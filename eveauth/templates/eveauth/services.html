@@ -27,7 +27,7 @@
       </div>
 
       <div class="panel-body">
-        {% if request.user.profile.level >= 1 %}
+        {% if request.user.profile.level >= 0 %}
         {% if not request.user.profile.mumble_password %}
         <p>
           <strong><span class="text-danger">You need to set a password to connect to mumble.</span></strong>
