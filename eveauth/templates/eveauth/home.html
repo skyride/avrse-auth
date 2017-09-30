@@ -1,0 +1,13 @@
+{% extends 'eveauth/base.html' %}
+{% load static %}
+
+{% block title %}Login{% endblock %}
+
+
+{% block content %}
+<div align="center">
+  <h2>Log in to access services</h2>
+
+  <a href="{% url 'social:begin' 'eveonline' %}"><img src="{% static 'eveauth/img/EVE_SSO_Login_Buttons_Large_Black.png' %}"></a>
+</div>
+{% endblock %}

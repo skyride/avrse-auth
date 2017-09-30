@@ -1,0 +1,127 @@
+{% extends 'eveauth/base.html' %}
+{% load static %}
+
+{% block title %}Services{% endblock %}
+
+
+{% block content %}
+<h2>Services</h2>
+<hr />
+
+<!-- <div class="row">
+  {% if request.user.profile.character %}
+  <div class="col-sm-4">
+    <img class="pull-left" src="//imageserver.eveonline.com/Character/93417038_64.jpg">
+     {{ request.user.profile.character.name }}
+  </div>
+  {% endif %}
+</div>
+<hr />-->
+
+<div class="row">
+
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <strong>Mumble</strong>
+      </div>
+
+      <div class="panel-body">
+        {% if request.user.profile.level >= 1 %}
+        {% if not request.user.profile.mumble_password %}
+        <p>
+          <strong><span class="text-danger">You need to set a password to connect to mumble.</span></strong>
+        </p>
+        {% endif %}
+
+        <table class="table table-condensed">
+          {% if request.user.profile.mumble_password %}
+          <tr>
+            <th>Address:</th>
+            <td>{{ mumble_host }}</td>
+          </tr>
+
+          <tr>
+            <th>Port:</th>
+            <td>{{ mumble_port }}</td>
+          </tr>
+
+          <tr>
+            <th>Username:</th>
+            <td>{{ request.user }}</td>
+          </tr>
+          {% endif %}
+
+          <tr>
+            <th style="vertical-align: middle;">Password:</th>
+            <td>
+              <form style="margin-bottom: 0px;" method="POST" action="{% url 'update_mumble_password' %}">
+                {% csrf_token %}
+                <div class="input-group">
+                  <input class="form-control input-sm" type="password" name="mumble_password">
+                  <span class="input-group-btn">
+                    <button class="btn btn-sm btn-primary">Save</button>
+                  </span>
+                </div>
+              </form>
+            </td>
+          </tr>
+
+        </table>
+        {% else %}
+        <span class="text-danger"><strong>Only members and blues can access mumble.</strong></span>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-sm-4 col-sm-offset-4">
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <strong>Access Level</strong>
+      </div>
+
+      <div class="panel-body">
+        <table class="table table-condensed">
+          <tr>
+            <td style="vertical-align: middle;" class="col-xs-1">
+              {% if request.user.profile.level >= 2 %}
+              <span class="text-success glyphicon glyphicon-ok"></span>
+              {% else %}
+              <span class="text-danger glyphicon glyphicon-remove"></span>
+              {% endif %}
+            </td>
+            <td>Member</td>
+          </tr>
+
+          <tr>
+            <td style="vertical-align: middle;">
+              {% if request.user.profile.level >= 1 %}
+              <span class="text-success glyphicon glyphicon-ok"></span>
+              {% else %}
+              <span class="text-danger glyphicon glyphicon-remove"></span>
+              {% endif %}
+            </td>
+            <td>Blues</td>
+          </tr>
+
+          <tr>
+            <td style="vertical-align: middle;">
+              {% if request.user.profile.level >= 0 %}
+              <span class="text-success glyphicon glyphicon-ok"></span>
+              {% else %}
+              <span class="text-danger glyphicon glyphicon-remove"></span>
+              {% endif %}
+            </td>
+            <td>Non-Member</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}
