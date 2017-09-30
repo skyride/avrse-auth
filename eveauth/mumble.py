@@ -70,7 +70,7 @@ class ServerAuthenticatorI(Murmur.ServerUpdatingAuthenticator):
                         profile.character.name,
                         tag
                     )
-                    return (1, out_name, ["admin"])
+                    return (db_user.id, out_name, ["admin"])
             return (-1, None, None)
 
     def getInfo(self, id, current=None):
