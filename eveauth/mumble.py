@@ -62,7 +62,7 @@ class ServerAuthenticatorI(Murmur.ServerUpdatingAuthenticator):
                 if password == profile.mumble_password:
                     tag = ""
 
-                    if db_user.groups.filter(name="Admin").exists():
+                    if db_user.groups.filter(name="admin").exists():
                         tag = "[SA]"
 
                     out_name = "#%s - %s %s" % (
@@ -70,7 +70,10 @@ class ServerAuthenticatorI(Murmur.ServerUpdatingAuthenticator):
                         profile.character.name,
                         tag
                     )
-                    return (db_user.id, out_name, ["admin"])
+
+                    groups = db_user.groups.values_list('name', flat=True)
+                    
+                    return (db_user.id, out_name, groups)
             return (-1, None, None)
 
     def getInfo(self, id, current=None):
