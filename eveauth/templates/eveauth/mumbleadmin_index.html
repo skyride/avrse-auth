@@ -1,0 +1,67 @@
+{% extends 'eveauth/base.html' %}
+{% load static %}
+{% load authtags %}
+
+{% block title %}Landing{% endblock %}
+
+
+{% block content %}
+<h2>Mumble Admin</h2>
+<hr />
+
+<div class="row">
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <strong>Status</strong>
+      </div>
+
+      <div class="panel-body" style="padding: 0;">
+        <table class="table" style="margin: 0;">
+          <tr>
+            <th>Connected Users:</th>
+            <td>{{ users|length }}</td>
+          </tr>
+
+          <tr>
+            <th>Uptime:</th>
+            <td>{{ server.getUptime|time }}</td>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-8">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <strong>Connected Users</strong>
+      </div>
+
+      <div class="panel-body" style="padding: 0;">
+        <table class="table table-striped" style="margin: 0;">
+          <tr>
+            <th>Name</th>
+            <th>Channel</th>
+            <th>Ping</th>
+            <th>Idle</th>
+            <th></th>
+          </tr>
+
+          {% for session, user in users %}
+          <tr>
+            <td>{{ user.name }}</td>
+            <td>{{ user.channel|channel }}</td>
+            <td>{{ user.udpPing|floatformat:"0" }}</td>
+            <td>{{ user.idlesecs|time }}</td>
+            <td>
+              <a class="btn btn-xs btn-danger" href="{% url 'mumbleadmin_kick' user.session %}">Kick</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -9,6 +9,17 @@ from models.templink import Templink
 from esi import ESI
 
 
+def get_server():
+    import Ice
+    Ice.loadSlice( '', ['-I' + Ice.getSliceDir(), "eveauth/Murmur.ice"])
+    import Murmur
+
+    ice = Ice.initialize()
+    meta = Murmur.MetaPrx.checkedCast(ice.stringToProxy('Meta:tcp -h 127.0.0.1 -p 6502'))
+    server = meta.getServer(1)
+    return server
+
+
 @app.task(name="purge_templink_users")
 def purge_templink_users(templink_id):
     import Ice

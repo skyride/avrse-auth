@@ -13,5 +13,7 @@ urlpatterns = [
     url(r'^templinks/submit/$', views.templink_submit, name="templink_submit"),
     url(r'^templinks/disable/([0-9]+)$', views.templink_disable, name="templink_disable"),
     url(r'^templinks/([0-9A-Za-z]+)/$', views.templink_landing, name="templink_landing"),
-    url(r'^templinks/([0-9A-Za-z]+)/submit$', views.templink_landing_submit, name="templink_landing_submit")
+    url(r'^templinks/([0-9A-Za-z]+)/submit$', views.templink_landing_submit, name="templink_landing_submit"),
+    url(r'^mumbleadmin/$', views.mumbleadmin_index, name="mumbleadmin_index"),
+    url(r'^mumbleadmin/kick/([0-9]+)$', views.mumbleadmin_kick, name="mumbleadmin_kick")
 ]
