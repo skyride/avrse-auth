@@ -47,7 +47,7 @@
             <th></th>
           </tr>
 
-          {% for session, user in users %}
+          {% for user in users|dictsort:"name" %}
           <tr>
             <td>{{ user.name }}</td>
             <td>{{ user.channel|channel }}</td>

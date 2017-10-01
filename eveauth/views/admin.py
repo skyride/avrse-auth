@@ -21,7 +21,7 @@ from eveauth.tasks import get_server
 @user_passes_test(lambda x: x.groups.filter(name="admin").exists())
 def registeredusers_index(request, page=1):
     context = {
-        "users": User.objects.order_by("profile__character__name").all()
+        "users": User.objects.order_by("-last_login").all()
     }
 
     return render(request, "eveauth/registeredusers_index.html", context)
@@ -35,7 +35,7 @@ def mumbleadmin_index(request):
 
     context = {
         "server": server,
-        "users": server.getUsers().items()
+        "users": map(lambda x: x[1], server.getUsers().items())
     }
 
     return render(request, "eveauth/mumbleadmin_index.html", context)

@@ -1,5 +1,6 @@
 {% extends 'eveauth/base.html' %}
 {% load static %}
+{% load authtags %}
 
 {% block title %}Templinks{% endblock %}
 
@@ -40,10 +41,16 @@
       {% endif %}
     </td>
     <td>{{ templink.created_by.first_name }} {{ templink.created_by.last_name }}</td>
-    <td>{{ templink.created }}</td>
     <td>
       {% if templink.active %}
-        {% if templink.expires %}{{ templink.expires }}{% else %}Never{% endif %}
+      {{ templink.created|since }} ago
+      {% else %}
+      <span title="{{ templink.created|since }} ago">{{ templink.created }}</span>
+      {% endif %}
+    </td>
+    <td>
+      {% if templink.active %}
+        {% if templink.expires %}{{ templink.expires|until }}{% else %}Never{% endif %}
       {% endif %}
     </td>
     <td>{{ templink.users.count }}</td>
