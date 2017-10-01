@@ -44,6 +44,9 @@
             <th>Channel</th>
             <th>Ping</th>
             <th>Idle</th>
+            <th><div align="center">Mute</div></th>
+            <th><div align="center">Deaf</div></th>
+
             <th></th>
           </tr>
 
@@ -53,6 +56,16 @@
             <td>{{ user.channel|channel }}</td>
             <td>{{ user.udpPing|floatformat:"0" }}</td>
             <td>{{ user.idlesecs|time }}</td>
+            <td align="center" style="vertical-align: middle;">
+              {% if user.mute or user.selfMute %}
+              <span class="glyphicon glyphicon-volume-off text-danger"></span>
+              {% endif %}
+            </td>
+            <td align="center" style="vertical-align: middle;">
+              {% if user.deaf or user.selfDeaf %}
+              <span class="glyphicon glyphicon-headphones text-danger"></span>
+              {% endif %}
+            </td>
             <td>
               <a class="btn btn-xs btn-danger" href="{% url 'mumbleadmin_kick' user.session %}">Kick</a>
             </td>
