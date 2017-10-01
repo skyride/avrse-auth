@@ -6,6 +6,10 @@ django.setup()
 
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import PBKDF2PasswordHasher
+from django.utils import timezone
+from django.db.models import Q
+
+from eveauth.models import TemplinkUser
 
 import Ice
 Ice.loadSlice( '', ['-I' + Ice.getSliceDir(), "Murmur.ice"])
@@ -76,6 +80,23 @@ class ServerAuthenticatorI(Murmur.ServerUpdatingAuthenticator):
                         groups = db_user.groups.values_list('name', flat=True)
 
                         return (db_user.id, out_name, groups)
+
+
+        # Check if the password is a templink key
+        if name == "templink":
+            templink_user = TemplinkUser.objects.filter(
+                Q(templink__expires__gte=timezone.now()) | Q(templink__expires__isnull=True),
+                templink__active=True,
+                password=pw
+            )
+            if templink_user.exists():
+                templink_user = templink_user.first()
+                groups = [
+                    "templink",
+                    "templink_%s" % templink_user.templink.id
+                ]
+                return (templink_user.id+10000000, templink_user.mumble_name(), groups)
+
         return (-1, None, None)
 
     def getInfo(self, id, current=None):

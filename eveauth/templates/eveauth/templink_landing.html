@@ -1,0 +1,35 @@
+{% extends 'eveauth/base.html' %}
+{% load static %}
+
+{% block title %}Landing{% endblock %}
+
+
+{% block content %}
+<h2>Templink</h2>
+<hr />
+
+<div class="col-sm-6 col-sm-offset-3">
+  <div class="well well-md">
+    <form method="POST" action="{% url 'templink_landing_submit' templink.link %}">
+      <h3>Join Mumble</h3>
+      <br />
+
+      <div class="input-group">
+        <span class="input-group-addon">[{{ templink.tag }}]</span>
+        <input class="form-control" type="text" name="name" placeholder="Name" maxlength="64">
+      </div>
+      <br />
+
+      <button type="submit" class="btn btn-block btn-primary">Submit</button>
+      <br />
+
+      <p>
+        <strong>Created By:</strong> {{ templink.created_by.first_name }} {{ templink.created_by.last_name }}
+      </p>
+      {% csrf_token %}
+    </form>
+  </div>
+</div>
+
+</form>
+{% endblock %}

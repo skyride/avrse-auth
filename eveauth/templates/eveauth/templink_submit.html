@@ -1,0 +1,23 @@
+{% extends 'eveauth/base.html' %}
+{% load static %}
+
+{% block title %}Join Mumble{% endblock %}
+
+
+{% block content %}
+<h2>Templink</h2>
+<hr />
+
+<div class="col-sm-6 col-sm-offset-3">
+  <div class="well well-md">
+    <h3>Join Mumble</h3>
+    <br />
+
+    <a class="btn btn-primary btn-block" href="mumble://templink:{{ user.password }}@{{ mumble_host }}:{{ mumble_port }}/">
+      Join as <strong>{{ user.mumble_name }}</strong>
+    </a>
+  </div>
+</div>
+
+</form>
+{% endblock %}

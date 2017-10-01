@@ -24,13 +24,13 @@
     <th>Created By:</th>
     <th>Created:</th>
     <th>Expires:</th>
-    <th>Times Used:</th>
+    <th>Used:</th>
     <th></th>
   </tr>
 
   {% for templink in templinks %}
   <tr>
-    <td>[{{ templink.tag }}]</td>
+    <td><a href="{% url 'templink_landing' templink.link %}">[{{ templink.tag }}]</a></td>
     <td>{{ templink.description }}</td>
     <td>
       {% if templink.active %}
@@ -46,7 +46,7 @@
         {% if templink.expires %}{{ templink.expires }}{% else %}Never{% endif %}
       {% endif %}
     </td>
-    <td>0</td>
+    <td>{{ templink.users.count }}</td>
     <td>
       {% if templink.active %}
       <a class="btn btn-xs btn-danger" href="{% url 'templink_disable' templink.id %}">Disable</a>
