@@ -1,0 +1,41 @@
+{% extends 'eveauth/base.html' %}
+{% load static %}
+
+{% block title %}Create Templink{% endblock %}
+
+
+{% block content %}
+<h2>Create Templink</h2>
+<hr />
+
+<form method="POST" action="{% url 'templink_submit' %}">
+  <div class="form-group">
+    <label for="tag">Tag</label>
+    <input class="form-control" type="text" name="tag" id="tag" maxlength="32"
+    placeholder='e.g. WAFFLES, bait op, etc, will show as "[bait op] caprisunkraftfoods"'>
+  </div>
+
+  <div class="form-group">
+    <label for="duration">Duration</label>
+    <select class="form-control" id="duration" name="duration">
+      <option value="1800">30 mins</option>
+      <option value="3600">1 hr</option>
+      <option value="7200">2 hrs</option>
+      <option value="10800">3 hrs</option>
+      <option value="21600">6 hrs</option>
+      <option value="86400">1 day</option>
+      <option value="259200">3 days</option>
+      <option value="forever">Forever</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description</label>
+    <input class="form-control" type="text" name="description" id="description" maxlength="256"
+    placeholder='tl;dr of what the link is for e.g. "get scanner on comms", "snuff to help bait this super"'>
+  </div>
+
+  {% csrf_token %}
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}

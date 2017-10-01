@@ -54,27 +54,29 @@ class ServerAuthenticatorI(Murmur.ServerUpdatingAuthenticator):
             db_user = db_user[0]
             profile = db_user.profile
 
-            # Test password
-            if profile.mumble_password != None:
-                hasher = PBKDF2PasswordHasher()
-                salt = profile.mumble_password.split("$")[2]
-                password = hasher.encode(pw, salt)
-                if password == profile.mumble_password:
-                    tag = ""
+            # Test access level
+            if profile.level >= 0:
+                # Test password
+                if profile.mumble_password != None:
+                    hasher = PBKDF2PasswordHasher()
+                    salt = profile.mumble_password.split("$")[2]
+                    password = hasher.encode(pw, salt)
+                    if password == profile.mumble_password:
+                        tag = ""
 
-                    if db_user.groups.filter(name="admin").exists():
-                        tag = "[SA]"
+                        if db_user.groups.filter(name="admin").exists():
+                            tag = "[SA]"
 
-                    out_name = "#%s - %s %s" % (
-                        profile.corporation.ticker,
-                        profile.character.name,
-                        tag
-                    )
+                        out_name = "#%s - %s %s" % (
+                            profile.corporation.ticker,
+                            profile.character.name,
+                            tag
+                        )
 
-                    groups = db_user.groups.values_list('name', flat=True)
-                    
-                    return (db_user.id, out_name, groups)
-            return (-1, None, None)
+                        groups = db_user.groups.values_list('name', flat=True)
+
+                        return (db_user.id, out_name, groups)
+        return (-1, None, None)
 
     def getInfo(self, id, current=None):
       print "getInfo ", id

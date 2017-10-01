@@ -1,0 +1,58 @@
+{% extends 'eveauth/base.html' %}
+{% load static %}
+
+{% block title %}Templinks{% endblock %}
+
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-6">
+    <h2>Templinks</h2>
+  </div>
+
+  <div class="col-sm-6">
+    <a class="btn btn-primary pull-right" href="{% url 'templink_create' %}">Create</a>
+  </div>
+</div>
+<hr />
+
+<table class="table table-striped">
+  <tr>
+    <th>Tag:</th>
+    <th>Description:</th>
+    <th>Active:</th>
+    <th>Created By:</th>
+    <th>Created:</th>
+    <th>Expires:</th>
+    <th>Times Used:</th>
+    <th></th>
+  </tr>
+
+  {% for templink in templinks %}
+  <tr>
+    <td>[{{ templink.tag }}]</td>
+    <td>{{ templink.description }}</td>
+    <td>
+      {% if templink.active %}
+      <span class="glyphicon glyphicon-ok text-success"></span>
+      {% else %}
+      <span class="glyphicon glyphicon-remove text-danger"></span>
+      {% endif %}
+    </td>
+    <td>{{ templink.created_by.first_name }} {{ templink.created_by.last_name }}</td>
+    <td>{{ templink.created }}</td>
+    <td>
+      {% if templink.active %}
+        {% if templink.expires %}{{ templink.expires }}{% else %}Never{% endif %}
+      {% endif %}
+    </td>
+    <td>0</td>
+    <td>
+      {% if templink.active %}
+      <a class="btn btn-xs btn-danger" href="{% url 'templink_disable' templink.id %}">Disable</a>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
