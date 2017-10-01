@@ -12,7 +12,7 @@ from esi import ESI
 @app.task(name="purge_templink_users")
 def purge_templink_users(templink_id):
     import Ice
-    Ice.loadSlice( '', ['-I' + Ice.getSliceDir(), "Murmur.ice"])
+    Ice.loadSlice( '', ['-I' + Ice.getSliceDir(), "eveauth/Murmur.ice"])
     import Murmur
 
     ice = Ice.initialize()
