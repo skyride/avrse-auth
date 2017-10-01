@@ -68,8 +68,9 @@ class ServerAuthenticatorI(Murmur.ServerUpdatingAuthenticator):
                     if password == profile.mumble_password:
                         tag = ""
 
-                        if db_user.groups.filter(name="admin").exists():
-                            tag = "[SA]"
+                        # Disabling this because SA flairs are for knobs
+                        #if db_user.groups.filter(name="admin").exists():
+                        #    tag = "[SA]"
 
                         out_name = "#%s - %s %s" % (
                             profile.corporation.ticker,
