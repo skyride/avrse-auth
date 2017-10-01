@@ -14,6 +14,10 @@ class Alliance(models.Model):
     last_updated = models.DateTimeField(auto_now=True)
 
 
+    def __unicode__(self):
+        return self.ticker
+
+
     @staticmethod
     def get_or_create(alliance_id):
         from eveauth.esi import ESI

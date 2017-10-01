@@ -80,6 +80,9 @@ class ServerAuthenticatorI(Murmur.ServerUpdatingAuthenticator):
 
                         groups = db_user.groups.values_list('name', flat=True)
 
+                        db_user.last_login = timezone.now()
+                        db_user.save()
+
                         return (db_user.id, out_name, groups)
 
 

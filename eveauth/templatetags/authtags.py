@@ -32,3 +32,8 @@ def pretty_time_delta(seconds):
 @register.filter(name="channel")
 def channel(id):
     return MurmurChannel.objects.get(channel_id=id).name
+
+
+@register.filter(name="level")
+def level(id):
+    return ["Non-member", "Blue", "Member"][id]
