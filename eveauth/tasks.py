@@ -5,7 +5,34 @@ from avrseauth.local_settings import members, blues
 from models.character import Character
 from models.corporation import Corporation
 from models.alliance import Alliance
+from models.templink import Templink
 from esi import ESI
+
+
+@app.task(name="purge_templink_users")
+def purge_templink_users(templink_id):
+    import Ice
+    Ice.loadSlice( '', ['-I' + Ice.getSliceDir(), "Murmur.ice"])
+    import Murmur
+
+    ice = Ice.initialize()
+    meta = Murmur.MetaPrx.checkedCast(ice.stringToProxy('Meta:tcp -h 127.0.0.1 -p 6502'))
+    server = meta.getServer(1)
+
+    # Get templink user list
+    templink = Templink.objects.get(id=templink_id)
+    id_map = map(lambda x: x.mumble_id(), templink.users.all())
+
+    # Get active user list from server
+    users = server.getUsers().items()
+
+    # Get a list of active users using this temp link
+    user_map = filter(lambda x: x.userid in id_map, map(lambda x: x[1], users))
+
+    # Kick each user from the server
+    for user in user_map:
+        server.kickUser(user.session, "Templink deactivated")
+
 
 
 @app.task(name="update_groups")

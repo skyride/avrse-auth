@@ -15,6 +15,7 @@ from django.db.models import Q
 from django.db import IntegrityError
 
 from eveauth.models import Templink, TemplinkUser
+from eveauth.tasks import purge_templink_users
 
 
 def home(request):
@@ -84,6 +85,7 @@ def templink_disable(request, id):
     templink.save()
 
     #CODE TO KICK PEOPLE GOES HERE
+    purge_templink_users(templink.id)
 
     return redirect(templink_index)
 

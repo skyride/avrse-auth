@@ -95,7 +95,7 @@ class ServerAuthenticatorI(Murmur.ServerUpdatingAuthenticator):
                     "templink",
                     "templink_%s" % templink_user.templink.id
                 ]
-                return (templink_user.id+10000000, templink_user.mumble_name(), groups)
+                return (templink_user.mumble_id(), templink_user.mumble_name(), groups)
 
         return (-1, None, None)
 
