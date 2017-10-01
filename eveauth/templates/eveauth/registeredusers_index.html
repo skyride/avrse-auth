@@ -22,7 +22,11 @@
   <tr>
     <td><img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Character/{{ user.profile.character_id }}_32.jpg"> {{ user.profile.character.name }}</td>
     <td><img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Corporation/{{ user.profile.corporation_id }}_32.png"> {{ user.profile.corporation.ticker }}</td>
-    <td><img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Alliance/{{ user.profile.alliance_id }}_32.png"> {{ user.profile.alliance }}</td>
+    <td>
+      {% if user.profile.alliance %}
+      <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Alliance/{{ user.profile.alliance_id }}_32.png"> {{ user.profile.alliance.ticker }}
+      {% endif %}
+    </td>
     <td>{{ user.profile.level|level }}</td>
     <td>{{ user.last_login }}</td>
   </tr>
