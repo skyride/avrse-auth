@@ -66,20 +66,17 @@ class ServerAuthenticatorI(Murmur.ServerUpdatingAuthenticator):
                     salt = profile.mumble_password.split("$")[2]
                     password = hasher.encode(pw, salt)
                     if password == profile.mumble_password:
-                        tag = ""
-
-                        # Disabling this because SA flairs are for knobs
-                        #if db_user.groups.filter(name="admin").exists():
-                        #    tag = "[SA]"
-
-                        out_name = "#%s - %s %s" % (
+                        # Name
+                        out_name = "#%s - %s" % (
                             profile.corporation.ticker,
-                            profile.character.name,
-                            tag
+                            profile.character.name
                         )
 
-                        groups = db_user.groups.values_list('name', flat=True)
+                        # Groups
+                        groups = list(db_user.groups.values_list('name', flat=True))
+                        groups.append(["Non-members", "Blues", "Members"][profile.level])
 
+                        # Register a login
                         db_user.last_login = timezone.now()
                         db_user.save()
 
