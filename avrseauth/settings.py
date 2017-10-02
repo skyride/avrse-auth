@@ -141,5 +141,34 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(_PATH, 'static')
 
+# How many hours between rechecking user groups via API
+USER_UPDATE_DELAY = 1
+
+# Celery
+CELERY_APP_NAME = "avrseauth"
+BROKER_URL = "redis://127.0.0.1:6379/"
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/"
+CELERY_IGNORE_RESULT = False
+CELERY_TASK_RESULT_EXPIRES = 1200
+
+CELERY_DISABLE_RATE_LIMITS = True
+CELERYD_TASK_SOFT_TIME_LIMIT = 300
+CELERYD_PREFETCH_MULTIPLIER = 1
+CELERY_STORE_ERRORS_EVEN_IF_IGNORED = True
+
+from datetime import timedelta
+CELERYBEAT_SCHEDULE = {
+    # Update user groups once an hour
+    'spawn_groupupdates': {
+        'task': 'spawn_groupupdates',
+        #'schedule': timedelta(hours=USER_UPDATE_DELAY)
+        'schedule': timedelta(seconds=30)
+    },
+    'purge_expired_templinks': {
+        'task': 'purge_expired_templinks',
+        'schedule': timedelta(seconds=5)
+    }
+}
+
 
 from local_settings import *
