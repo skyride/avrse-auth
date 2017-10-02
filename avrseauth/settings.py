@@ -150,8 +150,7 @@ CELERYBEAT_SCHEDULE = {
     # Update user groups once an hour
     'spawn_groupupdates': {
         'task': 'spawn_groupupdates',
-        #'schedule': timedelta(hours=USER_UPDATE_DELAY)
-        'schedule': timedelta(seconds=30)
+        'schedule': timedelta(hours=USER_UPDATE_DELAY)
     },
     'purge_expired_templinks': {
         'task': 'purge_expired_templinks',
