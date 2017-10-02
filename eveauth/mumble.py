@@ -84,7 +84,7 @@ class ServerAuthenticatorI(Murmur.ServerUpdatingAuthenticator):
     def getInfo(self, id, current=None):
       print "User Connected: %s" % (id)
       name = self.idToName(id);
-      if (name == None):
+      if (name == -2):
         return (False, {})
       map = {}
       map[Murmur.UserInfo.UserName]=name
@@ -121,7 +121,7 @@ class ServerAuthenticatorI(Murmur.ServerUpdatingAuthenticator):
     def setInfo(self, id, info, current=None):
       print "Set", id, info
       return -1
-      
+
 
 if __name__ == "__main__":
     global contextR
