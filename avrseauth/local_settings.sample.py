@@ -26,6 +26,7 @@ ESI_RETRIES = 15
 
 MUMBLE_HOST = ""
 MUMBLE_PORT = 64738
+MUMBLE_ACCESS_LEVEL = 1     # 0 = anyone, 1 = blues and members, 2 = members
 
 members = {
     "alliances": [

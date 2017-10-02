@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import PBKDF2PasswordHasher
 from django.utils import timezone
 from django.db.models import Q
+from django.conf import settings
 
 from eveauth.models import TemplinkUser
 
@@ -59,7 +60,7 @@ class ServerAuthenticatorI(Murmur.ServerUpdatingAuthenticator):
             profile = db_user.profile
 
             # Test access level
-            if profile.level >= 0:
+            if profile.level >= settings.MUMBLE_ACCESS_LEVEL:
                 # Test password
                 if profile.mumble_password != None:
                     hasher = PBKDF2PasswordHasher()
