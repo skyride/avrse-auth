@@ -23,12 +23,12 @@ from eveauth.tasks import purge_templink_users
 @user_passes_test(lambda x: x.groups.filter(name="admin").exists())
 def templink_index(request):
     context = {
-        "templinks": Templink.objects.order_by(
+        "templinks": Templink.objects.prefetch_related(
+            "created_by__profile__character"
+        ).order_by(
             "-active",
             "-created"
-        ).prefetch_related(
-            "created_by"
-        )
+        ).all()
     }
 
     return render(request, "eveauth/templink_index.html", context)

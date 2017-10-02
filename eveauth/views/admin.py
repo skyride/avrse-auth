@@ -21,7 +21,14 @@ from eveauth.tasks import get_server
 @user_passes_test(lambda x: x.groups.filter(name="admin").exists())
 def registeredusers_index(request, page=1):
     context = {
-        "users": User.objects.order_by("-last_login").all()
+        "users": User.objects.prefetch_related(
+            "profile",
+            "profile__character",
+            "profile__corporation",
+            "profile__alliance"
+        ).order_by(
+            "-last_login"
+        ).all()
     }
 
     return render(request, "eveauth/registeredusers_index.html", context)
