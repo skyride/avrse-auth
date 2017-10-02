@@ -4,10 +4,12 @@ from templink import Templink
 
 class TemplinkUser(models.Model):
     templink = models.ForeignKey(Templink, related_name="users")
-    name = models.CharField(max_length=64, unique=True)
+    name = models.CharField(max_length=64)
     password = models.CharField(max_length=32, db_index=True)
     created = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        unique_together = ("templink", "name")
 
     def mumble_id(self):
         return self.id + 10000000

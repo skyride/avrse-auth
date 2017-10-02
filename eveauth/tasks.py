@@ -1,6 +1,7 @@
 from avrseauth.celery import app
+from django.utils import timezone
 from django.contrib.auth.models import User
-from avrseauth.local_settings import members, blues
+from avrseauth.settings import members, blues
 
 from models.character import Character
 from models.corporation import Corporation
@@ -20,8 +21,38 @@ def get_server():
     return server
 
 
+# Update user groups from the API
+@app.task(name="spawn_groupupdates")
+def spawn_groupupdates():
+    users = User.objects.all()
+    for user in users:
+        update_groups.delay(user.id)
+
+    print "Spawned group update tasks for %s users" % users.count()
+
+
+
+# Set expired templinks inactive and kick anyone using them from mumble
+@app.task(name="purge_expired_templinks")
+def purge_expired_templinks():
+    templinks = Templink.objects.filter(
+        active=True,
+        expires__lt=timezone.now()
+    ).all()
+
+    for templink in templinks:
+        templink.active = False
+        templink.save()
+
+        purge_templink_users.delay(templink.id, reason="Templink expired")
+
+        print "Purged templink [%s] %s" % (templink.tag, templink.link)
+
+
+
+# Purge all users using a particular templink
 @app.task(name="purge_templink_users")
-def purge_templink_users(templink_id):
+def purge_templink_users(templink_id, reason="Templink deactivated"):
     import Ice
     Ice.loadSlice( '', ['-I' + Ice.getSliceDir(), "eveauth/Murmur.ice"])
     import Murmur
@@ -42,14 +73,16 @@ def purge_templink_users(templink_id):
 
     # Kick each user from the server
     for user in user_map:
-        server.kickUser(user.session, "Templink deactivated")
+        server.kickUser(user.session, reason)
 
 
 
+# Update a users groups from the API
 @app.task(name="update_groups")
 def update_groups(user_id):
     user = User.objects.get(id=user_id)
-    social = user.social_auth.get(provider="eveonline")
+    print "Updating groups for %s" % user.username
+    social = user.social_auth.filter(provider="eveonline").first()
 
     # Update char/corp/alliance
     api = ESI()
