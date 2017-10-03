@@ -21,6 +21,9 @@ class Profile(models.Model):
     corporation = models.ForeignKey(Corporation, null=True)
     alliance = models.ForeignKey(Alliance, null=True)
 
+    forum_username = models.CharField(max_length=128, null=True)
+    forum_password = models.CharField(max_length=64, null=True)
+
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

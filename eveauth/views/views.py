@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 import json
 from datetime import timedelta
+from hashlib import sha1
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -30,6 +31,8 @@ def services(request):
     context = {
         "mumble_host": settings.MUMBLE_HOST,
         "mumble_port": settings.MUMBLE_PORT,
+        "forum_address": settings.FORUM_ADDRESS,
+        "mumble_access_level": settings.MUMBLE_ACCESS_LEVEL
     }
 
     return render(request, "eveauth/services.html", context)
@@ -45,4 +48,19 @@ def update_mumble_password(request):
     profile.mumble_password = password
 
     profile.save()
+    messages.success(request, 'Updated mumble password')
+    return redirect(services)
+
+
+@login_required
+def update_forum_password(request):
+    profile = request.user.profile
+
+    password = request.POST.get("forum_password")
+    password = sha1(password).hexdigest()
+    profile.forum_username = profile.character.name
+    profile.forum_password = password
+
+    profile.save()
+    messages.success(request, 'Updated forum password')
     return redirect(services)

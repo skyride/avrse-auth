@@ -53,6 +53,8 @@ def mumbleadmin_index(request):
 @user_passes_test(lambda x: x.groups.filter(name="admin").exists())
 def mumbleadmin_kick(request, session_id):
     server = get_server()
+    user = server.getUsers()[int(session_id)]
     server.kickUser(int(session_id), "Kicked via web admin")
+    messages.success(request, 'Kicked %s from mumble' % user.name)
 
     return redirect(mumbleadmin_index)
