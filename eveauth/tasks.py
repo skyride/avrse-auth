@@ -58,7 +58,6 @@ def mumble_afk_check():
         users = server.getUsers().items()
 
         for session, user in users:
-            print user
             if user.selfDeaf and user.idlesecs >= settings.MUMBLE_AUTO_AFK_DELAY:
                 if user.channel != settings.MUMBLE_AUTO_AFK_CHANNEL:
                     # Move the user to the afk channel
