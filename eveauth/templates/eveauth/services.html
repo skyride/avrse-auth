@@ -100,7 +100,7 @@
           {% if request.user.profile.forum_username %}
           <tr>
             <th>Username:</th>
-            <td>{{ user.username }}</td>
+            <td>{{ request.user.profile.forum_username }}</td>
           </tr>
           {% endif %}
 
