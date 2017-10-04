@@ -27,6 +27,9 @@ ESI_RETRIES = 15
 MUMBLE_HOST = ""
 MUMBLE_PORT = 64738
 MUMBLE_ACCESS_LEVEL = 1     # 0 = anyone, 1 = blues and members, 2 = members
+MUMBLE_AUTO_AFK = True
+MUMBLE_AUTO_AFK_DELAY = 20
+MUMBLE_AUTO_AFK_CHANNEL = 0
 
 FORUM_ADDRESS = "https://forums.example.com/"
 

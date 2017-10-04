@@ -155,6 +155,10 @@ CELERYBEAT_SCHEDULE = {
     'purge_expired_templinks': {
         'task': 'purge_expired_templinks',
         'schedule': timedelta(seconds=5)
+    },
+    'mumble_afk_check': {
+        'task': 'mumble_afk_check',
+        'schedule': timedelta(seconds=5)
     }
 }
 

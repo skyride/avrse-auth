@@ -2,6 +2,7 @@ from avrseauth.celery import app
 from django.utils import timezone
 from django.contrib.auth.models import User
 from avrseauth.settings import members, blues
+from django.conf import settings
 
 from models.character import Character
 from models.corporation import Corporation
@@ -47,6 +48,22 @@ def purge_expired_templinks():
         purge_templink_users.delay(templink.id, reason="Templink expired")
 
         print "Purged templink [%s] %s" % (templink.tag, templink.link)
+
+
+# Move people to mumble
+@app.task(name="mumble_afk_check")
+def mumble_afk_check():
+    if settings.MUMBLE_AUTO_AFK:
+        server = get_server()
+        users = server.getUsers().items()
+
+        for session, user in users:
+            print user
+            if user.selfDeaf and user.idlesecs >= settings.MUMBLE_AUTO_AFK_DELAY:
+                if user.channel != settings.MUMBLE_AUTO_AFK_CHANNEL:
+                    # Move the user to the afk channel
+                    user.channel = settings.MUMBLE_AUTO_AFK_CHANNEL
+                    server.setState(user)
 
 
 
