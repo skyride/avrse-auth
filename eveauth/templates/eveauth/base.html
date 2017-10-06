@@ -11,7 +11,11 @@
     <title>AVRSE Auth // {% block title %}{% endblock %}</title>
 
     <!-- CSS -->
-    <link href="{% static 'eveauth/css/bootstrap.min.css' %}" rel="stylesheet">
+    {% if request.session.theme == "darkly" %}
+    <link href="{% static 'eveauth/css/darkly.min.css' %}" rel="stylesheet">
+    {% else %}
+    <link href="{% static 'eveauth/css/flatly.min.css' %}" rel="stylesheet">
+    {% endif %}
   </head>
 
   <body>
@@ -49,6 +53,11 @@
                 {{ request.user.first_name }} {{ request.user.last_name }} <span class="caret">
               </a>
               <ul class="dropdown-menu">
+                {% if request.session.theme == "darkly" %}
+                <li><a href="{% url 'toggle_theme' %}">Light Mode</a></li>
+                {% else %}
+                <li><a href="{% url 'toggle_theme' %}">Dark Mode</a></li>
+                {% endif %}
                 <li><a href="{% url 'logout' %}">Logout</a></li>
               </ul>
               {% endif %}

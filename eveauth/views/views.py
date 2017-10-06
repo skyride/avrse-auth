@@ -4,7 +4,7 @@ import json
 from datetime import timedelta
 from hashlib import sha1
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -37,6 +37,17 @@ def services(request):
     }
 
     return render(request, "eveauth/services.html", context)
+
+
+def toggle_theme(request):
+    if not "theme" in request.session:
+        request.session['theme'] = "darkly"
+    elif request.session['theme'] == "darkly":
+        request.session['theme'] = "flatly"
+    else:
+        request.session['theme'] = "darkly"
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 @login_required

@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^$', views.home, name="home"),
     url(r'^logout/$', logout, {'next_page': "/"}, name="logout"),
     url(r'^services/$', views.services, name="services"),
+    url(r'^toggle_theme/$', views.toggle_theme, name="toggle_theme"),
     url(r'^services/mumble/update_password/$', views.update_mumble_password, name="update_mumble_password"),
     url(r'^services/forum/update_password/$', views.update_forum_password, name="update_forum_password"),
     url(r'^templinks/$', views.templink_index, name="templink_index"),
