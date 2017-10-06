@@ -32,6 +32,7 @@ MUMBLE_AUTO_AFK_DELAY = 20
 MUMBLE_AUTO_AFK_CHANNEL = 0
 
 FORUM_ADDRESS = "https://forums.example.com/"
+FORUM_API_KEY = ""
 
 members = {
     "alliances": [
