@@ -9,6 +9,7 @@ from models.corporation import Corporation
 from models.alliance import Alliance
 from models.templink import Templink
 from esi import ESI
+from ipb import IPBUser
 
 
 def get_server():
@@ -137,3 +138,8 @@ def update_groups(user_id):
         user.profile.level = 0
 
     user.profile.save()
+
+    # Update IPB User
+    if user.profile.forum_id:
+        ipb = IPBUser(user)
+        ipb.update_access_level()

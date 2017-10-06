@@ -17,7 +17,7 @@ from django.db import IntegrityError
 
 from eveauth.models import Templink, TemplinkUser
 from eveauth.tasks import purge_templink_users
-from eveauth.ipb import IPB
+from eveauth.ipb import IPBUser
 
 
 def home(request):
@@ -61,7 +61,7 @@ def update_forum_password(request):
     profile.forum_username = profile.character.name
     profile.save()
 
-    ipb = IPB(request.user)
+    ipb = IPBUser(request.user)
     ipb.update_password(password)
 
     messages.success(request, 'Updated forum password')

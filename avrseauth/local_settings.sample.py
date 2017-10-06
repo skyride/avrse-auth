@@ -33,6 +33,11 @@ MUMBLE_AUTO_AFK_CHANNEL = 0
 
 FORUM_ADDRESS = "https://forums.example.com/"
 FORUM_API_KEY = ""
+FORUM_ACCESS_GROUPS = [
+    11,     # Non-Members
+    10,     # Blues
+    3,      # Members
+]
 
 members = {
     "alliances": [
