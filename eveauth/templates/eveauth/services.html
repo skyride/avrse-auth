@@ -8,16 +8,6 @@
 <h2>Services</h2>
 <hr />
 
-<!-- <div class="row">
-  {% if request.user.profile.character %}
-  <div class="col-sm-4">
-    <img class="pull-left" src="//imageserver.eveonline.com/Character/93417038_64.jpg">
-     {{ request.user.profile.character.name }}
-  </div>
-  {% endif %}
-</div>
-<hr />-->
-
 <div class="row">
 
   <div class="col-sm-6 col-md-4">
@@ -128,11 +118,24 @@
   <div class="col-sm-6 col-md-4">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <strong>Access Level</strong>
+        <strong>Access Status</strong>
       </div>
 
       <div class="panel-body">
+
         <table class="table table-condensed">
+          <tr>
+            <td></td>
+            <td><strong>Corporation:</strong> {{ user.profile.corporation.name }}</td>
+          </tr>
+
+          {% if user.profile.alliance %}
+          <tr>
+            <td></td>
+            <td><strong>Alliance:</strong> {{ user.profile.alliance.name }}</td>
+          </tr>
+          {% endif %}
+
           <tr>
             <td style="vertical-align: middle;" class="col-xs-1">
               {% if request.user.profile.level >= 2 %}
