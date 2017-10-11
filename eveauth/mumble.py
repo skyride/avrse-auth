@@ -96,7 +96,7 @@ class ServerAuthenticatorI(Murmur.ServerUpdatingAuthenticator):
 
 
     def idToName(self, id, current=None):
-        return -2;
+        return None;
 
 
     def idToTexture(self, id, current=None):
