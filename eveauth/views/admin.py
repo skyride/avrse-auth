@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 from django.utils.crypto import get_random_string
 from django.conf import settings
 from django.utils import timezone
@@ -20,15 +21,18 @@ from eveauth.tasks import get_server
 @login_required
 @user_passes_test(lambda x: x.groups.filter(name="admin").exists())
 def registeredusers_index(request, page=1):
+    users = User.objects.prefetch_related(
+        "profile",
+        "profile__character",
+        "profile__corporation",
+        "profile__alliance"
+    ).order_by(
+        "-last_login"
+    ).all()
+    paginator = Paginator(users, 25)
+
     context = {
-        "users": User.objects.prefetch_related(
-            "profile",
-            "profile__character",
-            "profile__corporation",
-            "profile__alliance"
-        ).order_by(
-            "-last_login"
-        ).all()
+        "users": paginator.page(page)
     }
 
     return render(request, "eveauth/registeredusers_index.html", context)
