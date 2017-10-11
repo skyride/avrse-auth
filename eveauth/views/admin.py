@@ -41,6 +41,20 @@ def registeredusers_index(request, page=1):
 
 @login_required
 @user_passes_test(lambda x: x.groups.filter(name="admin").exists())
+def view_user(request, id):
+    user = User.objects.get(id=id)
+
+    context = {
+        "user": user,
+        "forum_address": settings.FORUM_ADDRESS
+    }
+
+    return render(request, "eveauth/user_view.html", context)
+
+
+
+@login_required
+@user_passes_test(lambda x: x.groups.filter(name="admin").exists())
 def mumbleadmin_index(request):
     server = get_server()
 

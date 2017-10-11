@@ -1,0 +1,59 @@
+{% extends 'eveauth/base.html' %}
+{% load static %}
+{% load authtags %}
+
+{% block title %}Registered Users{% endblock %}
+
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-4">
+    <div class="well well-sm">
+      <img style="border-radius: 10%;" src="//imageserver.eveonline.com/Character/{{ user.profile.character_id }}_64.jpg">
+      <span style="font-size: 22px;">{{ user.profile.character.name }}</span>
+    </div>
+
+    <div class="well well-sm">
+      <img style="border-radius: 10%;" src="//imageserver.eveonline.com/Corporation/{{ user.profile.corporation_id }}_64.png">
+      <span style="font-size: 22px;">{{ user.profile.corporation.name }}</span>
+    </div>
+
+  {% if user.profile.alliance %}
+    <div class="well well-sm">
+      <img style="border-radius: 10%;" src="//imageserver.eveonline.com/Alliance/{{ user.profile.alliance_id }}_64.png">
+      <span style="font-size: 22px;">{{ user.profile.alliance.name }}</span>
+    </div>
+  {% endif %}
+  </div>
+
+
+  <div class="col-sm-8">
+    <div class="well">
+      <h3>Details</h3>
+
+      <ul class="list-unstyled">
+        <li><strong>Last Login:</strong> {{ user.last_login }}</li>
+        <li><strong>Has Mumble password:</strong> {{ user.profile.mumble_password|yesno:"Yes,No" }}</li>
+        <li><strong>Has Forum password:</strong> {{ user.profile.forum_id|yesno:"Yes,No" }}</li>
+        <li><strong>Access Level:</strong> {{ user.profile.level|level }}</li>
+      </ul>
+
+      {% if user.profile.forum_id %}
+      <a class="btn btn-default" href="{{ forum_address }}index.php?/profile/{{ user.profile.forum_id }}-asd/">Forum Account</a>
+      {% endif %}
+      <a class="btn btn-default" href="https://evewho.com/pilot/{{ user.profile.character.name }}">EVEWho</a>
+      <a class="btn btn-default" href="https://zkillboard.com/character/{{ user.profile.character_id }}/">zKillboard</a>
+    </div>
+
+    <div class="well">
+      <h3>Groups</h3>
+
+      <ul class="">
+        {% for group in user.groups.all %}
+        <li>{{ group.name }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
