@@ -65,18 +65,14 @@ def mumble_afk_check():
                     user.channel = settings.MUMBLE_AUTO_AFK_CHANNEL
                     server.setState(user)
 
+        server.ice_getCommunicator().destroy()
+
 
 
 # Purge all users using a particular templink
 @app.task(name="purge_templink_users")
 def purge_templink_users(templink_id, reason="Templink deactivated"):
-    import Ice
-    Ice.loadSlice( '', ['-I' + Ice.getSliceDir(), "eveauth/Murmur.ice"])
-    import Murmur
-
-    ice = Ice.initialize()
-    meta = Murmur.MetaPrx.checkedCast(ice.stringToProxy('Meta:tcp -h 127.0.0.1 -p 6502'))
-    server = meta.getServer(1)
+    server = get_server()
 
     # Get templink user list
     templink = Templink.objects.get(id=templink_id)
@@ -91,6 +87,8 @@ def purge_templink_users(templink_id, reason="Templink deactivated"):
     # Kick each user from the server
     for user in user_map:
         server.kickUser(user.session, reason)
+
+    server.ice_getCommunicator().destroy()
 
 
 

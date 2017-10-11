@@ -45,7 +45,9 @@ def mumbleadmin_index(request):
         "users": map(lambda x: x[1], server.getUsers().items())
     }
 
-    return render(request, "eveauth/mumbleadmin_index.html", context)
+    o = render(request, "eveauth/mumbleadmin_index.html", context)
+    server.ice_getCommunicator().destroy()
+    return o
 
 
 
@@ -57,4 +59,5 @@ def mumbleadmin_kick(request, session_id):
     server.kickUser(int(session_id), "Kicked via web admin")
     messages.success(request, 'Kicked %s from mumble' % user.name)
 
+    server.ice_getCommunicator().destroy()
     return redirect(mumbleadmin_index)
