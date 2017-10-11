@@ -144,6 +144,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print 'CTRL-C caught, aborting'
 
-    meta.removeCallback(metaR)
+    #meta.removeCallback(metaR)
     ice.shutdown()
+    ice.destroy()
     print "Goodbye"
