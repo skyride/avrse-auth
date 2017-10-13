@@ -36,9 +36,9 @@
             <!-- <li class="active"><a href="">asd</a></li> -->
             <li><a href="{% url 'services' %}">Services</a></li>
               {% if request.user|has_group:"admin" %}
-              <li><a href="{% url 'templink_index' %}">Templink</a></li>
-              <li><a href="{% url 'registeredusers_index' 1 %}">Registered Users</a></li>
-              <li><a href="{% url 'mumbleadmin_index' %}">Mumble Admin</a></li>
+              <li><a href="{% url 'registeredusers_index' 1 %}">Users</a></li>
+              <li><a href="{% url 'templink_index' %}">Templinks</a></li>
+              <li><a href="{% url 'mumbleadmin_index' %}">Mumble</a></li>
               {% endif %}
             {% endif %}
           </ul>
