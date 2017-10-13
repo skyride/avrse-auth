@@ -30,6 +30,7 @@ def home(request):
 @login_required
 def services(request):
     context = {
+        "discord": request.user.social_auth.filter(provider="discord").first(),
         "mumble_host": settings.MUMBLE_HOST,
         "mumble_port": settings.MUMBLE_PORT,
         "forum_address": settings.FORUM_ADDRESS,

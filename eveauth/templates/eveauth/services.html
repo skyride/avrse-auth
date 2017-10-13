@@ -13,6 +13,64 @@
   <div class="col-sm-6 col-md-4">
     <div class="panel panel-default">
       <div class="panel-heading">
+        <strong>Access Status</strong>
+      </div>
+
+      <div class="panel-body">
+
+        <table class="table table-condensed">
+          <tr>
+            <td></td>
+            <td><strong>Corporation:</strong> {{ user.profile.corporation.name }}</td>
+          </tr>
+
+          {% if user.profile.alliance %}
+          <tr>
+            <td></td>
+            <td><strong>Alliance:</strong> {{ user.profile.alliance.name }}</td>
+          </tr>
+          {% endif %}
+
+          <tr>
+            <td style="vertical-align: middle;" class="col-xs-1">
+              {% if request.user.profile.level >= 2 %}
+              <span class="text-success glyphicon glyphicon-ok"></span>
+              {% else %}
+              <span class="text-danger glyphicon glyphicon-remove"></span>
+              {% endif %}
+            </td>
+            <td>Member</td>
+          </tr>
+
+          <tr>
+            <td style="vertical-align: middle;">
+              {% if request.user.profile.level >= 1 %}
+              <span class="text-success glyphicon glyphicon-ok"></span>
+              {% else %}
+              <span class="text-danger glyphicon glyphicon-remove"></span>
+              {% endif %}
+            </td>
+            <td>Blues</td>
+          </tr>
+
+          <tr>
+            <td style="vertical-align: middle;">
+              {% if request.user.profile.level >= 0 %}
+              <span class="text-success glyphicon glyphicon-ok"></span>
+              {% else %}
+              <span class="text-danger glyphicon glyphicon-remove"></span>
+              {% endif %}
+            </td>
+            <td>Non-Member</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-md-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
         <strong>Mumble</strong>
       </div>
 
@@ -118,57 +176,26 @@
   <div class="col-sm-6 col-md-4">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <strong>Access Status</strong>
+        <strong>Discord</strong>
       </div>
 
       <div class="panel-body">
+        {% if discord %}
+        <strong>Connected:</strong>
 
-        <table class="table table-condensed">
-          <tr>
-            <td></td>
-            <td><strong>Corporation:</strong> {{ user.profile.corporation.name }}</td>
-          </tr>
+        <span class="text-muted"><i>{{ discord.extra_data.username }}#{{ discord.extra_data.discriminator }}</i></span>
+        <div style="height: 8px;"></div>
 
-          {% if user.profile.alliance %}
-          <tr>
-            <td></td>
-            <td><strong>Alliance:</strong> {{ user.profile.alliance.name }}</td>
-          </tr>
-          {% endif %}
-
-          <tr>
-            <td style="vertical-align: middle;" class="col-xs-1">
-              {% if request.user.profile.level >= 2 %}
-              <span class="text-success glyphicon glyphicon-ok"></span>
-              {% else %}
-              <span class="text-danger glyphicon glyphicon-remove"></span>
-              {% endif %}
-            </td>
-            <td>Member</td>
-          </tr>
-
-          <tr>
-            <td style="vertical-align: middle;">
-              {% if request.user.profile.level >= 1 %}
-              <span class="text-success glyphicon glyphicon-ok"></span>
-              {% else %}
-              <span class="text-danger glyphicon glyphicon-remove"></span>
-              {% endif %}
-            </td>
-            <td>Blues</td>
-          </tr>
-
-          <tr>
-            <td style="vertical-align: middle;">
-              {% if request.user.profile.level >= 0 %}
-              <span class="text-success glyphicon glyphicon-ok"></span>
-              {% else %}
-              <span class="text-danger glyphicon glyphicon-remove"></span>
-              {% endif %}
-            </td>
-            <td>Non-Member</td>
-          </tr>
-        </table>
+        <a href="#" class="btn btn-default btn-sm">
+          <img src="{% static 'eveauth/img/discord-join.png' %}">
+        </a>
+        {% else %}
+        <div align="center">
+          <a href="{% url 'social:begin' 'discord' %}">
+            <img style="border-radius: 4px;" src="{% static 'eveauth/img/discord-connect.png' %}">
+          </a>
+        </div>
+        {% endif %}
       </div>
     </div>
   </div>
