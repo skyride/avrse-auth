@@ -173,7 +173,7 @@
   </div>
 
 
-  {% if discord %}
+  {% if user.profile.level >= discord_access_level %}
   <div class="col-sm-6 col-md-4">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -196,6 +196,7 @@
             <img style="border-radius: 4px;" src="{% static 'eveauth/img/discord-connect.png' %}">
           </a>
         </div>
+        {% endif %}
       </div>
     </div>
   </div>
