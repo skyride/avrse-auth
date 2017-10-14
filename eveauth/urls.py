@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^templinks/([0-9A-Za-z]+)/submit$', views.templink_landing_submit, name="templink_landing_submit"),
     url(r'^users/([0-9]+)$', views.registeredusers_index, name="registeredusers_index"),
     url(r'^user/([0-9]+)$', views.view_user, name="view_user"),
+    url(r'^groupadmin/$', views.groupadmin_index, name="groupadmin_index"),
     url(r'^mumble/$', views.mumbleadmin_index, name="mumbleadmin_index"),
     url(r'^mumble/kick/([0-9]+)$', views.mumbleadmin_kick, name="mumbleadmin_kick"),
 ]

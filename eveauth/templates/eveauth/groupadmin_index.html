@@ -1,0 +1,34 @@
+{% extends 'eveauth/base.html' %}
+{% load static %}
+{% load authtags %}
+
+{% block title %}Groups{% endblock %}
+
+
+{% block content %}
+<h2>Group Admin</h2>
+<hr />
+
+<table class="table table-striped">
+  <tr>
+    <th>Name</th>
+    <th>Members</th>
+    <th></th>
+  </tr>
+
+  {% for group in groups %}
+  <tr>
+    <td>
+      {{ group.name }}
+    </td>
+    <td>
+      {{ group.user_set.count }}
+    </td>
+    <td>
+      <a class="btn btn-danger btn-xs" href="">Delete</a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

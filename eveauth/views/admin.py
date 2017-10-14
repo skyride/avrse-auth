@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.core.paginator import Paginator
 from django.utils.crypto import get_random_string
 from django.conf import settings
@@ -16,6 +16,7 @@ from django.db.models import Q
 from django.db import IntegrityError
 
 from eveauth.tasks import get_server
+
 
 
 @login_required
@@ -51,6 +52,22 @@ def view_user(request, id):
 
     return render(request, "eveauth/user_view.html", context)
 
+
+
+@login_required
+@user_passes_test(lambda x: x.groups.filter(name="admin").exists())
+def groupadmin_index(request):
+    groups = Group.objects.exclude(
+        Q(name__startswith="Corp: ") | Q(name__startswith="Alliance: ")
+    ).order_by(
+        'name'
+    ).all()
+
+    context = {
+        "groups": groups
+    }
+
+    return render(request, "eveauth/groupadmin_index.html", context)
 
 
 @login_required
