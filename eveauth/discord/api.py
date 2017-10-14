@@ -14,7 +14,7 @@ class DiscordAPI:
 
     def is_user_in_guild(self, user_id):
         members = self.api.guilds_members_list(self.guild['id']).keys()
-        return user_id in members
+        return int(user_id) in members
 
 
     def kick_member(self, user_id):

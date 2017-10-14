@@ -153,7 +153,7 @@ def update_discord(user_id):
     print "Updating discord for %s" % user.username
 
     social_discord = user.social_auth.filter(provider="discord").first()
-    if social_discord:
+    if social_discord != None:
         api = DiscordAPI()
 
         # Check if the user is on discord
