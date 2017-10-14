@@ -176,4 +176,5 @@ def update_discord(user_id):
             ).all()
             for group in groups:
                 roles.append(group.name)
+            print "Updating roles: %s" % str(roles)
             api.update_roles(social_discord.uid, roles)

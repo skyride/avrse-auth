@@ -37,11 +37,12 @@ class DiscordAPI:
     # Roles is a list of role name strings
     def update_roles(self, user_id, roles):
         # Find roles we need to create
-        guild_roles = map(lambda x: x.name, self.api.guilds_roles_list(self.guild['id']))
-        for role_name in Set(roles).difference(guild_roles):
+        guild_roles = self.api.guilds_roles_list(self.guild['id'])
+        guild_roles_map = map(lambda x: x.name, guild_roles)
+        for role_name in Set(roles).difference(guild_roles_map):
             role = self.api.guilds_roles_create(self.guild['id'])
             self.api.guilds_roles_modify(self.guild['id'], role.id, name=role_name)
-        guild_roles = self.api.guilds_roles_list(self.guild['id'])
+            guild_roles.append(role)
 
         # Build snowflake list
         snowflakes = []
