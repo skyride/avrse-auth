@@ -6,8 +6,19 @@
 
 
 {% block content %}
-<h2>Registered Users</h2>
-<hr />
+<div class="row">
+  <div class="col-sm-6">
+    <h2>Registered Users</h2>
+    <hr />
+  </div>
+
+  <div class="col-sm-6">
+    <a class="btn btn-success pull-right" href="{% url 'user_updategroups_all' %}">
+      <span class="glyphicon glyphicon-refresh"></span>
+      Refresh All
+    </a>
+  </div>
+</div>
 
 <table class="table table-striped">
   <tr>
@@ -16,6 +27,7 @@
     <th>Alliance</th>
     <th>Access Level</th>
     <th>Last login</th>
+    <th></th>
   </tr>
 
   {% for user in users %}
@@ -35,6 +47,11 @@
     </td>
     <td>{{ user.profile.level|level }}</td>
     <td>{{ user.last_login }}</td>
+    <td style="vertical-align: middle;">
+      <a class="btn btn-success btn-xs" href="{% url 'user_updategroups' user.id %}">
+        <span class="glyphicon glyphicon-refresh"></span>
+      </a>
+    </td>
   </tr>
   {% endfor %}
 </table>

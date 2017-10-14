@@ -33,6 +33,7 @@ def spawn_groupupdates():
         update_groups.delay(user.id)
 
     print "Spawned group update tasks for %s users" % users.count()
+    return users.count()
 
 
 

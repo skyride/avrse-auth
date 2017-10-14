@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 import json
 from datetime import timedelta
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -15,7 +15,7 @@ from django.utils import timezone
 from django.db.models import Q
 from django.db import IntegrityError
 
-from eveauth.tasks import get_server
+from eveauth.tasks import get_server, update_groups, spawn_groupupdates
 
 
 
@@ -37,6 +37,25 @@ def registeredusers_index(request, page=1):
     }
 
     return render(request, "eveauth/registeredusers_index.html", context)
+
+
+
+@login_required
+@user_passes_test(lambda x: x.groups.filter(name="admin").exists())
+def user_updategroups(request, id):
+    update_groups.delay(id)
+    user = User.objects.get(id=id)
+    messages.success(request, "Triggered group update for %s" % user.profile.character.name)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+
+@login_required
+@user_passes_test(lambda x: x.groups.filter(name="admin").exists())
+def user_updategroups_all(request):
+    users = spawn_groupupdates()
+    messages.success(request, "Triggered updates for %s users" % users)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 
