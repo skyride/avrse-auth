@@ -11,6 +11,7 @@ from models.templink import Templink
 from esi import ESI
 from ipb import IPBUser
 from discord.api import DiscordAPI
+from django.db.models import Q
 
 
 def get_server():
