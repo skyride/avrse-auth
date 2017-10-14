@@ -1,4 +1,5 @@
 *.pyc
 *.sqlite3
+config.yaml
 local_settings.py
 celerybeat-schedule

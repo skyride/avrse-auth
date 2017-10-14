@@ -10,6 +10,7 @@ from models.alliance import Alliance
 from models.templink import Templink
 from esi import ESI
 from ipb import IPBUser
+from discord.api import DiscordAPI
 
 
 def get_server():
@@ -141,3 +142,38 @@ def update_groups(user_id):
     if user.profile.forum_id:
         ipb = IPBUser(user)
         ipb.update_access_level()
+
+    update_discord.delay(user.id)
+
+
+# Update Discord status
+@app.task(name="update_discord")
+def update_discord(user_id):
+    user = User.objects.get(id=user_id)
+    print "Updating discord for %s" % user.username
+
+    social_discord = user.social_auth.filter(provider="discord").first()
+    if social_discord:
+        api = DiscordAPI()
+
+        # Check if the user is on discord
+        if api.is_user_in_guild(social_discord.uid):
+            # Check if we should kick the user
+            if user.profile.level < settings.DISCORD_ACCESS_LEVEL:
+                api.kick_member(social_discord.uid)
+                return
+
+            # Update the users name
+            api.set_name(social_discord.uid, user.profile.character.name)
+
+            # Update the users roles
+            roles = [
+                user.profile.corporation.ticker,
+                ["Non-member", "Blue", "Member"][user.profile.level]
+            ]
+            groups = user.groups.exclude(
+                Q(name__startswith="Corp: ") | Q(name__startswith="Alliance: ")
+            ).all()
+            for group in groups:
+                roles.append(group.name)
+            api.update_roles(roles)

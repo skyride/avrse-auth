@@ -31,6 +31,7 @@ def home(request):
 def services(request):
     context = {
         "discord": request.user.social_auth.filter(provider="discord").first(),
+        "invite_key": settings.DISCORD_INVITE_KEY,
         "mumble_host": settings.MUMBLE_HOST,
         "mumble_port": settings.MUMBLE_PORT,
         "forum_address": settings.FORUM_ADDRESS,

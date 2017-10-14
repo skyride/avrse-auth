@@ -186,12 +186,12 @@
         <span class="text-muted"><i>{{ discord.extra_data.username }}#{{ discord.extra_data.discriminator }}</i></span>
         <div style="height: 8px;"></div>
 
-        <a href="#" class="btn btn-default btn-sm">
+        <a href="https://discord.gg/{{ invite_key }}" class="btn btn-default btn-sm">
           <img src="{% static 'eveauth/img/discord-join.png' %}">
         </a>
         {% else %}
         <div align="center">
-          <a href="{% url 'social:begin' 'discord' %}">
+          <a href="{% url 'social:begin' 'discord' %}" class="btn btn-default btn-sm">
             <img style="border-radius: 4px;" src="{% static 'eveauth/img/discord-connect.png' %}">
           </a>
         </div>
