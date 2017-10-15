@@ -1,4 +1,5 @@
 from profile import Profile
+from groupdetails import GroupDetails
 
 from character import Character
 from corporation import Corporation

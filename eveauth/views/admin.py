@@ -91,6 +91,60 @@ def groupadmin_index(request):
 
 @login_required
 @user_passes_test(lambda x: x.groups.filter(name="admin").exists())
+def groupadmin_create(request):
+    group = Group(name="New Group")
+    group.save()
+
+    return redirect(groupadmin_edit, group.id)
+
+
+@login_required
+@user_passes_test(lambda x: x.groups.filter(name="admin").exists())
+def groupadmin_edit(request, id):
+    group = Group.objects.get(id=id)
+
+    # Check if we need to update the group
+    if request.POST.get("name", None) != None:
+        group.name = request.POST.get("name")
+        group.details.is_open = bool(request.POST.get("is_open", False))
+        group.details.can_apply = bool(request.POST.get("can_apply", False))
+        group.details.mumble = bool(request.POST.get("mumble", False))
+        group.details.forum = bool(request.POST.get("forum", False))
+        group.details.discord = bool(request.POST.get("discord", False))
+        group.save()
+        group.details.save()
+
+    context = {
+        "group": group
+    }
+
+    return render(request, "eveauth/groupadmin_edit.html", context)
+
+
+@login_required
+@user_passes_test(lambda x: x.groups.filter(name="admin").exists())
+def groupadmin_kick(request, group_id, user_id):
+    user = User.objects.get(id=user_id)
+    group = Group.objects.get(id=group_id)
+    group.user_set.remove(user)
+
+    update_groups.delay(user.id)
+
+    messages.success(request, 'Kicked %s from %s' % (user.profile.character.name, group.name))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+@login_required
+@user_passes_test(lambda x: x.groups.filter(name="admin").exists())
+def groupadmin_delete(request, id):
+    group = Group.objects.get(id=id)
+    messages.success(request, 'Deleted group %s' % group.name)
+    group.delete()
+    return redirect(groupadmin_index)
+
+
+@login_required
+@user_passes_test(lambda x: x.groups.filter(name="admin").exists())
 def mumbleadmin_index(request):
     server = get_server()
 

@@ -1,0 +1,114 @@
+{% extends 'eveauth/base.html' %}
+{% load static %}
+{% load authtags %}
+
+{% block title %}{{ group.name }}{% endblock %}
+
+
+{% block content %}
+<h2>Group Admin: {{ group.name }}</h2>
+<hr />
+
+<div class="row">
+  <div class="col-md-5">
+    <div class="well well-md">
+      <form class="form-horizontal" method="POST">
+        {% csrf_token %}
+
+        <fieldset>
+          <legend>Options</legend>
+          <div class="form-group">
+            <label for="name" class="col-lg-2" control-label>Name</label>
+            <div class="col-lg-10">
+              <input type="text" class="form-control" id="name" name="name" value="{{ group.name }}" placeholder="Name">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-2" control-label>Access</label>
+            <div class="col-lg-10">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="is_open" {{ group.details.is_open|yesno:"checked," }}> Open Group
+                </label>
+              </div>
+
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="can_apply" {{ group.details.can_apply|yesno:"checked," }}> Can Apply
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-2" control-label>Services</label>
+            <div class="col-lg-10">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="mumble" {{ group.details.mumble|yesno:"checked," }}> Send to Mumble
+                </label>
+              </div>
+
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="forum" {{ group.details.forum|yesno:"checked," }}> Send to Forum
+                </label>
+              </div>
+
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="discord" {{ group.details.discord|yesno:"checked," }}> Send to Discord
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">Save</button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-md-7">
+    <div class="well well-md">
+      <legend>Members</legend>
+
+      <div class="">
+        <table class="table table-striped">
+          <tr>
+            <th>Name</th>
+            <th>Corp</th>
+            <th>Alliance</th>
+            <th></th>
+          </tr>
+
+          {% for user in group.user_set.all %}
+          <tr>
+            <td>
+              <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Character/{{ user.profile.character_id }}_32.jpg">
+              <a href="{% url 'view_user' user.id %}">{{ user.profile.character.name }}</a>
+            </td>
+            <td>
+              <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Corporation/{{ user.profile.corporation_id }}_32.png">
+              {{ user.profile.corporation.ticker }}
+            </td>
+            <td>
+              {% if user.profile.alliance %}
+              <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Alliance/{{ user.profile.alliance_id }}_32.png"> {{ user.profile.alliance.ticker }}
+              {% endif %}
+            </td>
+            <td>
+              <a href="{% url 'groupadmin_kick' group.id user.id %}" class="btn btn-danger btn-xs">Kick</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
