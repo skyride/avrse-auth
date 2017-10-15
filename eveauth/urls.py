@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^groupadmin/([0-9]+)/$', views.groupadmin_edit, name="groupadmin_edit"),
     url(r'^groupadmin/([0-9]+)/delete$', views.groupadmin_delete, name="groupadmin_delete"),
     url(r'^groupadmin/([0-9]+)/kick/([0-9]+)$', views.groupadmin_kick, name="groupadmin_kick"),
+    url(r'^groupadmin/app/([0-9]+)/(\w+)$', views.groupadmin_app_complete, name="groupadmin_app_complete"),
     url(r'^mumble/$', views.mumbleadmin_index, name="mumbleadmin_index"),
     url(r'^mumble/kick/([0-9]+)$', views.mumbleadmin_kick, name="mumbleadmin_kick"),
 ]

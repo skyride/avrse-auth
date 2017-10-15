@@ -21,6 +21,7 @@
   <tr>
     <th>Name</th>
     <th>Members</th>
+    <th>Apps</th>
     <th>Open Group</th>
     <th>Can Apply</th>
     <th>Send to Mumble</th>
@@ -32,13 +33,10 @@
   {% for group in groups %}
   <tr>
     <td>
-      {% if group.name != "admin" %}
       <a href="{% url 'groupadmin_edit' group.id %}">{{ group.name }}</a>
-      {% else %}
-      {{ group.name }}
-      {% endif %}
     </td>
     <td>{{ group.user_set.count }}</td>
+    <td>{{ group|outstandingapps }}</td>
     <td>{{ group.details.is_open|yesno }}</td>
     <td>{{ group.details.can_apply|yesno }}</td>
     <td>{{ group.details.mumble|yesno }}</td>

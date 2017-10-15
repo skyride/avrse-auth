@@ -15,6 +15,7 @@ from django.utils import timezone
 from django.db.models import Q
 from django.db import IntegrityError
 
+from eveauth.models import GroupApp
 from eveauth.tasks import get_server, update_groups, spawn_groupupdates
 
 
@@ -115,10 +116,23 @@ def groupadmin_edit(request, id):
         group.details.save()
 
     context = {
-        "group": group
+        "group": group,
+        "apps": group.apps.filter(accepted=None).order_by('created').all()
     }
 
     return render(request, "eveauth/groupadmin_edit.html", context)
+
+
+@login_required
+@user_passes_test(lambda x: x.groups.filter(name="admin").exists())
+def groupadmin_app_complete(request, app_id, yesno):
+    app = GroupApp.objects.get(id=app_id)
+    if yesno == "accept":
+        app.complete(True, request.user)
+    else:
+        app.complete(False, request.user)
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 @login_required

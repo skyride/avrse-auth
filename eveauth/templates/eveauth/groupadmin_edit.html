@@ -20,7 +20,7 @@
           <div class="form-group">
             <label for="name" class="col-lg-2" control-label>Name</label>
             <div class="col-lg-10">
-              <input type="text" class="form-control" id="name" name="name" value="{{ group.name }}" placeholder="Name">
+              <input type="text" class="form-control" id="name" name="name" value="{{ group.name }}" placeholder="Name" {% if group.name == "admin" %}readonly{% endif %}>
             </div>
           </div>
 
@@ -74,7 +74,47 @@
 
   <div class="col-md-7">
     <div class="well well-md">
-      <legend>Members</legend>
+      <legend>Applications</legend>
+
+      {% if group.apps.count == 0 %}
+      No outstanding applications to this group
+      {% else %}
+      <table class="table table-striped">
+        <tr>
+          <th>Name</th>
+          <th>Corp</th>
+          <th>Alliance</th>
+          <th></th>
+        </tr>
+
+        {% for app in apps.all %}
+        <tr>
+          <td>
+            <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Character/{{ app.user.profile.character_id }}_32.jpg">
+            <a href="{% url 'view_user' app.user.id %}">{{ app.user.profile.character.name }}</a>
+          </td>
+          <td>
+            <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Corporation/{{ app.user.profile.corporation_id }}_32.png">
+            {{ app.user.profile.corporation.ticker }}
+          </td>
+          <td>
+            {% if app.user.profile.alliance %}
+            <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Alliance/{{ user.profile.alliance_id }}_32.png">
+            {{ app.user.profile.alliance.ticker }}
+            {% endif %}
+          </td>
+          <td>
+            <a href="{% url 'groupadmin_app_complete' app.id 'accept' %}" class="btn btn-success btn-xs">Accept</a>
+            <a href="{% url 'groupadmin_app_complete' app.id 'deny' %}" class="btn btn-danger btn-xs">Deny</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+      {% endif %}
+    </div>
+
+    <div class="well well-md">
+      <legend>Members ({{ group.user_set.count }})</legend>
 
       <div class="">
         <table class="table table-striped">

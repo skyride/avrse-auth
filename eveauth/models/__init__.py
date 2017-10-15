@@ -1,5 +1,6 @@
 from profile import Profile
 from groupdetails import GroupDetails
+from groupapp import GroupApp
 
 from character import Character
 from corporation import Corporation

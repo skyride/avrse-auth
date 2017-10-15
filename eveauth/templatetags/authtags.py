@@ -50,3 +50,8 @@ def since(timestamp):
 def until(timestamp):
     delta = timestamp - timezone.now()
     return pretty_time_delta(delta.total_seconds())
+
+
+@register.filter(name="outstandingapps")
+def outstandingapps(group):
+    return group.apps.filter(accepted=None).count()
