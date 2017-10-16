@@ -14,7 +14,7 @@ class AuthPlugin(Plugin):
     @Plugin.listen('MessageCreate')
     def command_evetime(self, event):
         if event.content == "!evetime":
-            event.msg.reply(datetime.utcnow().strftime("%H:%M:%S"))
+            event.reply(datetime.utcnow().strftime("%H:%M:%S"))
 
 
     @Plugin.listen('GuildMemberAdd')
