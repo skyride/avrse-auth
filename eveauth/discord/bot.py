@@ -4,19 +4,17 @@ sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'avrseauth.settings'
 django.setup()
 
+from dattime import datetime
 from django.db.models import Q
 from disco.bot import Plugin
 from social_django.models import UserSocialAuth
 
 
 class AuthPlugin(Plugin):
-    @Plugin.command('ping')
-    def command_ping(self, event):
-        social = self._get_social(event.msg.author.id)
-        if social:
-            event.msg.reply("Hi %s" % social.user.username)
-        else:
-            event.msg.reply("Hi %s" % event.msg.author.id)
+    @Plugin.listen('MessageCreate')
+    def command_evetime(self, event):
+        if event.msg.content == "!evetime":
+            event.msg.reply(datetime.utcnow().strftime("%H:%M:%S"))
 
 
     @Plugin.listen('GuildMemberAdd')
