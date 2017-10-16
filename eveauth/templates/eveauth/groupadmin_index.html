@@ -17,6 +17,55 @@
 </div>
 <hr />
 
+{% if apps.count > 0 %}
+<div class="well">
+  <legend>Recent Applications</legend>
+
+  <table class="table table-striped">
+    <tr>
+      <th>Name</th>
+      <th>Group</th>
+      <th>Corp</th>
+      <th>Alliance</th>
+      <th>Created</th>
+      <th></th>
+    </tr>
+
+    {% for app in apps.all|slice:"8" %}
+    <tr>
+      <td>
+        <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Character/{{ app.user.profile.character_id }}_32.jpg">
+        <a href="{% url 'view_user' app.user.id %}">{{ app.user.profile.character.name }}</a>
+      </td>
+      <td>
+        {{ app.group.name }}
+      </td>
+      <td>
+        <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Corporation/{{ app.user.profile.corporation_id }}_32.png">
+        {{ app.user.profile.corporation.ticker }}
+      </td>
+      <td>
+        {% if app.user.profile.alliance %}
+        <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Alliance/{{ user.profile.alliance_id }}_32.png">
+        {{ app.user.profile.alliance.ticker }}
+        {% endif %}
+      </td>
+      <td>
+        {{ app.created }}
+      </td>
+      <td>
+        <span class="pull-right">
+          <a href="{% url 'groupadmin_app_complete' app.id 'accept' %}" class="btn btn-success btn-xs">Accept</a>
+          <a href="{% url 'groupadmin_app_complete' app.id 'deny' %}" class="btn btn-danger btn-xs">Deny</a>
+        </span>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+
+{% endif %}
+
 <table class="table table-striped">
   <tr>
     <th>Name</th>

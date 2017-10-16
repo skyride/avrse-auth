@@ -94,8 +94,15 @@ def groupadmin_index(request):
         'name'
     ).all()
 
+    apps = GroupApp.objects.exclude(
+        completed__isnull=False
+    ).order_by(
+        '-created'
+    ).all()
+
     context = {
-        "groups": groups
+        "groups": groups,
+        "apps": apps
     }
 
     return render(request, "eveauth/groupadmin_index.html", context)
