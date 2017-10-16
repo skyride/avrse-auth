@@ -1,0 +1,71 @@
+{% extends 'eveauth/base.html' %}
+{% load static %}
+{% load authtags %}
+
+{% block title %}Groups{% endblock %}
+
+
+{% block content %}
+<div class="row">
+  <div class="col-md-6">
+    <h2>Groups</h2>
+  </div>
+</div>
+<hr />
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="well">
+      <legend>My Groups</legend>
+
+      <table class="table table-striped">
+        {% for group in my_groups %}
+        <tr>
+          <td>{{ group.name }}</td>
+          <td>
+            <a class="btn btn-danger btn-xs pull-right" href="{% url 'groups_leave' group.id %}">Leave</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="well">
+      <legend>Open Groups</legend>
+
+      <table class="table table-striped">
+        {% for group in open_groups %}
+        <tr>
+          <td>{{ group.name }}</td>
+          <td>
+            <a class="btn btn-success btn-xs pull-right" href="{% url 'groups_join' group.id %}">Join</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <div class="well">
+      <legend>Apply</legend>
+
+      <table class="table table-striped">
+        {% for group in apply %}
+        <tr>
+          <td>{{ group.name }}</td>
+          <td>
+            {% if group.id not in my_apps %}
+            <a class="btn btn-success btn-xs pull-right" href="{% url 'groups_apply' group.id %}">Apply</a>
+            {% else %}
+            <button class="btn btn-success btn-xs pull-right" disabled>Applied</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -16,7 +16,7 @@ from django.db.models import Q
 from django.db import IntegrityError
 
 from eveauth.models import GroupApp
-from eveauth.tasks import get_server, update_groups, spawn_groupupdates
+from eveauth.tasks import get_server, update_groups, spawn_groupupdates, update_discord
 
 
 
@@ -129,6 +129,7 @@ def groupadmin_app_complete(request, app_id, yesno):
     app = GroupApp.objects.get(id=app_id)
     if yesno == "accept":
         app.complete(True, request.user)
+        update_discord.delay(app.user.id)
     else:
         app.complete(False, request.user)
 
@@ -142,7 +143,7 @@ def groupadmin_kick(request, group_id, user_id):
     group = Group.objects.get(id=group_id)
     group.user_set.remove(user)
 
-    update_groups.delay(user.id)
+    update_discord.delay(user.id)
 
     messages.success(request, 'Kicked %s from %s' % (user.profile.character.name, group.name))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
