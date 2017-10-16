@@ -40,7 +40,8 @@ def registeredusers_index(request, page=1, order_by=""):
         "profile__corporation",
         "profile__alliance"
     ).order_by(
-        order_by_dict[order_by]
+        order_by_dict[order_by],
+        "profile__corporation__name"
     ).all()
     paginator = Paginator(users, 40)
 
