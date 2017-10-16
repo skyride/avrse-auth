@@ -4,7 +4,7 @@ sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'avrseauth.settings'
 django.setup()
 
-from dattime import datetime
+from datetime import datetime
 from django.db.models import Q
 from disco.bot import Plugin
 from social_django.models import UserSocialAuth
