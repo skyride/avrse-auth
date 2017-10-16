@@ -45,7 +45,9 @@ def services(request):
 
 @login_required
 def groups_index(request):
-    my_groups = request.user.groups.order_by('name').all()
+    my_groups = request.user.groups.exclude(
+        Q(name__startswith="Alliance: ") | Q(name__startswith="Corp: ")
+    ).order_by('name').all()
     my_groups_map = map(lambda x: x.id, my_groups)
     my_apps = request.user.group_apps.filter(accepted=None).all()
     my_apps_map = map(lambda x: x.group.id, my_apps)
