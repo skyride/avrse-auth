@@ -13,7 +13,7 @@ from social_django.models import UserSocialAuth
 class AuthPlugin(Plugin):
     @Plugin.listen('MessageCreate')
     def command_evetime(self, event):
-        if event.msg.content == "!evetime":
+        if event.content == "!evetime":
             event.msg.reply(datetime.utcnow().strftime("%H:%M:%S"))
 
 
