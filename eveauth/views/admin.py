@@ -22,16 +22,27 @@ from eveauth.tasks import get_server, update_groups, spawn_groupupdates, update_
 
 @login_required
 @user_passes_test(lambda x: x.groups.filter(name="admin").exists())
-def registeredusers_index(request, page=1):
+def registeredusers_index(request, page=1, order_by=""):
+    if order_by == None:
+        order_by = 'last_login'
+
+    order_by_dict = {
+        "name": "profile__character__name",
+        "corp": "profile__corporation__name",
+        "alliance": "profile__alliance__name",
+        "access_level": "profile__level",
+        "last_login": "-last_login"
+    }
+
     users = User.objects.prefetch_related(
         "profile",
         "profile__character",
         "profile__corporation",
         "profile__alliance"
     ).order_by(
-        "-last_login"
+        order_by_dict[order_by]
     ).all()
-    paginator = Paginator(users, 25)
+    paginator = Paginator(users, 40)
 
     context = {
         "users": paginator.page(page)

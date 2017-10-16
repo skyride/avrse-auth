@@ -22,11 +22,11 @@
 
 <table class="table table-striped">
   <tr>
-    <th>Name</th>
-    <th>Corp</th>
-    <th>Alliance</th>
-    <th>Access Level</th>
-    <th>Last login</th>
+    <th><a href="{% url 'registeredusers_index' page=1 order_by='name' %}">Name</a></th>
+    <th><a href="{% url 'registeredusers_index' page=1 order_by='corp' %}">Corp</a></th>
+    <th><a href="{% url 'registeredusers_index' page=1 order_by='alliance' %}">Alliance</a></th>
+    <th><a href="{% url 'registeredusers_index' page=1 order_by='access_level' %}">Access Level</a></th>
+    <th><a href="{% url 'registeredusers_index' page=1 order_by='last_login' %}">Last login</a></th>
     <th></th>
   </tr>
 
