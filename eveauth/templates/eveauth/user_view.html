@@ -35,6 +35,14 @@
         <li><strong>Last Login:</strong> {{ user.last_login }}</li>
         <li><strong>Has Mumble password:</strong> {{ user.profile.mumble_password|yesno:"Yes,No" }}</li>
         <li><strong>Has Forum password:</strong> {{ user.profile.forum_id|yesno:"Yes,No" }}</li>
+        <li>
+          <strong>Discord Account:</strong>
+          {% if discord %}
+          {{ discord.extra_data.username }}#{{ discord.extra_data.discriminator }}
+          {% else %}
+          Not connected
+          {% endif %}
+        </li>
         <li><strong>Access Level:</strong> {{ user.profile.level|level }}</li>
       </ul>
 

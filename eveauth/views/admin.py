@@ -79,6 +79,7 @@ def view_user(request, id):
 
     context = {
         "user": user,
+        "discord": user.social_auth.filter(provider="discord").first(),
         "forum_address": settings.FORUM_ADDRESS
     }
 
