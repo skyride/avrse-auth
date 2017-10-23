@@ -6,6 +6,7 @@ django.setup()
 
 from datetime import datetime
 from django.db.models import Q
+from django.conf import settings
 from disco.bot import Plugin
 from social_django.models import UserSocialAuth
 
@@ -14,7 +15,7 @@ class AuthPlugin(Plugin):
     @Plugin.listen('MessageCreate')
     def command_evetime(self, event):
         if event.content == "!evetime":
-            event.reply(datetime.utcnow().strftime("%H:%M:%S"))
+            event.reply(datetime.utcnow().strftime("EVETime: %H:%M:%S"))
 
 
     @Plugin.listen('GuildMemberAdd')
@@ -22,7 +23,8 @@ class AuthPlugin(Plugin):
         # Kick the user if they aren't authed
         social = self._get_social(event.member.id)
         if not social:
-            event.member.kick()
+            if event.member.id not in settings.DISCORD_ALLOWED_BOTS:
+                event.member.kick()
 
         # Set their nickname to their EVE Character
         event.member.set_nickname(social.user.profile.character.name)
