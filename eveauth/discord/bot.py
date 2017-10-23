@@ -24,6 +24,8 @@ class AuthPlugin(Plugin):
         social = self._get_social(event.member.id)
         if not social:
             if event.member.id not in settings.DISCORD_ALLOWED_BOTS:
+                return
+            else:
                 event.member.kick()
 
         # Set their nickname to their EVE Character
