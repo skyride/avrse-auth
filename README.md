@@ -1,6 +1,6 @@
 # AVRSE Auth
 
-![https://i.imgur.com/tgSuSNd.png](Screenshot)
+![](screenshot.png)
 
 AVRSE auth is an EVE Online auth system originally created for TISHU/Adversity, but that I'm happy to release publically so that others may use it. As it's created for a single alliance the basic features and functionality are heavily tailored towards how we run our group, but if it's a good fit for you too then you're welcome to use it.
 
