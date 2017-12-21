@@ -24,7 +24,7 @@ class Corporation(models.Model):
             corporation = api.get("/corporations/%s/" % corporation_id)
             db_corporation = Corporation(
                 id=corporation_id,
-                name=corporation['corporation_name'],
+                name=corporation['name'],
                 ticker=corporation['ticker']
                 )
 
@@ -41,7 +41,7 @@ class Corporation(models.Model):
                 old_name = db_corporation.name
                 api = ESI()
                 corporation = api.get("/corporations/%s/" % corporation_id)
-                db_corporation.name = corporation['corporation_name']
+                db_corporation.name = corporation['name']
                 db_corporation.ticker = corporation['ticker']
                 db_corporation.save()
 
