@@ -1,4 +1,4 @@
-import json
+import ujson
 
 from django.core.management.base import BaseCommand
 
@@ -10,7 +10,7 @@ class Command(BaseCommand):
     help = "Imports scopes from the swagger.json file and adds them to the database"
 
     def handle(self, *args, **options):
-        swagger = json.load(open(swagger_json_file))
+        swagger = ujson.load(open(swagger_json_file))
 
         # Add or update scopes as required
         for name, description in swagger['securityDefinitions']['evesso']['scopes'].iteritems():
