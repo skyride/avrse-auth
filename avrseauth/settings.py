@@ -174,5 +174,5 @@ from local_settings import *
 # SDE Database
 DATABASES['sde'] = {
     'ENGINE': 'django.db.backends.sqlite3',
-    'NAME': os.path.join(BASE_DIR, ' sqlite-latest.sqlite'),
+    'NAME': os.path.join(BASE_DIR, 'sqlite-latest.sqlite'),
 }
