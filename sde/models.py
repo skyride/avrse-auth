@@ -12,6 +12,9 @@ class Region(models.Model):
     z = models.FloatField()
     radius = models.FloatField()
 
+    def __str__(self):
+        return "%s:%s" % (self.id, self.name)
+
 
 class Constellation(models.Model):
     id = models.BigIntegerField(primary_key=True)
@@ -21,6 +24,9 @@ class Constellation(models.Model):
     y = models.FloatField()
     z = models.FloatField()
     radius = models.FloatField()
+
+    def __str__(self):
+        return "%s:%s" % (self.id, self.name)
 
 
 class System(models.Model):
@@ -42,6 +48,9 @@ class System(models.Model):
     sun = models.ForeignKey('Type')
     security_class = models.CharField(max_length=2)
 
+    def __str__(self):
+        return "%s:%s" % (self.id, self.name)
+
 
 # Types
 class MarketGroup(models.Model):
@@ -52,12 +61,18 @@ class MarketGroup(models.Model):
     icon_id = models.IntegerField(null=True)
     hasTypes = models.BooleanField()
 
+    def __str__(self):
+        return "%s:%s" % (self.id, self.name)
+
 
 class Category(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100, db_index=True)
     icon_id = models.IntegerField(null=True)
     published = models.BooleanField()
+
+    def __str__(self):
+        return "%s:%s" % (self.id, self.name)
 
 
 class Group(models.Model):
@@ -70,6 +85,9 @@ class Group(models.Model):
     fittableNonSingleton = models.BooleanField()
     published = models.BooleanField()
 
+    def __str__(self):
+        return "%s:%s" % (self.id, self.name)
+
 
 class Type(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -81,3 +99,6 @@ class Type(models.Model):
     published = models.BooleanField()
     market_group = models.ForeignKey(MarketGroup)
     icon_id = models.IntegerField(null=True)
+
+    def __str__(self):
+        return "%s:%s" % (self.id, self.name)
