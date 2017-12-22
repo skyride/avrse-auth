@@ -3,3 +3,4 @@
 config.yaml
 local_settings.py
 celerybeat-schedule
+.ropeproject
