@@ -1,6 +1,8 @@
 from __future__ import print_function
 import sys
 
+from django.db import transaction
+
 # Defines some functions for importing
 
 
@@ -9,6 +11,7 @@ class ModelUpdater:
     def __init__(self, cursor):
         self.cursor = cursor
 
+    @transaction.atomic
     def update_model(self, Model, table_name, table_map):
         print("Updating %s...   " % Model.__name__, end="")
         sys.stdout.flush()
