@@ -28,7 +28,7 @@ class Alliance(models.Model):
             alliance = api.get("/alliances/%s/" % alliance_id)
             db_alliance = Alliance(
                 id=alliance_id,
-                name=alliance['alliance_name'],
+                name=alliance['name'],
                 ticker=alliance['ticker']
             )
 
@@ -44,7 +44,7 @@ class Alliance(models.Model):
             db_alliance = db_alliance[0]
             if db_alliance.last_updated < now() - timedelta(days=2):
                 alliance = api.get("/alliances/%s/" % alliance_id)
-                db_alliance.name = alliance['alliance_name']
+                db_alliance.name = alliance['name']
                 db_alliance.ticker = alliance['ticker']
                 db_alliance.save()
 
