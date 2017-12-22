@@ -14,4 +14,10 @@ class Command(BaseCommand):
         # Get cursor for sde db
         with connections['sde'].cursor() as cursor:
             updater = ModelUpdater(cursor)
+            updater.update_model(MarketGroup, "invMarketGroups", maps.MarketGroup)
+            updater.update_model(Category, "invCategories", maps.Category)
+            updater.update_model(Group, "invGroups", maps.Group)
+            updater.update_model(Type, "invTypes", maps.Type)
             updater.update_model(Region, "mapRegions", maps.Region)
+            updater.update_model(Constellation, "mapConstellations", maps.Constellation)
+            updater.update_model(System, "mapSolarSystems", maps.System)
