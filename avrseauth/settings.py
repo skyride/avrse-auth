@@ -22,7 +22,6 @@ ALLOWED_HOSTS = ["192.168.0.18"]
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -32,7 +31,8 @@ INSTALLED_APPS = [
     'social_django',
 
     'eveauth',
-    'esi'
+    'esi',
+    'sde'
 ]
 
 MIDDLEWARE = [
@@ -170,3 +170,9 @@ CELERYBEAT_SCHEDULE = {
 
 
 from local_settings import *
+
+# SDE Database
+DATABASES['sde'] = {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': os.path.join(BASE_DIR, ' sqlite-latest.sqlite'),
+}
