@@ -10,7 +10,7 @@ class Region(models.Model):
     x = models.FloatField()
     y = models.FloatField()
     z = models.FloatField()
-    radius = models.FloatField()
+    radius = models.FloatField(null=True)
 
     def __str__(self):
         return "%s:%s" % (self.id, self.name)
@@ -23,7 +23,7 @@ class Constellation(models.Model):
     x = models.FloatField()
     y = models.FloatField()
     z = models.FloatField()
-    radius = models.FloatField()
+    radius = models.FloatField(null=True)
 
     def __str__(self):
         return "%s:%s" % (self.id, self.name)
@@ -44,7 +44,7 @@ class System(models.Model):
     hub = models.BooleanField()
     international = models.BooleanField()
     security = models.FloatField()
-    radius = models.FloatField()
+    radius = models.FloatField(null=True)
     sun = models.ForeignKey('Type')
     security_class = models.CharField(max_length=2)
 
@@ -59,7 +59,7 @@ class MarketGroup(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     icon_id = models.IntegerField(null=True)
-    hasTypes = models.BooleanField()
+    has_types = models.BooleanField()
 
     def __str__(self):
         return "%s:%s" % (self.id, self.name)
@@ -82,7 +82,7 @@ class Group(models.Model):
     icon_id = models.IntegerField(null=True)
     anchored = models.BooleanField()
     anchorable = models.BooleanField()
-    fittableNonSingleton = models.BooleanField()
+    fittable_non_singleton = models.BooleanField()
     published = models.BooleanField()
 
     def __str__(self):
