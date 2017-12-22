@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
-    help = "Imports scopes from the swagger.json file and adds them to the database"
+    help = "Downloads the SDE file from fuzzworks"
 
     def handle(self, *args, **options):
         # Fetch the SDE
