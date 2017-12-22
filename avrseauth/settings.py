@@ -176,3 +176,4 @@ DATABASES['sde'] = {
     'ENGINE': 'django.db.backends.sqlite3',
     'NAME': os.path.join(BASE_DIR, 'sqlite-latest.sqlite'),
 }
+DATABASES['default']['OPTIONS'] = {'charset': 'utf8mb4'}
