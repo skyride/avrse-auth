@@ -46,7 +46,7 @@ class System(models.Model):
     security = models.FloatField()
     radius = models.FloatField(null=True)
     sun = models.ForeignKey('Type')
-    security_class = models.CharField(max_length=2)
+    security_class = models.CharField(max_length=2, null=True)
 
     def __str__(self):
         return "%s:%s" % (self.id, self.name)
@@ -57,7 +57,7 @@ class MarketGroup(models.Model):
     id = models.IntegerField(primary_key=True)
     parent = models.ForeignKey('self', null=True, default=None, db_constraint=False)
     name = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(null=True)
     icon_id = models.IntegerField(null=True)
     has_types = models.BooleanField()
 
@@ -97,7 +97,7 @@ class Type(models.Model):
     volume = models.FloatField(null=True)
     capacity = models.FloatField(null=True)
     published = models.BooleanField()
-    market_group = models.ForeignKey(MarketGroup)
+    market_group = models.ForeignKey(MarketGroup, null=True)
     icon_id = models.IntegerField(null=True)
 
     def __str__(self):
