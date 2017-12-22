@@ -1,3 +1,6 @@
+from __future__ import print_function
+import sys
+
 # Defines some functions for importing
 
 
@@ -7,6 +10,9 @@ class ModelUpdater:
         self.cursor = cursor
 
     def update_model(self, Model, table_name, table_map):
+        print("Updating %s...   " % Model.__name__, end="")
+        sys.stdout.flush()
+
         # Get query
         query = self.query_from_map(table_name, table_map)
 
@@ -25,6 +31,7 @@ class ModelUpdater:
                 setattr(obj, attr, result[i])
 
             obj.save()
+        print("%s objects" % len(results))
 
 
     # Generates SQL select query from a map
