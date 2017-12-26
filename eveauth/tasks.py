@@ -10,7 +10,7 @@ from models.alliance import Alliance
 from models.templink import Templink
 from esi import ESI
 from ipb import IPBUser
-from discord.api import DiscordAPI
+from discord.api import DiscordAPI, is_active
 from django.db.models import Q
 
 
@@ -151,6 +151,9 @@ def update_groups(user_id):
 # Update Discord status
 @app.task(name="update_discord")
 def update_discord(user_id):
+    if not is_active():
+        return
+
     user = User.objects.get(id=user_id)
     print "Updating discord for %s" % user.username
 
