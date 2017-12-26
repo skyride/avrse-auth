@@ -5,8 +5,11 @@ from disco.api.http import Routes
 from django.conf import settings
 
 
-def is_active():
+def is_bot_active():
     return settings.DISCORD_BOT_TOKEN != ""
+
+def is_api_active():
+    return settings.SOCIAL_AUTH_DISCORD_KEY != ""
 
 
 class DiscordAPI:
