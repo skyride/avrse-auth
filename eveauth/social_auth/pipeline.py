@@ -8,4 +8,4 @@ def update_user(backend, user, response, *args, **kwargs):
 
 def update_character(backend, user, response, *args, **kwargs):
     if backend.name == "character_auth":
-        print response
+        pass
