@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Mercurytide url metadata scraper">
+    <meta name="description" content="AVRSE Auth">
 
     <title>AVRSE Auth // {% block title %}{% endblock %}</title>
 
@@ -35,6 +35,7 @@
             {% if request.user.is_authenticated %}
             <!-- <li class="active"><a href="">asd</a></li> -->
             <li><a href="{% url 'services' %}">Services</a></li>
+            <li><a href="{% url 'characters_index' %}">Characters</a></li>
             <li><a href="{% url 'groups_index' %}">Groups</a></li>
               {% if request.user|has_group:"admin" %}
               <li><a href="{% url 'registeredusers_index' 1 %}">Users</a></li>
