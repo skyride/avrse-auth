@@ -1,17 +1,18 @@
-from avrseauth.celery import app
 from django.utils import timezone
 from django.contrib.auth.models import User
-from avrseauth.settings import members, blues
 from django.conf import settings
-
-from models.character import Character
-from models.corporation import Corporation
-from models.alliance import Alliance
-from models.templink import Templink
-from esi import ESI
-import ipb
-from discord.api import DiscordAPI, is_bot_active
 from django.db.models import Q
+
+from avrseauth.settings import members, blues
+from avrseauth.celery import app
+
+import eveauth.ipb
+from eveauth.models.character import Character
+from eveauth.models.corporation import Corporation
+from eveauth.models.alliance import Alliance
+from eveauth.models.templink import Templink
+from eveauth.esi import ESI
+from eveauth.discord.api import DiscordAPI, is_bot_active
 
 
 def get_server():
