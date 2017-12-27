@@ -16,8 +16,13 @@ DATABASES = {
 CELERY_APP_NAME = "avrseauth"
 BROKER_URL = "redis://127.0.0.1:6379/1"
 
+# For login
 SOCIAL_AUTH_EVEONLINE_KEY = ""
 SOCIAL_AUTH_EVEONLINE_SECRET = ""
+
+# For characters
+SOCIAL_AUTH_CHARACTER_AUTH_KEY = ""
+SOCIAL_AUTH_CHARACTER_AUTH_SECRET = ""
 
 # Leave blank if you don't want to use discord
 SOCIAL_AUTH_DISCORD_KEY = ""
