@@ -47,9 +47,11 @@ def channel(id):
     murmur = get_server()
     for channel in murmur.getChannels():
         cache.set(key % channel.id, channel.name, 60)
+        if channel.id == id:
+            name = channel.name
     murmur.ice_getCommunicator().destroy()
 
-    return channel(id)
+    return name
 
 
 @register.filter(name="level")
