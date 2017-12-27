@@ -6,7 +6,7 @@ from django.db.models import Q
 from avrseauth.settings import members, blues
 from avrseauth.celery import app
 
-import eveauth.ipb
+from eveauth import ipb
 from eveauth.models.character import Character
 from eveauth.models.corporation import Corporation
 from eveauth.models.alliance import Alliance
