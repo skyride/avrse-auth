@@ -1,10 +1,12 @@
 import math
 
 from django import template
+from django.conf import settings
+from django.core.cache import cache
 from django.contrib.auth.models import Group
 from django.utils import timezone
 
-from eveauth.models import MurmurChannel
+from eveauth.tasks import get_server
 
 register = template.Library()
 
@@ -32,7 +34,22 @@ def pretty_time_delta(seconds):
 
 @register.filter(name="channel")
 def channel(id):
-    return MurmurChannel.objects.get(channel_id=id).name
+    if settings.MUMBLE_HOST == "":
+        return "CHANNEL_NAME"
+
+    # Try cache
+    key = "murmur_channel_name:%s"
+    name = cache.get(key % id)
+    if name != None:
+        return name
+
+    # Populate cache
+    murmur = get_server()
+    for channel in murmur.getChannels():
+        cache.set(key % channel.id, channel.name, 60)
+    murmur.ice_getCommunicator().destroy()
+
+    return channel(id)
 
 
 @register.filter(name="level")
