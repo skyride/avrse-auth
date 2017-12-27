@@ -17,7 +17,7 @@ class Character(models.Model):
 
     # Extra details, these are default null
     token = models.ForeignKey(UserSocialAuth, null=True, default=None)
-    owner = models.ForeignKey(User, null=True, default=None)
+    owner = models.ForeignKey(User, null=True, default=None, related_name="characters")
     corp = models.ForeignKey(Corporation, null=True, default=None)
     alliance = models.ForeignKey(Alliance, null=True, default=None)
 

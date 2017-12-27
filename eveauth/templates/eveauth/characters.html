@@ -1,0 +1,22 @@
+{% extends 'eveauth/base.html' %}
+{% load static %}
+
+{% block title %}Characters{% endblock %}
+
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-9">
+    <h2>Characters</h2>
+  </div>
+
+  <div class="col-sm-3">
+    <a class="btn btn-lg btn-block btn-primary" href="{% url 'social:begin' 'character_auth' %}">Connect</a>
+  </div>
+</div>
+<hr />
+
+<div class="row">
+  
+</div>
+{% endblock %}
