@@ -185,3 +185,8 @@ def update_discord(user_id):
                 roles.append(group.name)
             print "Updating roles: %s" % str(roles)
             api.update_roles(social_discord.uid, roles)
+
+
+@app.task(name="update_character")
+def update_character(character_id):
+    print character_id
