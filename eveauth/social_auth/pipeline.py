@@ -1,4 +1,4 @@
-from tasks import update_groups
+from eveauth.tasks import update_groups
 
 
 def update_user(backend, user, response, *args, **kwargs):
