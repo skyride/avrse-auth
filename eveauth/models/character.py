@@ -1,12 +1,29 @@
 from datetime import datetime, timedelta
 
 from django.db import models
+from django.contrib.auth.models import User
+from social_django.models import UserSocialAuth
+
+from sde.models import System, Type
+
+from .corporation import Corporation
+from .alliance import Alliance
 
 
 class Character(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=64)
     last_updated = models.DateTimeField(auto_now=True)
+
+    # Extra details, these are default null
+    token = models.ForeignKey(UserSocialAuth, null=True, default=None)
+    owner = models.ForeignKey(User, null=True, default=None)
+    corp = models.ForeignKey(Corporation, null=True, default=None)
+    alliance = models.ForeignKey(Alliance, null=True, default=None)
+
+    wallet = models.DecimalField(max_digits=16, decimal_places=2, default=0)
+    system = models.ForeignKey(System, null=True, default=None)
+    ship = models.ForeignKey(Type, null=True, default=None)
 
 
     @staticmethod
