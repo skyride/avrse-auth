@@ -9,7 +9,7 @@ from models.corporation import Corporation
 from models.alliance import Alliance
 from models.templink import Templink
 from esi import ESI
-from ipb import IPBUser
+import ipb
 from discord.api import DiscordAPI, is_bot_active
 from django.db.models import Q
 
@@ -141,9 +141,10 @@ def update_groups(user_id):
     user.profile.save()
 
     # Update IPB User
-    if user.profile.forum_id:
-        ipb = IPBUser(user)
-        ipb.update_access_level()
+    if ipb.is_active():
+        if user.profile.forum_id:
+            forum_api = ipb.IPBUser(user)
+            forum_api.update_access_level()
 
     update_discord.delay(user.id)
 

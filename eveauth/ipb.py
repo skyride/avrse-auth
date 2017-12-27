@@ -4,6 +4,10 @@ from django.conf import settings
 from django.utils.crypto import get_random_string
 
 
+def is_active():
+    return settings.FORUM_API_KEY != ""
+
+
 # IPBoard Micro API
 class IPBUser:
     def __init__(self, user):
