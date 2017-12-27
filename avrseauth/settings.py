@@ -16,7 +16,7 @@ _PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '../..'))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["192.168.0.18"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -63,6 +63,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.user.user_details',
     'social_core.pipeline.social_auth.associate_by_email',
     'eveauth.social_auth.pipeline.update_user',
+    'eveauth.social_auth.pipeline.update_character',
 )
 
 ROOT_URLCONF = 'avrseauth.urls'
@@ -179,5 +180,6 @@ DATABASES['sde'] = {
 }
 DATABASES['default']['OPTIONS'] = {'charset': 'utf8mb4'}
 
+# EVE SSO Stuff
 SOCIAL_AUTH_CHARACTER_AUTH_KEY = SOCIAL_AUTH_EVEONLINE_KEY
 SOCIAL_AUTH_CHARACTER_AUTH_SECRET = SOCIAL_AUTH_EVEONLINE_SECRET
