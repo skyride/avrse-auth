@@ -1,9 +1,7 @@
 from django.utils.timezone import now, timedelta
 
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 
 class Corporation(models.Model):
