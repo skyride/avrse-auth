@@ -48,7 +48,8 @@ MIDDLEWARE = [
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.eveonline.EVEOnlineOAuth2',
-    'eveauth.discord.oauth.DiscordOAuth2'
+    'eveauth.discord.oauth.DiscordOAuth2',
+    'eveauth.social_auth.characterauth.EVECharacterAuth'
 )
 
 SOCIAL_AUTH_PIPELINE = (
