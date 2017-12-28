@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^services/$', views.services, name="services"),
 
     url(r'^characters/$', views.characters_index, name="characters_index"),
+    url(r'^characters/delete/([0-9]+)$', views.characters_delete, name="characters_delete"),
 
     url(r'^groups/$', views.groups_index, name="groups_index"),
     url(r'^groups/([0-9]+)/leave$', views.groups_leave, name="groups_leave"),
