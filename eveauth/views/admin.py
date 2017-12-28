@@ -12,7 +12,7 @@ from django.core.paginator import Paginator
 from django.utils.crypto import get_random_string
 from django.conf import settings
 from django.utils import timezone
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.db import IntegrityError
 
 from eveauth.models import GroupApp
@@ -31,7 +31,8 @@ def registeredusers_index(request, page=1, order_by=""):
         "corp": "profile__corporation__name",
         "alliance": "profile__alliance__name",
         "access_level": "profile__level",
-        "last_login": "-last_login"
+        "last_login": "-last_login",
+        "chars": "-chars",
     }
 
     users = User.objects.prefetch_related(
@@ -39,6 +40,8 @@ def registeredusers_index(request, page=1, order_by=""):
         "profile__character",
         "profile__corporation",
         "profile__alliance"
+    ).annotate(
+        chars=Count('characters')
     ).order_by(
         order_by_dict[order_by],
         "profile__corporation__name"
