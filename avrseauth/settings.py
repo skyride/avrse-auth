@@ -115,19 +115,19 @@ SOCIAL_AUTH_EVEONLINE_SCOPE = [
     "publicData"
 ]
 SOCIAL_AUTH_CHARACTER_AUTH_SCOPE = [
-    "esi-assets.read_assets.v1",
-    "esi-characters.read_corporation_roles.v1",
-    "esi-characters.read_fatigue.v1",
-    "esi-clones.read_clones.v1",
-    "esi-clones.read_implants.v1",
-    "esi-location.read_location.v1",
+    "esi-assets.read_assets.v1",                    # SEE UR STUFF
+    "esi-characters.read_corporation_roles.v1",     # SEE UR ROLES
+    "esi-characters.read_fatigue.v1",               # SEE UR SPACE AIDS
+    "esi-clones.read_clones.v1",                    # SEE UR JUMP CLONES
+    "esi-clones.read_implants.v1",                  # SEE UR IMPLANTS
+    "esi-location.read_location.v1",                # SEE WHERE UR AT
     "esi-location.read_online.v1",
     "esi-location.read_ship_type.v1",
-    "esi-search.search_structures.v1",
+    "esi-search.search_structures.v1",              # SEE SHITADELS UR STUFF IS IN
     "esi-universe.read_structures.v1",
-    "esi-skills.read_skills.v1",
+    "esi-skills.read_skills.v1",                    # SEE UR SKILLS
     "esi-skills.read_skillqueue.v1",
-    "esi-wallet.read_character_wallet.v1"
+    "esi-wallet.read_character_wallet.v1"           # SEE UR SPACE GOLD
 ]
 SOCIAL_AUTH_DISCORD_SCOPE = [
     "identify"
