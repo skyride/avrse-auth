@@ -21,3 +21,4 @@ class Command(BaseCommand):
             updater.update_model(Region, "mapRegions", maps.Region)
             updater.update_model(Constellation, "mapConstellations", maps.Constellation)
             updater.update_model(System, "mapSolarSystems", maps.System)
+            updater.update_model(Station, "staStations", maps.Station)

@@ -82,3 +82,14 @@ Type = [
     ('market_group_id', 'marketGroupID'),
     ('icon_id', 'iconID')
 ]
+
+
+Station = [
+    ('id', 'stationID'),
+    ('name', 'stationName'),
+    ('type_id', 'stationTypeID'),
+    ('system_id', 'solarSystemID'),
+    ('x', 'x'),
+    ('y', 'y'),
+    ('z', 'z'),
+]

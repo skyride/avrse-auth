@@ -102,3 +102,17 @@ class Type(models.Model):
 
     def __str__(self):
         return "%s:%s" % (self.id, self.name)
+
+
+class Station(models.Model):
+    id = models.BigIntegerField(primary_key=True)
+    name = models.CharField(max_length=100, db_index=True)
+    type = models.ForeignKey(Type)
+    system = models.ForeignKey(System)
+    x = models.FloatField()
+    y = models.FloatField()
+    z = models.FloatField()
+
+    # Is the station a structure or an NPC station
+    structure = models.BooleanField(default=False)
+    last_updated = models.DateTimeField(auto_now=True, db_index=True)
