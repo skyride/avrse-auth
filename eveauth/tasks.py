@@ -189,4 +189,5 @@ def update_discord(user_id):
 
 @app.task(name="update_character")
 def update_character(character_id):
-    print character_id
+    # Get the db objects we need
+    db_char = Character.objects.get(id=character_id)
