@@ -45,7 +45,9 @@ def channel(id):
 
     # Populate cache
     murmur = get_server()
-    for channel in murmur.getChannels():
+    channels = murmur.getChannels()
+    for channel in channels:
+        channel = channels[channel]
         cache.set(key % channel.id, channel.name, 60)
         if channel.id == id:
             name = channel.name
