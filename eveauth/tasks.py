@@ -153,7 +153,7 @@ def update_groups(user_id):
 # Update Discord status
 @app.task(name="update_discord")
 def update_discord(user_id):
-    if not is_active():
+    if not is_bot_active():
         return
 
     user = User.objects.get(id=user_id)
