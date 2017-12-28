@@ -25,6 +25,9 @@ class Character(models.Model):
     system = models.ForeignKey(System, null=True, default=None)
     ship = models.ForeignKey(Type, null=True, default=None)
 
+    fatigue_expire_date = models.DateTimeField(null=True, default=None)
+    last_jump_date = models.DateTimeField(null=True, default=None)
+
 
     @staticmethod
     def get_or_create(id):
