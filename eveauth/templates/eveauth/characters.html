@@ -18,8 +18,20 @@
 
 <div class="row">
   {% for character in characters %}
-  <div class="col-md-4">
-    asd
+  <div class="col-md-3 col-sm-4 col-xs-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        {{ character.name }}
+      </div>
+
+      <img width="100%" src="https://imageserver.eveonline.com/Character/{{ character.id }}_512.jpg">
+
+      <ul class="list-group">
+        <li class="list-group-item">
+          <i>Info will be here later</i>
+        </li>
+      </ul>
+    </div>
   </div>
   {% endfor %}
 </div>
