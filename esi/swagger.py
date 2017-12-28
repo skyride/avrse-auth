@@ -10,3 +10,12 @@ def get_client(token=None):
         return SwaggerClient.from_spec(
             load_file(swagger_json_file)
         )
+
+    # Set up client
+    http_client = RequestsClient()
+
+
+    return SwaggerClient.from_spec(
+        load_file(swagger_json_file),
+        http_client=http_client
+    )
