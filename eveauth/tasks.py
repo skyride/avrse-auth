@@ -296,7 +296,7 @@ def update_character(character_id):
                     #print db_asset.parent_id
                 db_asset.save()
 
-        print "Updated all info for characters %s" % db_char.name
+        print "Updated all info for character %s" % db_char.name
 
 
 

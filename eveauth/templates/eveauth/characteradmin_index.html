@@ -1,0 +1,86 @@
+{% extends 'eveauth/base.html' %}
+{% load static %}
+{% load authtags %}
+
+{% block title %}Characters{% endblock %}
+
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-6">
+    <h2>Characters</h2>
+  </div>
+
+  <div class="col-sm-6">
+    <a class="btn btn-success pull-right" href="{% url 'user_updategroups_all' %}">
+      <span class="glyphicon glyphicon-refresh"></span>
+      Refresh All
+    </a>
+  </div>
+</div>
+<hr />
+
+<table class="table table-striped">
+  <tr>
+    <th><a href="{% url 'registeredusers_index' page=1 order_by='name' %}">Name</a></th>
+    <th><a href="{% url 'registeredusers_index' page=1 order_by='chars' %}">Characters</a></th>
+    <th><a href="{% url 'registeredusers_index' page=1 order_by='corp' %}">Corp</a></th>
+    <th><a href="{% url 'registeredusers_index' page=1 order_by='alliance' %}">Alliance</a></th>
+    <th><a href="{% url 'registeredusers_index' page=1 order_by='access_level' %}">Access Level</a></th>
+    <th><a href="{% url 'registeredusers_index' page=1 order_by='last_login' %}">Last login</a></th>
+    <th></th>
+  </tr>
+
+  {% for user in users %}
+  <tr>
+    <td>
+      <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Character/{{ user.profile.character_id }}_32.jpg">
+      <a href="{% url 'view_user' user.id %}">{{ user.profile.character.name }}</a>
+    </td>
+    <td>
+      {{ user.chars }}
+    </td>
+    <td>
+      <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Corporation/{{ user.profile.corporation_id }}_32.png">
+      {{ user.profile.corporation.ticker }}
+    </td>
+    <td>
+      {% if user.profile.alliance %}
+      <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Alliance/{{ user.profile.alliance_id }}_32.png"> {{ user.profile.alliance.ticker }}
+      {% endif %}
+    </td>
+    <td>{{ user.profile.level }}</td>
+    <td>{{ user.last_login }}</td>
+    <td style="vertical-align: middle;">
+      <a class="btn btn-success btn-xs" href="{% url 'user_updategroups' user.id %}">
+        <span class="glyphicon glyphicon-refresh"></span>
+      </a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+<div align="center">
+  {% if users.has_other_pages %}
+  <ul class="pagination">
+    {% if users.has_previous %}
+      <li><a href="{% url 'registeredusers_index' users.previous_page_number %}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in users.paginator.page_range %}
+      {% if users.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="{% url 'registeredusers_index' i %}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if users.has_next %}
+      <li><a href="{% url 'registeredusers_index' users.next_page_number %}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+</div>
+{% endblock %}

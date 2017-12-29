@@ -15,7 +15,7 @@ from django.utils import timezone
 from django.db.models import Q, Count
 from django.db import IntegrityError
 
-from eveauth.models import GroupApp
+from eveauth.models import GroupApp, Character
 from eveauth.tasks import get_server, update_groups, spawn_groupupdates, update_discord
 
 
@@ -207,3 +207,31 @@ def mumbleadmin_kick(request, session_id):
 
     server.ice_getCommunicator().destroy()
     return redirect(mumbleadmin_index)
+
+
+@login_required
+@user_passes_test(lambda x: x.groups.filter(name="admin").exists())
+def characteradmin_index(request, page=1, order_by=None):
+    if order_by == None:
+        order_by = 'name'
+
+    order_by_dict = {
+        "name": "name",
+        "corp": "corp__name",
+        "alliance": "alliance__name",
+        "system": "system__name",
+    }
+
+    chars = Character.objects.prefetch_related(
+    ).order_by(
+        order_by_dict[order_by],
+        "corp__name",
+        "name"
+    ).all()
+    paginator = Paginator(chars, 40)
+
+    context = {
+        "users": paginator.page(page)
+    }
+
+    return render(request, "eveauth/characteradmin_index.html", context)

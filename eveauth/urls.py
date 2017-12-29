@@ -33,6 +33,8 @@ urlpatterns = [
     url(r'^user/([0-9]+)/updategroups$', views.user_updategroups, name="user_updategroups"),
     url(r'^user/all/updategroups$', views.user_updategroups_all, name="user_updategroups_all"),
 
+    url(r'^admin/characters/(?P<page>[0-9]+)/(?P<order_by>[a-zA-Z_]+)?$', views.characteradmin_index, name="characteradmin_index"),
+
     url(r'^groupadmin/$', views.groupadmin_index, name="groupadmin_index"),
     url(r'^groupadmin/create$', views.groupadmin_create, name="groupadmin_create"),
     url(r'^groupadmin/([0-9]+)/$', views.groupadmin_edit, name="groupadmin_edit"),
