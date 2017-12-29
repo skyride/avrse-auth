@@ -6,6 +6,8 @@ from character import Character
 from corporation import Corporation
 from alliance import Alliance
 
+from asset import Asset
+
 from templink import Templink
 from templinkuser import TemplinkUser
 
