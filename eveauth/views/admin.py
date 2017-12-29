@@ -219,19 +219,29 @@ def characteradmin_index(request, page=1, order_by=None):
         "name": "name",
         "corp": "corp__name",
         "alliance": "alliance__name",
+        "ship": "ship__name",
+        "ship_type": "ship__group__name",
         "system": "system__name",
+        "region": "system__region__name",
     }
 
-    chars = Character.objects.prefetch_related(
+    chars = Character.objects.filter(
+        owner__isnull=False
+    ).prefetch_related(
+        'corp',
+        'alliance',
+        'system',
+        'system__region',
     ).order_by(
         order_by_dict[order_by],
-        "corp__name",
+        "owner__username",
+        "system__name",
         "name"
     ).all()
     paginator = Paginator(chars, 40)
 
     context = {
-        "users": paginator.page(page)
+        "characters": paginator.page(page)
     }
 
     return render(request, "eveauth/characteradmin_index.html", context)

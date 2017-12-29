@@ -22,40 +22,34 @@
 
 <table class="table table-striped">
   <tr>
-    <th><a href="{% url 'registeredusers_index' page=1 order_by='name' %}">Name</a></th>
-    <th><a href="{% url 'registeredusers_index' page=1 order_by='chars' %}">Characters</a></th>
-    <th><a href="{% url 'registeredusers_index' page=1 order_by='corp' %}">Corp</a></th>
-    <th><a href="{% url 'registeredusers_index' page=1 order_by='alliance' %}">Alliance</a></th>
-    <th><a href="{% url 'registeredusers_index' page=1 order_by='access_level' %}">Access Level</a></th>
-    <th><a href="{% url 'registeredusers_index' page=1 order_by='last_login' %}">Last login</a></th>
-    <th></th>
+    <th><a href="{% url 'characteradmin_index' page=1 order_by='name' %}">Name</a></th>
+    <th><a href="{% url 'characteradmin_index' page=1 order_by='corp' %}">Corp</a></th>
+    <th><a href="{% url 'characteradmin_index' page=1 order_by='alliance' %}">Alliance</a></th>
+    <th><a href="{% url 'characteradmin_index' page=1 order_by='ship' %}">Ship</a></th>
+    <th><a href="{% url 'characteradmin_index' page=1 order_by='ship_type' %}">Ship Type</a></th>
+    <th><a href="{% url 'characteradmin_index' page=1 order_by='system' %}">System</a></th>
+    <th><a href="{% url 'characteradmin_index' page=1 order_by='region' %}">Region</a></th>
   </tr>
 
-  {% for user in users %}
+  {% for char in characters %}
   <tr>
     <td>
-      <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Character/{{ user.profile.character_id }}_32.jpg">
-      <a href="{% url 'view_user' user.id %}">{{ user.profile.character.name }}</a>
+      <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Character/{{ char.id }}_32.jpg">
+      {{ char.name }}
     </td>
     <td>
-      {{ user.chars }}
-    </td>
-    <td>
-      <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Corporation/{{ user.profile.corporation_id }}_32.png">
-      {{ user.profile.corporation.ticker }}
+      <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Corporation/{{ char.corp_id }}_32.png">
+      {{ char.corp.ticker }}
     </td>
     <td>
       {% if user.profile.alliance %}
-      <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Alliance/{{ user.profile.alliance_id }}_32.png"> {{ user.profile.alliance.ticker }}
+      <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Alliance/{{ char.alliance_id }}_32.png"> {{ char.alliance.ticker }}
       {% endif %}
     </td>
-    <td>{{ user.profile.level }}</td>
-    <td>{{ user.last_login }}</td>
-    <td style="vertical-align: middle;">
-      <a class="btn btn-success btn-xs" href="{% url 'user_updategroups' user.id %}">
-        <span class="glyphicon glyphicon-refresh"></span>
-      </a>
-    </td>
+    <td>{{ char.ship.name }}</td>
+    <td>{{ char.ship.group.name }}</td>
+    <td>{{ char.system.name }}</td>
+    <td>{{ char.system.region.name }}</td>
   </tr>
   {% endfor %}
 </table>
