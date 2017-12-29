@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 from django.db import models
 
+from math import pow, sqrt
+
 
 # Map
 class Region(models.Model):
@@ -50,6 +52,19 @@ class System(models.Model):
 
     def __str__(self):
         return "%s:%s" % (self.id, self.name)
+
+
+    # Compares distance between self and a target system
+    def distance(self, target, ly=False):
+        x = pow(target.x - self.x, 2)
+        y = pow(target.y - self.y, 2)
+        z = pow(target.z - self.z, 2)
+
+        distance = sqrt(x + y + z)
+        if ly:
+            return distance / 9460730472580800
+        else:
+            return distance
 
 
 # Types
