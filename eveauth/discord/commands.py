@@ -4,6 +4,7 @@ from django.db.models import Q
 
 from avrseauth.settings import members, blues
 from eveauth.models import Character
+from sde.models import System
 
 
 class BotCommands:
@@ -32,6 +33,13 @@ class BotCommands:
         return User.objects.filter(
             characters__name__istartswith=self.search
         ).first()
+
+    def get_system(self):
+        pass
+
+    def whoin(self):
+        pass
+
 
     def alts(self):
         user = self.get_user()

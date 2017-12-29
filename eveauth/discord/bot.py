@@ -6,8 +6,9 @@ django.setup()
 
 from datetime import datetime
 
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.conf import settings
+from django.contrib.humanize.templatetags.humanize import intcomma
 
 from disco.bot import Plugin
 from social_django.models import UserSocialAuth
@@ -24,6 +25,7 @@ class AuthPlugin(Plugin):
 
         if tokens[0] == "!evetime":
             event.reply(datetime.utcnow().strftime("EVETime: %H:%M:%S"))
+
         elif tokens[0] == "!range":
             system = System.objects.filter(
                 name__istartswith=" ".join(tokens[1:])
@@ -55,6 +57,15 @@ class AuthPlugin(Plugin):
         if tokens[0].startswith("!"):
             user = self._get_social(event.member.id).user
             commands = BotCommands(tokens, user, event)
+
+            # Authenticated commands
+            if tokens[0] == "!wallet":
+                wallet = user.characters.aggregate(Sum('wallet'))
+                event.reply(
+                    "%s ISK" % (
+                        intcomma(wallet['wallet__sum'])
+                    )
+                )
 
             admin = user.groups.filter(name="fc").exists()
             # Admin only commands
