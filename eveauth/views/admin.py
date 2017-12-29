@@ -214,9 +214,10 @@ def mumbleadmin_kick(request, session_id):
 @user_passes_test(lambda x: x.groups.filter(name="admin").exists())
 def characteradmin_index(request, page=1, order_by=None):
     if order_by == None:
-        order_by = 'name'
+        order_by = "owner"
 
     order_by_dict = {
+        "owner": "owner__username",
         "name": "name",
         "corp": "corp__name",
         "alliance": "alliance__name",
@@ -235,7 +236,6 @@ def characteradmin_index(request, page=1, order_by=None):
         'system__region',
     ).order_by(
         order_by_dict[order_by],
-        "owner__username",
         "system__name",
         "name"
     ).all()
