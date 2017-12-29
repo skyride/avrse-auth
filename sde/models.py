@@ -91,6 +91,7 @@ class Group(models.Model):
 
 class Type(models.Model):
     id = models.IntegerField(primary_key=True)
+    group = models.ForeignKey(Group, null=True, default=None)
     name = models.CharField(max_length=100, db_index=True)
     description = models.TextField()
     mass = models.FloatField(null=True)

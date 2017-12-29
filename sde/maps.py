@@ -73,6 +73,7 @@ Group = [
 
 Type = [
     ('id', 'typeID'),
+    ('group_id', 'groupID'),
     ('name', 'typeName'),
     ('description', 'description'),
     ('mass', 'mass'),
