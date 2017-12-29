@@ -1,3 +1,6 @@
+from django.conf import settings
+from django.db.models import Q
+
 from eveauth.models import Character
 
 
@@ -12,14 +15,14 @@ class BotCommands:
         return "```%s```" % text
 
     def get_personal_chars(self):
-        search = " ".join(self.tokens[1:])
-        return self.user.characters.filter(name__istartswith=search)
+        self.search = " ".join(self.tokens[1:])
+        return self.user.characters.filter(name__istartswith=self.search)
 
     def get_all_chars(self):
-        search = " ".join(self.tokens[1:])
+        self.search = " ".join(self.tokens[1:])
         return Character.objects.filter(
             owner__isnull=False,
-            name__istartswith=search
+            name__istartswith=self.search
         )
 
 
@@ -29,18 +32,34 @@ class BotCommands:
         else:
             chars = self.get_personal_chars()
 
-        if chars.count() == 0:
+        if self.search == "":
+            self.event.reply(
+                self.monowrap(
+                    "!fatigue <partial character name>"
+                )
+            )
+
+        elif chars.count() == 0:
             self.event.reply("No characters found")
+
         elif chars.count() > 1:
             self.event.reply(
                 self.monowrap(
-                    "Multiple chars found: %s" % (
-                        ",".join(
-                            map(lambda x: x.name, chars.all())
+                    "Multiple chars found:\n%s" % (
+                        ", ".join(
+                            map(lambda x: x.name,
+                                chars.filter(
+                                    Q(corp__id__in=settings['members']['corps'])
+                                    | Q(alliance__id__in=settings['members']['alliances'])
+                                    | Q(corp__id__in=settings['blues']['corps'])
+                                    | Q(alliance__id__in=settings['blues']['alliances'])
+                                ).all()
+                            )
                         )
                     )
                 )
             )
+
         else:
             char = chars.first()
             self.event.reply(
