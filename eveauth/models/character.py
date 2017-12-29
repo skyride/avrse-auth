@@ -48,6 +48,22 @@ class Character(models.Model):
         fatigue = self.fatigue_expire_date - timezone.now()
         return fatigue.total_seconds() > 0
 
+    def fatigue_text(self):
+        if self.has_fatigue():
+            delta = self.fatigue()
+            out = "%.2i:%.2i:%.2i" % (
+                (delta.seconds / 60 / 60) % 24,
+                (delta.seconds / 60) % 60,
+                delta.seconds % 60
+            )
+
+            if delta.days > 0:
+                out = "%sD %s" % (str(delta.days), out)
+
+            return out
+        else:
+            return "None"
+
 
     @staticmethod
     def get_or_create(id):

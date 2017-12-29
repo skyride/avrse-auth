@@ -5,19 +5,41 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'avrseauth.settings'
 django.setup()
 
 from datetime import datetime
+
 from django.db.models import Q
 from django.conf import settings
+
 from disco.bot import Plugin
 from social_django.models import UserSocialAuth
 
+from eveauth.discord.commands import BotCommands
+
 
 class AuthPlugin(Plugin):
+    # EVE Time
     @Plugin.listen('MessageCreate')
-    def command_evetime(self, event):
+    def evetime(self, event):
         if event.content == "!evetime":
             event.reply(datetime.utcnow().strftime("EVETime: %H:%M:%S"))
 
 
+    # FC Tools
+    @Plugin.listen('MessageCreate')
+    def fc_commands(self, event):
+        # Tokenise commands
+        tokens = event.content.split()
+        if tokens[0].startswith("!"):
+            social = self._get_social(event.member.id)
+            user = social.user
+            if user.groups.filter(name="fc").exists():
+                # Do commands
+                commands = BotCommands(tokens, user, event)
+
+                if tokens[0].lower() == "!fatigue":
+                    commands.fatigue()
+
+
+    # Handle guild member joins
     @Plugin.listen('GuildMemberAdd')
     def guild_member_join(self, event):
         # Kick the user if they aren't authed
