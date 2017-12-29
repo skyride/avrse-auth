@@ -296,6 +296,8 @@ def update_character(character_id):
                     #print db_asset.parent_id
                 db_asset.save()
 
+        print "Updated all info for characters %s" % db_char.name
+
 
 
 @app.task(name="update_character_location")
@@ -313,3 +315,5 @@ def update_character_location(character_id):
     db_char.ship_id = ship['ship_type_id']
 
     db_char.save()
+
+    print "Updated location info for character %s" % db_char.name
