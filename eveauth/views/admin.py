@@ -49,7 +49,8 @@ def registeredusers_index(request, page=1, order_by=""):
     paginator = Paginator(users, 40)
 
     context = {
-        "users": paginator.page(page)
+        "users": paginator.page(page),
+        "order_by": order_by
     }
 
     return render(request, "eveauth/registeredusers_index.html", context)
