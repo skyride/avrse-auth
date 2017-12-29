@@ -116,3 +116,41 @@ class Station(models.Model):
     # Is the station a structure or an NPC station
     structure = models.BooleanField(default=False)
     last_updated = models.DateTimeField(auto_now=True, db_index=True)
+
+    # Used to add structures
+    @staticmethod
+    def get_or_create(id, api):
+        # Check database for station/structure
+        station = Station.objects.filter(id=id).first()
+        if station != None:
+            return station
+
+        # Check for structure
+        r = api.get("/v1/universe/structures/%s/" % id)
+        if r != None:
+            station = Station(
+                id=id,
+                name=r['name'],
+                type_id=r['type_id'],
+                system_id=r['solar_system_id'],
+                x=r['position']['x'],
+                y=r['position']['y'],
+                z=r['position']['z']
+            )
+            station.save()
+            return station
+
+        # Try regular station
+        r = api.get("/v2/universe/stations/%s/" % id)
+        if r != None:
+            station = Station(
+                id=id,
+                name=r['name'],
+                type_id=r['type_id'],
+                system_id=r['system_id'],
+                x=r['position']['x'],
+                y=r['position']['y'],
+                z=r['position']['z']
+            )
+            station.save()
+            return station
