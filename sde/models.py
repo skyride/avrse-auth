@@ -126,31 +126,32 @@ class Station(models.Model):
             return station
 
         # Check for structure
-        r = api.get("/v1/universe/structures/%s/" % id)
-        if r != None:
-            station = Station(
-                id=id,
-                name=r['name'],
-                type_id=r['type_id'],
-                system_id=r['solar_system_id'],
-                x=r['position']['x'],
-                y=r['position']['y'],
-                z=r['position']['z']
-            )
-            station.save()
-            return station
-
-        # Try regular station
-        r = api.get("/v2/universe/stations/%s/" % id)
-        if r != None:
-            station = Station(
-                id=id,
-                name=r['name'],
-                type_id=r['type_id'],
-                system_id=r['system_id'],
-                x=r['position']['x'],
-                y=r['position']['y'],
-                z=r['position']['z']
-            )
-            station.save()
-            return station
+        if id > 71000914:
+            r = api.get("/v1/universe/structures/%s/" % id)
+            if r != None:
+                station = Station(
+                    id=id,
+                    name=r['name'],
+                    type_id=r['type_id'],
+                    system_id=r['solar_system_id'],
+                    x=r['position']['x'],
+                    y=r['position']['y'],
+                    z=r['position']['z']
+                )
+                station.save()
+                return station
+        else:
+            # Try regular station
+            r = api.get("/v2/universe/stations/%s/" % id)
+            if r != None:
+                station = Station(
+                    id=id,
+                    name=r['name'],
+                    type_id=r['type_id'],
+                    system_id=r['system_id'],
+                    x=r['position']['x'],
+                    y=r['position']['y'],
+                    z=r['position']['z']
+                )
+                station.save()
+                return station
