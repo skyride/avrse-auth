@@ -1,6 +1,6 @@
 from django.db import models
 
-from eveauth.models import Character
+from eveauth.models.character import Character
 from sde.models import Type
 
 

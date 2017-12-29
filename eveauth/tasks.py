@@ -1,6 +1,7 @@
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.db import transaction
 from django.db.models import Q
 
 from avrseauth.settings import members, blues
@@ -11,6 +12,8 @@ from eveauth.models.character import Character
 from eveauth.models.corporation import Corporation
 from eveauth.models.alliance import Alliance
 from eveauth.models.templink import Templink
+from eveauth.models.skill import Skill
+from eveauth.models.asset import Asset
 from eveauth.esi import ESI, parse_api_date
 from eveauth.discord.api import DiscordAPI, is_bot_active
 
@@ -241,6 +244,20 @@ def update_character(character_id):
             db_char.last_jump_date = parse_api_date(fatigue['last_jump_date'])
 
         db_char.save()
+
+        # Skills
+        skills = api.get("/v4/characters/$id/skills/")
+        with transaction.atomic():
+            Skill.objects.filter(character=db_char).delete()
+            for skill in skills['skills']:
+                Skill(
+                    character=db_char,
+                    type_id=skill['skill_id'],
+                    trained_skill_level=skill['trained_skill_level'],
+                    active_skill_level=skill['active_skill_level'],
+                    skillpoints_in_skill=skill['skillpoints_in_skill']
+                ).save()
+
 
 
 @app.task(name="update_character_location")
