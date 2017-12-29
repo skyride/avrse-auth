@@ -5,7 +5,7 @@ from sde.models import Type
 
 
 class Skill(models.Model):
-    character = models.ForeignKey(Character)
+    character = models.ForeignKey(Character, related_name="skills")
     type = models.ForeignKey(Type)
     trained_skill_level = models.IntegerField()
     active_skill_level = models.IntegerField()

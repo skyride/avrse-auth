@@ -6,7 +6,7 @@ from sde.models import Type, System, Station
 
 class Asset(models.Model):
     id = models.BigIntegerField(primary_key=True)
-    character = models.ForeignKey(Character)
+    character = models.ForeignKey(Character, related_name="assets")
     parent = models.ForeignKey('self', null=True, default=None, db_constraint=False)
 
     type = models.ForeignKey(Type)
