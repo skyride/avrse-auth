@@ -41,12 +41,12 @@ class BotCommands:
             )
 
         elif chars.count() == 0:
-            self.event.reply("No characters found")
+            self.event.reply("No Characters Found")
 
         elif chars.count() > 1:
             self.event.reply(
                 self.monowrap(
-                    "Multiple chars found:\n%s" % (
+                    "Multiple Chars Found:\n%s" % (
                         ", ".join(
                             map(lambda x: x.name,
                                 chars.filter(

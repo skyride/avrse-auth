@@ -13,6 +13,7 @@ from disco.bot import Plugin
 from social_django.models import UserSocialAuth
 
 from eveauth.discord.commands import BotCommands
+from sde.models import System
 
 
 class AuthPlugin(Plugin):
@@ -23,6 +24,27 @@ class AuthPlugin(Plugin):
 
         if tokens[0] == "!evetime":
             event.reply(datetime.utcnow().strftime("EVETime: %H:%M:%S"))
+        elif tokens[0] == "!range":
+            system = System.objects.filter(
+                name__istartswith=" ".join(tokens[1:])
+            )
+            if system.count() > 1:
+                event.reply(
+                    "```Multiple Systems Found:\n%s```" % (
+                        ", ".join(system.all().values_list('name', flat=True))
+                    )
+                )
+            elif system.count() == 1:
+                system = system.first()
+                event.reply(
+                    "\n".join(
+                        [
+                            "http://evemaps.dotlan.net/range/Redeemer,5/%s" % system.name.replace(" ", "_"),
+                            "http://evemaps.dotlan.net/range/Archon,5/%s" % system.name.replace(" ", "_"),
+                            "http://evemaps.dotlan.net/range/Aeon,5/%s" % system.name.replace(" ", "_")
+                        ]
+                    )
+                )
 
 
     # FC Tools
