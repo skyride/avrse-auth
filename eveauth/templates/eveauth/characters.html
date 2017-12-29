@@ -31,7 +31,9 @@
         padding: 5px;
       ">
         <div><img src="https://imageserver.eveonline.com/Corporation/{{ character.corp_id }}_64.png"></div>
+        {% if character.alliance %}
         <div><img src="https://imageserver.eveonline.com/Alliance/{{ character.alliance_id }}_64.png"></div>
+        {% endif %}
       </div>
 
       <ul class="list-group">
