@@ -72,9 +72,10 @@ class AuthPlugin(Plugin):
             if admin:
                 if tokens[0].lower() == "!fatigue":
                     commands.fatigue(admin=True)
-                if tokens[0].lower() == "!alts":
+                elif tokens[0].lower() == "!alts":
                     commands.alts()
-
+                elif tokens[0].lower() == "!whoin":
+                    commands.whoin()
 
             # public commands with limitations
             else:

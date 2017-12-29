@@ -4,7 +4,7 @@ from django.db.models import Q
 
 from avrseauth.settings import members, blues
 from eveauth.models import Character
-from sde.models import System
+from sde.models import System, Region
 
 
 class BotCommands:
@@ -35,10 +35,53 @@ class BotCommands:
         ).first()
 
     def get_system(self):
-        pass
+        self.search = " ".join(self.tokens[1:])
+        return System.objects.filter(
+            name__istartswith=self.search
+        )
+
+    def get_region(self):
+        self.search = " ".join(self.tokens[1:])
+        return Region.objects.filter(
+            name__istartswith=self.search
+        )
+
 
     def whoin(self):
-        pass
+        # Check for location
+        system = self.get_system()
+        region = self.get_region()
+
+        chars = None
+        if system.count() == 1:
+            location = system.first()
+            chars = Character.objects.filter(
+                system=location
+            )
+        elif region.count() == 1:
+            location = region.first()
+            chars = Character.objects.filter(
+                system__region=location
+            )
+
+        if chars != None:
+            self.event.reply(
+                self.monowrap(
+                    "Characters in %s\n%s" % (
+                        location.name,
+                        "\n".join(
+                            map(
+                                lambda x: "%s (%s): %s" % (
+                                    x.name,
+                                    x.owner.profile.character.name,
+                                    x.ship.name
+                                ),
+                                chars.all()
+                            )
+                        )
+                    )
+                )
+            )
 
 
     def alts(self):
