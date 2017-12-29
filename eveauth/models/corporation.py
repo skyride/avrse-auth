@@ -12,6 +12,10 @@ class Corporation(models.Model):
     last_updated = models.DateTimeField(auto_now=True)
 
 
+    def __str__(self):
+        return self.name
+
+
     @staticmethod
     def get_or_create(corporation_id):
         from eveauth.esi import ESI

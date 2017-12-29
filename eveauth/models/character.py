@@ -29,6 +29,10 @@ class Character(models.Model):
     last_jump_date = models.DateTimeField(null=True, default=None)
 
 
+    def __str__(self):
+        return self.name
+
+
     @staticmethod
     def get_or_create(id):
         from eveauth.esi import ESI

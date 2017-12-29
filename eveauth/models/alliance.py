@@ -15,6 +15,9 @@ class Alliance(models.Model):
     def __unicode__(self):
         return self.ticker
 
+    def __str__(self):
+        return self.name
+
 
     @staticmethod
     def get_or_create(alliance_id):
