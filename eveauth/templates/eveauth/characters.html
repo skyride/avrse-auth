@@ -41,11 +41,13 @@
           {{ character.corp.name }}
         </li>
 
-        {% if character.alliance %}
         <li class="list-group-item">
+          {% if character.alliance %}
           {{ character.alliance.name }}
+          {% else %}
+          N/A
+          {% endif %}
         </li>
-        {% endif %}
 
         <li class="list-group-item">
           {{ character.system.name }} - {{ character.ship.name }}
