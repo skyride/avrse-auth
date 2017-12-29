@@ -225,3 +225,20 @@ def update_character(character_id):
         db_char.last_jump_date = parse_api_date(fatigue['last_jump_date'])
 
         db_char.save()
+
+
+@app.task(name="update_character_location")
+def update_character_location(character_id):
+    # Get the db objects we need
+    db_char = Character.objects.get(id=character_id)
+    api = ESI(db_char.token)
+
+    # Location
+    location = api.get("/v1/characters/$id/location/")
+    db_char.system_id = location['solar_system_id']
+
+    # Ship
+    ship = api.get("/v1/characters/$id/ship/")
+    db_char.ship_id = ship['ship_type_id']
+
+    db_char.save()
