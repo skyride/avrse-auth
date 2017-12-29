@@ -7,6 +7,7 @@ from corporation import Corporation
 from alliance import Alliance
 
 from asset import Asset
+from skill import Skill
 
 from templink import Templink
 from templinkuser import TemplinkUser
