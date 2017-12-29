@@ -288,7 +288,11 @@ def update_character(character_id):
                 system__isnull=True
             ).all()
             for db_asset in db_assets:
-                db_asset.system = db_asset.parent.system
+                try:
+                    db_asset.system = db_asset.parent.system
+                except Asset.DoesNotExist:
+                    pass
+                    #print db_asset.parent_id
                 db_asset.save()
 
 

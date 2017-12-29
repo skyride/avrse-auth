@@ -108,11 +108,11 @@ class Type(models.Model):
 class Station(models.Model):
     id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=100, db_index=True)
-    type = models.ForeignKey(Type)
-    system = models.ForeignKey(System)
-    x = models.FloatField()
-    y = models.FloatField()
-    z = models.FloatField()
+    type = models.ForeignKey(Type, null=True, default=None)
+    system = models.ForeignKey(System, null=True, default=None)
+    x = models.FloatField(default=0)
+    y = models.FloatField(default=0)
+    z = models.FloatField(default=0)
 
     # Is the station a structure or an NPC station
     structure = models.BooleanField(default=False)
@@ -140,7 +140,13 @@ class Station(models.Model):
                     z=r['position']['z']
                 )
                 station.save()
-                return station
+            else:
+                station = Station(
+                    id=id,
+                    name="**UNKNOWN**"
+                )
+                station.save()
+            return station
         else:
             # Try regular station
             r = api.get("/v2/universe/stations/%s/" % id)
