@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db.models import Q
 
+from avrseauth.settings import members, blues
 from eveauth.models import Character
 
 
@@ -49,10 +50,10 @@ class BotCommands:
                         ", ".join(
                             map(lambda x: x.name,
                                 chars.filter(
-                                    Q(corp__id__in=settings.members['corps'])
-                                    | Q(alliance__id__in=settings.members['alliances'])
-                                    | Q(corp__id__in=settings.blues['corps'])
-                                    | Q(alliance__id__in=settings.blues['alliances'])
+                                    Q(corp__id__in=members['corps'])
+                                    | Q(alliance__id__in=members['alliances'])
+                                    | Q(corp__id__in=blues['corps'])
+                                    | Q(alliance__id__in=blues['alliances'])
                                 ).all()
                             )
                         )
