@@ -289,7 +289,8 @@ def update_character(character_id):
             ).all()
             for db_asset in db_assets:
                 try:
-                    db_asset.system = db_asset.parent.system
+                    if db_asset.parent != None:
+                        db_asset.system = db_asset.parent.system
                 except Asset.DoesNotExist:
                     pass
                     #print db_asset.parent_id
