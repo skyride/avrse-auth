@@ -103,6 +103,10 @@ def update_groups(user_id):
     print "Updating groups for %s" % user.username
     social = user.social_auth.filter(provider="eveonline").first()
 
+    # Queue character updates
+    for char in user.characters.all():
+        update_character.delay(char.id)
+
     # Update char/corp/alliance
     api = ESI()
     char_id = social.extra_data['id']
