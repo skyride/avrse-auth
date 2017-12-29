@@ -38,10 +38,25 @@
             <li><a href="{% url 'characters_index' %}">Characters</a></li>
             <li><a href="{% url 'groups_index' %}">Groups</a></li>
               {% if request.user|has_group:"admin" %}
-              <li><a href="{% url 'registeredusers_index' 1 %}">Users</a></li>
-              <li><a href="{% url 'groupadmin_index' %}">Group Admin</a></li>
-              <li><a href="{% url 'templink_index' %}">Templinks</a></li>
-              <li><a href="{% url 'mumbleadmin_index' %}">Mumble</a></li>
+              <li>
+                <a href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  Admin <span class="caret">
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="{% url 'registeredusers_index' 1 %}">Users</a></li>
+                  <li><a href="{% url 'groupadmin_index' %}">Groups</a></li>
+                </ul>
+              </li>
+
+              <li>
+                <a href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  Mumble <span class="caret">
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="{% url 'mumbleadmin_index' %}">Admin</a></li>
+                  <li><a href="{% url 'templink_index' %}">Templinks</a></li>
+                </ul>
+              </li>
               {% endif %}
             {% endif %}
           </ul>
