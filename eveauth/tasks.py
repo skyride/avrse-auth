@@ -236,8 +236,9 @@ def update_character(character_id):
 
         # Fatigue
         fatigue = api.get("/v1/characters/$id/fatigue/")
-        db_char.fatigue_expire_date = parse_api_date(fatigue['jump_fatigue_expire_date'])
-        db_char.last_jump_date = parse_api_date(fatigue['last_jump_date'])
+        if "jump_fatigue_expire_date" in fatigue:
+            db_char.fatigue_expire_date = parse_api_date(fatigue['jump_fatigue_expire_date'])
+            db_char.last_jump_date = parse_api_date(fatigue['last_jump_date'])
 
         db_char.save()
 
