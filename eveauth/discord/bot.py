@@ -20,15 +20,9 @@ class AuthPlugin(Plugin):
     @Plugin.listen('MessageCreate')
     def public_commands(self, event):
         tokens = event.content.split()
-        user = self._get_social(event.member.id).user
-        commands = BotCommands(tokens, user, event)
 
         if tokens[0] == "!evetime":
             event.reply(datetime.utcnow().strftime("EVETime: %H:%M:%S"))
-        elif tokens[0] == "!fatigue":
-            if not user.groups.filter(name="fc").exists():
-                commands.fatigue(admin=False)
-
 
 
     # FC Tools
@@ -38,12 +32,19 @@ class AuthPlugin(Plugin):
         tokens = event.content.split()
         if tokens[0].startswith("!"):
             user = self._get_social(event.member.id).user
-            if user.groups.filter(name="fc").exists():
-                # Do commands
-                commands = BotCommands(tokens, user, event)
+            commands = BotCommands(tokens, user, event)
 
+            admin = user.groups.filter(name="fc").exists()
+            # Admin only commands
+            if admin:
                 if tokens[0].lower() == "!fatigue":
-                    commands.fatigue()
+                    commands.fatigue(admin=True)
+
+
+            # public commands with limitations
+            else:
+                if tokens[0].lower() == "!fatigue":
+                    commands.fatigue(admin=False)
 
 
     # Handle guild member joins
