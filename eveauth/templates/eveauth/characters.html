@@ -1,5 +1,5 @@
 {% extends 'eveauth/base.html' %}
-{% load static %}
+{% load static humanize authtags %}
 
 {% block title %}Characters{% endblock %}
 
@@ -24,11 +24,41 @@
         {{ character.name }}
       </div>
 
-      <img width="100%" src="https://imageserver.eveonline.com/Character/{{ character.id }}_512.jpg">
+      <div style="
+        min-height: 260px;
+        background-size: cover;
+        background-image: url('https://imageserver.eveonline.com/Character/{{ character.id }}_512.jpg');
+        padding: 5px;
+      ">
+        <div><img src="https://imageserver.eveonline.com/Corporation/{{ character.corp_id }}_64.png"></div>
+        <div><img src="https://imageserver.eveonline.com/Alliance/{{ character.alliance_id }}_64.png"></div>
+      </div>
 
       <ul class="list-group">
         <li class="list-group-item">
-          <i>Info will be here later</i>
+          {{ character.corp.name }}
+        </li>
+
+        {% if character.alliance %}
+        <li class="list-group-item">
+          {{ character.alliance.name }}
+        </li>
+        {% endif %}
+
+        <li class="list-group-item">
+          {{ character.system.name }} - {{ character.ship.name }}
+        </li>
+
+        <li class="list-group-item">
+          {% if character.has_fatigue %}
+          {{ character.fatigue|fatiguetime }}
+          {% else %}
+          No Jump Fatigue
+          {% endif %}
+        </li>
+
+        <li class="list-group-item">
+          {{ character.wallet|intcomma }} ISK
         </li>
 
         <li class="list-group-item">

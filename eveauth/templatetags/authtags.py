@@ -76,3 +76,17 @@ def until(timestamp):
 @register.filter(name="outstandingapps")
 def outstandingapps(group):
     return group.apps.filter(accepted=None).count()
+
+
+@register.filter(name="fatiguetime")
+def fatiguetime(delta):
+    out = "%.2i:%.2i:%.2i" % (
+        (delta.seconds / 60 / 60) % 24,
+        (delta.seconds / 60) % 60,
+        delta.seconds % 60
+    )
+
+    if delta.days > 0:
+        out = "%sD %s" % (str(delta.days), out)
+
+    return out

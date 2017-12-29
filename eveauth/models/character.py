@@ -2,6 +2,8 @@ from datetime import datetime, timedelta
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+
 from social_django.models import UserSocialAuth
 
 from sde.models import System, Type
@@ -31,6 +33,18 @@ class Character(models.Model):
 
     def __str__(self):
         return self.name
+
+
+
+    def fatigue(self):
+        if self.fatigue_expire_date != None:
+            return self.fatigue_expire_date - timezone.now()
+
+    def has_fatigue(self):
+        if self.fatigue_expire_date == None:
+            return False
+        fatigue = self.fatigue_expire_date - timezone.now()
+        return fatigue.total_seconds() > 0
 
 
     @staticmethod
