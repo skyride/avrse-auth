@@ -13,8 +13,8 @@ from django.conf import settings
 class ESI():
     url = settings.ESI_URL
     datasource = settings.ESI_DATASOURCE
-    client_id = settings.SOCIAL_AUTH_EVEONLINE_KEY
-    secret_key = settings.SOCIAL_AUTH_EVEONLINE_SECRET
+    client_id = settings.SOCIAL_AUTH_CHARACTER_AUTH_KEY
+    secret_key = settings.SOCIAL_AUTH_CHARACTER_AUTH_SECRET
 
     cache_time = 30
     token = None

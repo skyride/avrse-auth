@@ -106,7 +106,7 @@ def update_groups(user_id):
     # Update char/corp/alliance
     api = ESI()
     char_id = social.extra_data['id']
-    char = api.get("/characters/%s/" % char_id)
+    char = api.get("/v4/characters/%s/" % char_id)
 
     user.profile.character = Character.get_or_create(char_id)
     user.profile.corporation = Corporation.get_or_create(char['corporation_id'])

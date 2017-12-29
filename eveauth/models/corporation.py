@@ -23,7 +23,7 @@ class Corporation(models.Model):
         corporation = Corporation.objects.filter(id=corporation_id)
         if len(corporation) == 0:
             api = ESI()
-            corporation = api.get("/corporations/%s/" % corporation_id)
+            corporation = api.get("/v4/corporations/%s/" % corporation_id)
             db_corporation = Corporation(
                 id=corporation_id,
                 name=corporation['name'],
@@ -42,7 +42,7 @@ class Corporation(models.Model):
             if db_corporation.last_updated < now() - timedelta(days=2):
                 old_name = db_corporation.name
                 api = ESI()
-                corporation = api.get("/corporations/%s/" % corporation_id)
+                corporation = api.get("/v4/corporations/%s/" % corporation_id)
                 db_corporation.name = corporation['name']
                 db_corporation.ticker = corporation['ticker']
                 db_corporation.save()

@@ -32,7 +32,7 @@ DISCORD_INVITE_KEY = ""
 DISCORD_ACCESS_LEVEL = 2
 DISCORD_ALLOWED_BOTS = []
 
-ESI_URL = "https://esi.tech.ccp.is/latest"
+ESI_URL = "https://esi.tech.ccp.is"
 ESI_DATASOURCE = "tranquility"
 ESI_RETRIES = 15
 
