@@ -8,6 +8,8 @@ class Asset(models.Model):
     parent = models.ForeignKey('self', null=True, default=None, db_constraint=False)
 
     type = models.ForeignKey(Type)
+    flag = models.CharField(max_length=64)
+
     quantity = models.IntegerField(default=0)
     raw_quantity = models.IntegerField(default=0)
     singleton = models.BooleanField()
