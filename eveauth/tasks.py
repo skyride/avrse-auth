@@ -7,6 +7,8 @@ from django.db.models import Q
 from avrseauth.settings import members, blues
 from avrseauth.celery import app
 
+from sde.models import System, Station
+
 from eveauth import ipb
 from eveauth.models.character import Character
 from eveauth.models.corporation import Corporation
@@ -257,6 +259,37 @@ def update_character(character_id):
                     active_skill_level=skill['active_skill_level'],
                     skillpoints_in_skill=skill['skillpoints_in_skill']
                 ).save()
+
+        # Assets
+        assets = api.get("/v3/characters/$id/assets/")
+        with transaction.atomic():
+            Asset.objects.filter(character=db_char).delete()
+            for asset in assets:
+                db_asset = Asset(
+                    character=db_char,
+                    id=asset['item_id'],
+                    type_id=asset['type_id'],
+                    flag=asset['location_flag'],
+                    quantity=asset['quantity'],
+                    raw_quantity=asset['quantity'],
+                    singleton=asset['is_singleton'],
+                )
+
+                if asset['location_flag'] == "Hangar":
+                    station = Station.get_or_create(asset['location_id'], api)
+                    db_asset.system = station.system
+                else:
+                    db_asset.parent_id = asset['location_id']
+                db_asset.save()
+
+            # Fix systems
+            db_assets = Asset.objects.filter(
+                character=db_char,
+                system__isnull=True
+            ).all()
+            for db_asset in db_assets:
+                db_asset.system = db_asset.parent.system
+                db_asset.save()
 
 
 

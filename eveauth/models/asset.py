@@ -16,6 +16,6 @@ class Asset(models.Model):
     raw_quantity = models.IntegerField(default=0)
     singleton = models.BooleanField()
 
-    system = models.ForeignKey(System)
+    system = models.ForeignKey(System, null=True, default=None)
     station = models.ForeignKey(Station, null=True, default=None)
     name = models.CharField(max_length=64, null=True, default=None)
