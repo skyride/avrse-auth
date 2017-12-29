@@ -30,10 +30,12 @@ class Character(models.Model):
     fatigue_expire_date = models.DateTimeField(null=True, default=None)
     last_jump_date = models.DateTimeField(null=True, default=None)
 
+    class Meta:
+        ordering = ["name"]
+
 
     def __str__(self):
         return self.name
-
 
 
     def fatigue(self):

@@ -66,7 +66,7 @@
     <div class="well">
       <h3>Characters</h3>
 
-      <table class="table">
+      <table class="table table-striped">
         {% for char in user.characters.all %}
         <tr>
           <td>
@@ -74,16 +74,17 @@
             {{ char.name }}
           </td>
           <td>
-            <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Corporation/{{ char.corporation_id }}_32.png">
-            {{ char.corporation.ticker }}
+            <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Corporation/{{ char.corp_id }}_32.png">
+            {{ char.corp.ticker }}
           </td>
           <td>
-            {% if char.corporation.alliance %}
-            <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Alliance/{{ char.corporation.alliance_id }}_32.png"> {{ char.corporation.alliance.ticker }}
+            {% if char.alliance %}
+            <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Alliance/{{ char.alliance_id }}_32.png">
+            {{ char.alliance.ticker }}
             {% endif %}
           </td>
           <td>
-            {{ char.last_updated }}
+            {{ char.system.name }} - {{ char.ship.name }}
           </td>
         </tr>
         {% endfor %}
