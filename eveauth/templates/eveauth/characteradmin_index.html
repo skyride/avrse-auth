@@ -22,7 +22,7 @@
 
 <table class="table table-striped">
   <tr>
-    <th>Owner</th>
+    <th><a href="{% url 'characteradmin_index' page=1 order_by='owner' %}">Owner</a></th>
     <th><a href="{% url 'characteradmin_index' page=1 order_by='name' %}">Name</a></th>
     <th><a href="{% url 'characteradmin_index' page=1 order_by='corp' %}">Corp</a></th>
     <th><a href="{% url 'characteradmin_index' page=1 order_by='alliance' %}">Alliance</a></th>
