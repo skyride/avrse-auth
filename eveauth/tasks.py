@@ -11,7 +11,7 @@ from eveauth.models.character import Character
 from eveauth.models.corporation import Corporation
 from eveauth.models.alliance import Alliance
 from eveauth.models.templink import Templink
-from eveauth.esi import ESI
+from eveauth.esi import ESI, parse_api_date
 from eveauth.discord.api import DiscordAPI, is_bot_active
 
 
@@ -191,3 +191,37 @@ def update_discord(user_id):
 def update_character(character_id):
     # Get the db objects we need
     db_char = Character.objects.get(id=character_id)
+
+    # Grab public info from API
+    api = ESI()
+    char = api.get("/v4/characters/%s/" % db_char.id)
+
+    db_char.name = char['name']
+    db_char.corp = Corporation.get_or_create(char['corporation_id'])
+    if "alliance_id" in char:
+        db_char.alliance = Alliance.get_or_create(char['alliance_id'])
+    else:
+        db_char.alliance = None
+    db_char.save()
+
+    # Grab non-public info
+    if db_char.token != None:
+        api = ESI(db_char.token)
+
+        # Wallet
+        db_char.wallet = api.get("/v1/characters/$id/wallet/")
+
+        # Location
+        location = api.get("/v1/characters/$id/location/")
+        db_char.system_id = location['solar_system_id']
+
+        # Ship
+        ship = api.get("/v1/characters/$id/ship/")
+        db_char.ship_id = ship['ship_type_id']
+
+        # Fatigue
+        fatigue = api.get("/v1/characters/$id/fatigue/")
+        db_char.fatigue_expire_date = parse_api_date(fatigue['jump_fatigue_expire_date'])
+        db_char.last_jump_date = parse_api_date(fatigue['last_jump_date'])
+
+        db_char.save()

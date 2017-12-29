@@ -1,5 +1,6 @@
 import requests
 import json
+import datetime
 
 from base64 import b64encode
 from urllib import urlencode
@@ -8,6 +9,9 @@ from hashlib import sha256
 from django.core.cache import cache
 from django.conf import settings
 
+
+def parse_api_date(date):
+    return datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%SZ')
 
 # ESI Api wrapper
 class ESI():
