@@ -1,6 +1,7 @@
 import requests
 import json
 import datetime
+import pytz
 
 from base64 import b64encode
 from urllib import urlencode
@@ -11,7 +12,8 @@ from django.conf import settings
 
 
 def parse_api_date(date):
-    return datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%SZ')
+    date = datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%SZ')
+    return pytz.utc.localize(date)
 
 # ESI Api wrapper
 class ESI():
