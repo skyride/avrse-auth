@@ -71,12 +71,16 @@ class BotCommands:
                         location.name,
                         "\n".join(
                             map(
-                                lambda x: "%s (%s): %s" % (
+                                lambda x: "%s %s (%s): %s" % (
+                                    x.system.name,
                                     x.name,
                                     x.owner.profile.character.name,
                                     x.ship.name
                                 ),
-                                chars.all()
+                                chars.order_by(
+                                    'system__name',
+                                    'name'
+                                ).all()
                             )
                         )
                     )
