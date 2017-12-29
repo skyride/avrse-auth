@@ -37,6 +37,17 @@ def spawn_groupupdates():
     return users.count()
 
 
+# Update location for characters with tokens
+@app.task(name="spawn_character_location_updates")
+def spawn_character_location_updates():
+    chars = Character.objects.filter(
+        token__isnull=False
+    ).all()
+    for char in chars:
+        update_character_location.delay(char.id)
+
+    print "Spawned character location update tasks for %s chars" % chars.count()
+
 
 # Set expired templinks inactive and kick anyone using them from mumble
 @app.task(name="purge_expired_templinks")
