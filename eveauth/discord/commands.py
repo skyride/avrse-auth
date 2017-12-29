@@ -1,3 +1,4 @@
+from eveauth.models import Character
 
 
 class BotCommands:
@@ -10,11 +11,23 @@ class BotCommands:
     def monowrap(self, text):
         return "```%s```" % text
 
+    def get_personal_chars(self):
+        search = " ".join(self.tokens[1:])
+        return self.user.characters.filter(name__istartswith=search)
 
-    def fatigue(self):
-        # Find chars
-        search = self.tokens[1]
-        chars = self.user.characters.filter(name__istartswith=search)
+    def get_all_chars(self):
+        search = " ".join(self.tokens[1:])
+        return Character.objects.filter(
+            owner__isnull=False,
+            name__istartswith=search
+        )
+
+
+    def fatigue(self, admin=False):
+        if admin:
+            chars = self.get_all_chars()
+        else:
+            chars = self.get_personal_chars()
 
         if chars.count() == 0:
             self.event.reply("No characters found")
@@ -31,14 +44,8 @@ class BotCommands:
         else:
             char = chars.first()
             self.event.reply(
-                self.monowrap(
-                    "Owner: %s\nCharacter: %s\nFatigue: %s\nSystem: %s\nRegion: %s\nShip: %s" %(
-                        self.user.profile.character.name,
-                        char.name,
-                        char.fatigue_text(),
-                        char.system.name,
-                        char.system.region.name,
-                        char.ship.name
-                    )
+                "**%s**: %s" % (
+                    char.name,
+                    char.fatigue_text()
                 )
             )

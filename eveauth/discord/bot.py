@@ -16,11 +16,19 @@ from eveauth.discord.commands import BotCommands
 
 
 class AuthPlugin(Plugin):
-    # EVE Time
+    # Public commands
     @Plugin.listen('MessageCreate')
-    def evetime(self, event):
-        if event.content == "!evetime":
+    def public_commands(self, event):
+        tokens = event.content.split()
+        user = self._get_social(event.member.id).user
+        commands = BotCommands(tokens, user, event)
+
+        if tokens[0] == "!evetime":
             event.reply(datetime.utcnow().strftime("EVETime: %H:%M:%S"))
+        elif tokens[0] == "!fatigue":
+            if not user.groups.filter(name="fc").exists():
+                commands.fatigue(admin=False)
+
 
 
     # FC Tools
@@ -29,8 +37,7 @@ class AuthPlugin(Plugin):
         # Tokenise commands
         tokens = event.content.split()
         if tokens[0].startswith("!"):
-            social = self._get_social(event.member.id)
-            user = social.user
+            user = self._get_social(event.member.id).user
             if user.groups.filter(name="fc").exists():
                 # Do commands
                 commands = BotCommands(tokens, user, event)
