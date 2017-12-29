@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.db.models import Q
 
 from avrseauth.settings import members, blues
@@ -24,6 +25,25 @@ class BotCommands:
         return Character.objects.filter(
             owner__isnull=False,
             name__istartswith=self.search
+        )
+
+    def get_user(self):
+        self.search = " ".join(self.tokens[1:])
+        return User.objects.filter(
+            characters__name__istartswith=self.search
+        ).first()
+
+    def alts(self):
+        user = self.get_user()
+        self.event.reply(
+            self.monowrap(
+                "Alts of %s\n%s" % (
+                    user.profile.character.name,
+                    ", ".join(
+                        user.characters.all().values_list('name', flat=True)
+                    )
+                )
+            )
         )
 
 
