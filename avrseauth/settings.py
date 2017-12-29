@@ -201,6 +201,7 @@ CELERYBEAT_SCHEDULE = {
     }
 }
 
+LOGIN_URL = "/"
 
 from local_settings import *
 
