@@ -241,7 +241,8 @@ def characteradmin_index(request, page=1, order_by=None):
     paginator = Paginator(chars, 40)
 
     context = {
-        "characters": paginator.page(page)
+        "characters": paginator.page(page),
+        "order_by": order_by
     }
 
     return render(request, "eveauth/characteradmin_index.html", context)
