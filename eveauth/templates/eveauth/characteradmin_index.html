@@ -22,17 +22,24 @@
 
 <table class="table table-striped">
   <tr>
+    <th>Owner</th>
     <th><a href="{% url 'characteradmin_index' page=1 order_by='name' %}">Name</a></th>
     <th><a href="{% url 'characteradmin_index' page=1 order_by='corp' %}">Corp</a></th>
     <th><a href="{% url 'characteradmin_index' page=1 order_by='alliance' %}">Alliance</a></th>
     <th><a href="{% url 'characteradmin_index' page=1 order_by='ship' %}">Ship</a></th>
-    <th><a href="{% url 'characteradmin_index' page=1 order_by='ship_type' %}">Ship Type</a></th>
+    <!-- <th><a href="{% url 'characteradmin_index' page=1 order_by='ship_type' %}">Ship Type</a></th>-->
     <th><a href="{% url 'characteradmin_index' page=1 order_by='system' %}">System</a></th>
     <th><a href="{% url 'characteradmin_index' page=1 order_by='region' %}">Region</a></th>
   </tr>
 
   {% for char in characters %}
   <tr>
+    <td>
+      {% ifchanged %}
+      <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Character/{{ char.owner.profile.character_id }}_32.jpg">
+      {{ char.owner.profile.character.name }}
+      {% endifchanged %}
+    </td>
     <td>
       <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Character/{{ char.id }}_32.jpg">
       {{ char.name }}
@@ -47,7 +54,7 @@
       {% endif %}
     </td>
     <td>{{ char.ship.name }}</td>
-    <td>{{ char.ship.group.name }}</td>
+    <!-- <td>{{ char.ship.group.name }}</td> -->
     <td>{{ char.system.name }}</td>
     <td>{{ char.system.region.name }}</td>
   </tr>
