@@ -6,6 +6,15 @@ from avrseauth.settings import members, blues
 from eveauth.models import Character
 from sde.models import System, Region
 
+ranges = {
+    30: 6,      # Titans
+    659: 6,     # Supers
+    485: 7,     # Dreads
+    547: 7,     # Carriers
+    1538: 7,    # FAXes
+    898: 8,     # Black Ops
+}
+
 
 class BotCommands:
     def __init__(self, tokens, user, event):
@@ -81,6 +90,39 @@ class BotCommands:
                                     'system__name',
                                     'name'
                                 ).all()
+                            )
+                        )
+                    )
+                )
+            )
+
+
+    def whoinrange(self):
+        target = self.get_system()
+        if target != None:
+            target = target.first()
+            chars = Character.objects.filter(owner__isnull=False)
+            in_range = []
+            for char in chars.prefetch_related('system', 'ship').all():
+                if char.ship.group_id in ranges.keys():
+                    if target.distance(char.system, True) <= ranges[char.ship.group_id]:
+                        in_range.append(char)
+
+            self.event.reply(
+                self.monowrap(
+                    "Characters in range of %s\n%s" % (
+                        target.name,
+                        "\n".join(
+                            map(
+                                lambda x: "<%s> %s (%s): %s (%s ly) Fatigue: %s" % (
+                                    x.system.name,
+                                    x.name,
+                                    x.owner.profile.character.name,
+                                    x.ship.name,
+                                    round(target.distance(x.system, True), 2),
+                                    x.fatigue_text()
+                                ),
+                                in_range
                             )
                         )
                     )
