@@ -17,6 +17,11 @@ ranges = {
     898: 8,     # Black Ops
 }
 
+supers = [
+    30,
+    659
+]
+
 
 class BotCommands:
     def __init__(self, tokens, user, event):
@@ -75,6 +80,40 @@ class BotCommands:
                     self.event.reply(self.monowrap(out))
                     out = cur
             self.event.reply(self.monowrap(out))
+
+
+    def supers(self):
+        chars = Character.objects.filter(
+            owner__isnull=False,
+            ship__group_id__in=supers
+        ).order_by(
+            'ship__group__name',
+            'ship__name',
+            'system__region__name',
+            'system__name',
+            'owner__username',
+            'name'
+        )
+
+        if chars.count() > 1:
+            table = [["Owner", "Char", "Ship", "System", "Region", "Fatigue"]]
+            for char in chars.all():
+                table.append(
+                    [
+                        char.owner.profile.character.name,
+                        char.name,
+                        char.ship.name,
+                        char.system.name,
+                        char.system.region.name,
+                        char.fatigue_text()
+                    ]
+                )
+
+            self.reply_chunked(
+                "All Supers\n%s" % (
+                    AsciiTable(table).table
+                )
+            )
 
 
     def whoin(self):

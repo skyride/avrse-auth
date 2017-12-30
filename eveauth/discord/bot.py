@@ -78,6 +78,8 @@ class AuthPlugin(Plugin):
                     commands.whoin()
                 elif tokens[0].lower() == "!whoinrange":
                     commands.whoinrange()
+                elif tokens[0].lower() == "!supers":
+                    commands.supers()
 
             # public commands with limitations
             else:

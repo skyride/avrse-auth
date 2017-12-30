@@ -47,3 +47,4 @@ webcolors==1.7
 websocket-client==0.40.0
 wsgiref==0.1.2
 zeroc-ice==3.7.0
+terminaltables==3.1.0
