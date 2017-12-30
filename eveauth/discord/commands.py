@@ -114,8 +114,7 @@ class BotCommands:
                         target.name,
                         "\n".join(
                             map(
-                                lambda x: "<%s> %s (%s): %s (%s ly) Fatigue: %s" % (
-                                    x.system.name,
+                                lambda x: "%s (%s): %s (%s ly) Fatigue: %s" % (
                                     x.name,
                                     x.owner.profile.character.name,
                                     x.ship.name,
