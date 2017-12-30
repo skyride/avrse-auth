@@ -34,7 +34,7 @@ class Asset(models.Model):
 
     # Style for items on the fitting panel
     def style(self):
-        if self.type.group.category.id == 8:
+        if self.type.group.category.id != 8:
             return {
                 "HiSlot0": "position:absolute; left:73px; top:60px; width:32px; height:32px;",
                 "HiSlot1": "position:absolute; left:102px; top:42px; width:32px; height:32px;",
