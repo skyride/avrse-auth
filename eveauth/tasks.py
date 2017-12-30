@@ -263,37 +263,46 @@ def update_character(character_id):
                 ).save()
 
         # Assets
-        assets = api.get("/v3/characters/$id/assets/")
         with transaction.atomic():
             Asset.objects.filter(character=db_char).delete()
-            for asset in assets:
-                db_asset = Asset(
-                    character=db_char,
-                    id=asset['item_id'],
-                    type_id=asset['type_id'],
-                    flag=asset['location_flag'],
-                    quantity=asset['quantity'],
-                    raw_quantity=asset['quantity'],
-                    singleton=asset['is_singleton'],
+
+            page = 1
+            while True:
+                assets = api.get("/v3/characters/$id/assets/", get_vars={'page': page})
+                if len(assets) < 1:
+                    break
+
+                for asset in assets:
+                    db_asset = Asset(
+                        character=db_char,
+                        id=asset['item_id'],
+                        type_id=asset['type_id'],
+                        flag=asset['location_flag'],
+                        quantity=asset['quantity'],
+                        raw_quantity=asset['quantity'],
+                        singleton=asset['is_singleton'],
+                    )
+
+                    if asset['location_flag'] == "Hangar":
+                        station = Station.get_or_create(asset['location_id'], api)
+                        db_asset.system = station.system
+                    else:
+                        db_asset.parent_id = asset['location_id']
+                    db_asset.save()
+
+                # Fetch names for all ships/containers
+                items = list(
+                    Asset.objects.filter(
+                        Q(character=db_char),
+                        Q(type__group__category_id=6) | Q(type__group__in=[12 , 340, 448])
+                    ).values_list(
+                        'id',
+                        flat=True
+                    )
                 )
 
-                if asset['location_flag'] == "Hangar":
-                    station = Station.get_or_create(asset['location_id'], api)
-                    db_asset.system = station.system
-                else:
-                    db_asset.parent_id = asset['location_id']
-                db_asset.save()
+                page = page + 1
 
-            # Fetch names for all ships/containers
-            items = list(
-                Asset.objects.filter(
-                    Q(character=db_char),
-                    Q(type__group__category_id=6) | Q(type__group__in=[12 , 340, 448])
-                ).values_list(
-                    'id',
-                    flat=True
-                )
-            )
             asset_names = api.post("/v1/characters/$id/assets/names/", data=json.dumps(items))
             for asset in asset_names:
                 db_asset = Asset.objects.get(id=asset['item_id'])
