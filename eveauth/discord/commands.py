@@ -119,11 +119,9 @@ class BotCommands:
                             ]
                         )
 
-            reply = self.monowrap(
-                "Characters in range of %s\n%s" % (
-                    target.name,
-                    AsciiTable(table).table
-                )
+            reply = "Characters in range of %s\n%s" % (
+                target.name,
+                AsciiTable(table).table
             )
 
             if len(self.monowrap(reply)) < 2000:
