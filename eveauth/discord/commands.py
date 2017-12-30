@@ -130,7 +130,7 @@ class BotCommands:
                 lines = reply.split("\n")
                 out = ""
                 while len(reply) > 0:
-                    cur = lines.pop()
+                    cur = lines.pop(0)
                     test = "%s\n%s" % (
                         out,
                         cur
