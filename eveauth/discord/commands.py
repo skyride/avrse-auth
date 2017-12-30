@@ -124,7 +124,15 @@ class BotCommands:
             target = target.first()
             chars = Character.objects.filter(owner__isnull=False)
             table = [["Owner", "Char", "Ship", "System", "Range", "Fatigue"]]
-            for char in chars.prefetch_related('system', 'ship').all():
+
+            for char in chars.prefetch_related(
+                'system',
+                'ship'
+            ).order_by(
+                'ship__group__name',
+                'ship__name',
+                'name'
+            ).all():
                 if char.ship.group_id in ranges.keys():
                     if target.distance(char.system, True) <= ranges[char.ship.group_id]:
                         table.append(
