@@ -2,7 +2,6 @@ from django.core.management.base import BaseCommand
 
 from django.db import connections
 
-from sde import maps
 from sde.models import *
 from sde.model_updater import ModelUpdater
 
@@ -14,11 +13,14 @@ class Command(BaseCommand):
         # Get cursor for sde db
         with connections['sde'].cursor() as cursor:
             updater = ModelUpdater(cursor)
-            updater.update_model(MarketGroup, "invMarketGroups", maps.MarketGroup)
-            updater.update_model(Category, "invCategories", maps.Category)
-            updater.update_model(Group, "invGroups", maps.Group)
-            updater.update_model(Type, "invTypes", maps.Type)
-            updater.update_model(Region, "mapRegions", maps.Region)
-            updater.update_model(Constellation, "mapConstellations", maps.Constellation)
-            updater.update_model(System, "mapSolarSystems", maps.System)
-            updater.update_model(Station, "staStations", maps.Station)
+            updater.update_model(MarketGroup, "invMarketGroups")
+            updater.update_model(Category, "invCategories")
+            updater.update_model(Group, "invGroups")
+            updater.update_model(Type, "invTypes")
+            updater.update_model(AttributeCategory, "dgmAttributeCategories")
+            updater.update_model(AttributeType, "dgmAttributeTypes")
+            updater.update_model(TypeAttribute, "dgmTypeAttributes")
+            updater.update_model(Region, "mapRegions")
+            updater.update_model(Constellation, "mapConstellations")
+            updater.update_model(System, "mapSolarSystems")
+            updater.update_model(Station, "staStations")

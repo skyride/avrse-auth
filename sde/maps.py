@@ -85,6 +85,36 @@ Type = [
 ]
 
 
+AttributeCategory = [
+    ('id', 'categoryID'),
+    ('name', 'categoryName'),
+    ('description', 'categoryDescription')
+]
+
+
+AttributeType = [
+    ('id', 'attributeID'),
+    ('name', 'attributeName'),
+    ('category_id', 'categoryID'),
+    ('description', 'description'),
+    ('icon_id', 'iconID'),
+    ('default_value', 'defaultValue'),
+    ('published', 'published'),
+    ('display_name', 'displayName'),
+    ('unit_id', 'unitID'),
+    ('stackable', 'stackable'),
+    ('high_is_good', 'highIsGood')
+]
+
+
+TypeAttribute = [
+    ('type_id', 'typeID'),
+    ('attribute_id', 'attributeID'),
+    ('value_int', 'valueInt'),
+    ('value_float', 'valueFloat')
+]
+
+
 Station = [
     ('id', 'stationID'),
     ('name', 'stationName'),

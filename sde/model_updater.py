@@ -3,6 +3,8 @@ import sys
 
 from django.db import transaction
 
+from sde import maps
+
 # Defines some functions for importing
 
 
@@ -12,9 +14,11 @@ class ModelUpdater:
         self.cursor = cursor
 
     @transaction.atomic
-    def update_model(self, Model, table_name, table_map):
+    def update_model(self, Model, table_name):
         print("Updating %s...   " % Model.__name__, end="")
         sys.stdout.flush()
+
+        table_map = getattr(maps, Model.__name__)
 
         # Get query
         query = self.query_from_map(table_name, table_map)
@@ -34,6 +38,7 @@ class ModelUpdater:
                 setattr(obj, attr, result[i])
 
             obj.save()
+
         print("%s objects" % len(results))
 
 

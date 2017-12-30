@@ -120,6 +120,45 @@ class Type(models.Model):
         return "%s:%s" % (self.id, self.name)
 
 
+class AttributeCategory(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=50, null=True)
+    description = models.CharField(max_length=200, null=True)
+
+
+class AttributeType(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=400)
+    category = models.ForeignKey(AttributeCategory, null=True, db_constraint=False, related_name="types")
+
+    description = models.CharField(max_length=1000, null=True)
+    icon_id = models.IntegerField(null=True)
+    default_value = models.IntegerField(null=True)
+    published = models.BooleanField(db_index=True)
+    display_name = models.CharField(max_length=150, null=True)
+    unit_id = models.IntegerField(null=True)
+    stackable = models.BooleanField()
+    high_is_good = models.BooleanField()
+
+
+class TypeAttribute(models.Model):
+    type = models.ForeignKey(Type, related_name="attributes")
+    attribute = models.ForeignKey(AttributeType, related_name="types")
+    value = models.FloatField()
+
+    value_int = None
+    value_float = None
+
+    # Override save to coalesce int/float
+    def save(self, *args, **kwargs):
+        if self.value_int != None:
+            self.value = self.value_int
+        elif self.value_float != None:
+            self.value = self.value_float
+
+        return super(TypeAttribute, self).save(*args, **kwargs)
+
+
 class Station(models.Model):
     id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=100, db_index=True)
