@@ -126,8 +126,8 @@ class BotCommands:
                 )
             )
 
-            if len(reply) < 2000:
-                self.event.reply(reply)
+            if len(self.monowrap(reply)) < 2000:
+                self.event.reply(self.monowrap(reply))
             else:
                 lines = reply.split()
                 out = ""
@@ -137,12 +137,12 @@ class BotCommands:
                         out,
                         cur
                     )
-                    if len(test) < 1998:
+                    if len(self.monowrap(test)) < 1998:
                         out = test
                     else:
-                        self.event.reply(out)
+                        self.event.reply(self.monowrap(out))
                         out = cur
-                self.event.reply(out)
+                self.event.reply(self.monowrap(out))
 
 
     def alts(self):
