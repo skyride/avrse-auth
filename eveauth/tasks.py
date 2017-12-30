@@ -300,8 +300,6 @@ def update_character(character_id):
                 db_asset.name = asset['name']
                 db_asset.save()
 
-
-
             # Fix systems
             db_assets = Asset.objects.filter(
                 character=db_char,

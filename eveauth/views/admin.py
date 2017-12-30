@@ -122,6 +122,18 @@ def adminassets_index(request, user_id):
 
 @login_required
 @user_passes_test(lambda x: x.groups.filter(name="admin").exists())
+def adminassets_viewship(request, id):
+    ship = Asset.objects.get(id=id)
+
+    context = {
+        "ship": ship
+    }
+
+    return render(request, "eveauth/view_ship.html", context)
+
+
+@login_required
+@user_passes_test(lambda x: x.groups.filter(name="admin").exists())
 def groupadmin_index(request):
     groups = Group.objects.exclude(
         Q(name__startswith="Corp: ") | Q(name__startswith="Alliance: ")

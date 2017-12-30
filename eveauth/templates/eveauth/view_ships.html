@@ -38,7 +38,9 @@
     </td>
     <td>
       <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Type/{{ asset.type_id }}_32.png">
-      <a>{{ asset.type.name }} {% if asset.name %}- <i>{{ asset.name }}</i>{% endif %}</a>
+      <a href="{% url 'adminassets_viewship' asset.id %}">
+        {{ asset.type.name }} {% if asset.name %}- <i>{{ asset.name }}</i>{% endif %}
+      </a>
     </td>
     <td>
       {% ifchanged asset.system asset.character asset.type.group %}
