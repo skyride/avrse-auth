@@ -104,7 +104,7 @@ class BotCommands:
         if target != None:
             target = target.first()
             chars = Character.objects.filter(owner__isnull=False)
-            table = [["Owner", "Char", "Ship", "Fatigue"]]
+            table = [["Owner", "Char", "Ship", "System", "Range", "Fatigue"]]
             for char in chars.prefetch_related('system', 'ship').all():
                 if char.ship.group_id in ranges.keys():
                     if target.distance(char.system, True) <= ranges[char.ship.group_id]:
@@ -113,18 +113,36 @@ class BotCommands:
                                 char.owner.profile.character.name,
                                 char.name,
                                 char.ship.name,
+                                char.system.name,
+                                "%s ly" % round(char.system.distance(target, ly=True), 2),
                                 char.fatigue_text()
                             ]
                         )
 
-            self.event.reply(
-                self.monowrap(
-                    "Characters in range of %s\n%s" % (
-                        target.name,
-                        AsciiTable(table).table
-                    )
+            reply = self.monowrap(
+                "Characters in range of %s\n%s" % (
+                    target.name,
+                    AsciiTable(table).table
                 )
             )
+
+            if len(reply) < 2000:
+                self.event.reply(reply)
+            else:
+                lines = reply.split()
+                out = ""
+                while len(reply) > 0:
+                    cur = lines.pop()
+                    test = "%s\n%s" % (
+                        out,
+                        cur
+                    )
+                    if len(test) < 1998:
+                        out = test
+                    else:
+                        self.event.reply(out)
+                        out = cur
+                self.event.reply(out)
 
 
     def alts(self):
