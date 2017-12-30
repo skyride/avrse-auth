@@ -57,6 +57,25 @@ class BotCommands:
             name__istartswith=self.search
         )
 
+    def reply_chunked(self, reply):
+        if len(self.monowrap(reply)) < 2000:
+            self.event.reply(self.monowrap(reply))
+        else:
+            lines = reply.split("\n")
+            out = ""
+            while len(lines) > 0:
+                cur = lines.pop(0)
+                test = "%s\n%s" % (
+                    out,
+                    cur
+                )
+                if len(self.monowrap(test)) < 1998:
+                    out = test
+                else:
+                    self.event.reply(self.monowrap(out))
+                    out = cur
+            self.event.reply(self.monowrap(out))
+
 
     def whoin(self):
         # Check for location
@@ -119,28 +138,12 @@ class BotCommands:
                             ]
                         )
 
-            reply = "Characters in range of %s\n%s" % (
-                target.name,
-                AsciiTable(table).table
+            self.reply_chunked(
+                "Characters in range of %s\n%s" % (
+                    target.name,
+                    AsciiTable(table).table
+                )
             )
-
-            if len(self.monowrap(reply)) < 2000:
-                self.event.reply(self.monowrap(reply))
-            else:
-                lines = reply.split("\n")
-                out = ""
-                while len(reply) > 0:
-                    cur = lines.pop(0)
-                    test = "%s\n%s" % (
-                        out,
-                        cur
-                    )
-                    if len(self.monowrap(test)) < 1998:
-                        out = test
-                    else:
-                        self.event.reply(self.monowrap(out))
-                        out = cur
-                self.event.reply(self.monowrap(out))
 
 
     def alts(self):
