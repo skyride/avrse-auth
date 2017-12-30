@@ -2,6 +2,8 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models import Q
 
+from terminaltables import AsciiTable
+
 from avrseauth.settings import members, blues
 from eveauth.models import Character
 from sde.models import System, Region
@@ -102,27 +104,24 @@ class BotCommands:
         if target != None:
             target = target.first()
             chars = Character.objects.filter(owner__isnull=False)
-            in_range = []
+            table = [["Owner", "Char", "Ship", "Fatigue"]]
             for char in chars.prefetch_related('system', 'ship').all():
                 if char.ship.group_id in ranges.keys():
                     if target.distance(char.system, True) <= ranges[char.ship.group_id]:
-                        in_range.append(char)
+                        table.append(
+                            [
+                                char.owner.profile.character.name,
+                                char.name,
+                                char.ship.name,
+                                char.fatigue_text()
+                            ]
+                        )
 
             self.event.reply(
                 self.monowrap(
                     "Characters in range of %s\n%s" % (
                         target.name,
-                        "\n".join(
-                            map(
-                                lambda x: "(%s)\t%s\t%s\t%s" % (
-                                    x.owner.profile.character.name,
-                                    x.name,
-                                    x.ship.name,
-                                    x.fatigue_text(nf=True)
-                                ),
-                                in_range
-                            )
-                        )
+                        AsciiTable(table).table
                     )
                 )
             )
