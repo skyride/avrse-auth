@@ -47,6 +47,7 @@
       </ul>
 
       {% if user.profile.forum_id %}
+      <a class="btn btn-default" href="{% url 'adminassets_index' user.id %}">Ships</a>
       <a class="btn btn-default" href="{{ forum_address }}index.php?/profile/{{ user.profile.forum_id }}-asd/">Forum Account</a>
       {% endif %}
       <a class="btn btn-default" href="https://evewho.com/pilot/{{ user.profile.character.name }}">EVEWho</a>

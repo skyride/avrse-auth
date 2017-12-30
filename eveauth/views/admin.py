@@ -15,7 +15,7 @@ from django.utils import timezone
 from django.db.models import Q, Count
 from django.db import IntegrityError
 
-from eveauth.models import GroupApp, Character
+from eveauth.models import GroupApp, Character, Asset
 from eveauth.tasks import get_server, update_groups, spawn_groupupdates, update_discord
 
 
@@ -89,6 +89,35 @@ def view_user(request, id):
 
     return render(request, "eveauth/user_view.html", context)
 
+
+@login_required
+@user_passes_test(lambda x: x.groups.filter(name="admin").exists())
+def adminassets_index(request, user_id):
+    user = User.objects.get(id=user_id)
+
+    context = {
+        "user": user,
+        "assets": Asset.objects.filter(
+                character__owner=user,
+                type__group__category__id=6,
+                singleton=True,
+                system__isnull=False
+            ).exclude(
+                type__group__id__in=[
+                    29,             # Capsule
+                    237,            # Noobship
+                ]
+            ).order_by(
+                'system__region__name',
+                'system__name',
+                'character__name',
+                '-type__mass',
+                'type__group__name',
+                'type__name'
+            ).all()
+    }
+
+    return render(request, "eveauth/view_ships.html", context)
 
 
 @login_required

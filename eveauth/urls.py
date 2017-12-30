@@ -26,6 +26,8 @@ urlpatterns = [
     url(r'^admin/user/([0-9]+)/updategroups$', views.user_updategroups, name="user_updategroups"),
     url(r'^admin/user/all/updategroups$', views.user_updategroups_all, name="user_updategroups_all"),
 
+    url(r'admin/assets/([0-9]+)$', views.adminassets_index, name="adminassets_index"),
+
     url(r'^admin/characters/(?P<page>[0-9]+)/(?P<order_by>[a-zA-Z_]+)?$', views.characteradmin_index, name="characteradmin_index"),
 
     url(r'^admin/groups/$', views.groupadmin_index, name="groupadmin_index"),

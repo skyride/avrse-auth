@@ -1,3 +1,5 @@
+import json
+
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.conf import settings
@@ -281,6 +283,24 @@ def update_character(character_id):
                 else:
                     db_asset.parent_id = asset['location_id']
                 db_asset.save()
+
+            # Fetch names for all ships/containers
+            items = list(
+                Asset.objects.filter(
+                    Q(character=db_char),
+                    Q(type__group__category_id=6) | Q(type__group__in=[12 , 340, 448])
+                ).values_list(
+                    'id',
+                    flat=True
+                )
+            )
+            asset_names = api.post("/v1/characters/$id/assets/names/", data=json.dumps(items))
+            for asset in asset_names:
+                db_asset = Asset.objects.get(id=asset['item_id'])
+                db_asset.name = asset['name']
+                db_asset.save()
+
+
 
             # Fix systems
             db_assets = Asset.objects.filter(
