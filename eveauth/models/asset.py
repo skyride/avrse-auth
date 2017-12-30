@@ -27,10 +27,10 @@ class Asset(models.Model):
         )
 
     def div_id(self):
-        if self.singleton:
+        if self.type.group.category.id == 8:
             return self.flag
         else:
-            return "%s-script" % self.flag
+            return "%s-charge" % self.flag
 
     # Style for items on the fitting panel
     def style(self):
@@ -127,7 +127,6 @@ class Asset(models.Model):
                 Q(flag__startswith='HiSlot')
                 | Q(flag__startswith='MedSlot')
                 | Q(flag__startswith='LowSlot'),
-                singleton=False
             ).order_by(
                 'flag'
             ).all()
@@ -140,6 +139,8 @@ class Asset(models.Model):
             self.items.filter(
                 flag__startswith=flag,
                 singleton=True
+            ).exclude(
+                type__group__category_id=8
             ).order_by(
                 'flag'
             ).all()
