@@ -127,7 +127,7 @@ class BotCommands:
             if len(self.monowrap(reply)) < 2000:
                 self.event.reply(self.monowrap(reply))
             else:
-                lines = reply.split()
+                lines = reply.split("\n")
                 out = ""
                 while len(reply) > 0:
                     cur = lines.pop()
