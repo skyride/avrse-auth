@@ -19,7 +19,7 @@ class Command(BaseCommand):
             updater.update_model(Type, "invTypes")
             updater.update_model(AttributeCategory, "dgmAttributeCategories")
             updater.update_model(AttributeType, "dgmAttributeTypes")
-            updater.update_model(TypeAttribute, "dgmTypeAttributes")
+            updater.update_model(TypeAttribute, "dgmTypeAttributes", no_key=True)
             updater.update_model(Region, "mapRegions")
             updater.update_model(Constellation, "mapConstellations")
             updater.update_model(System, "mapSolarSystems")

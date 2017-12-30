@@ -144,19 +144,23 @@ class AttributeType(models.Model):
 class TypeAttribute(models.Model):
     type = models.ForeignKey(Type, related_name="attributes")
     attribute = models.ForeignKey(AttributeType, related_name="types")
-    value = models.FloatField()
+    value_int = models.IntegerField(null=True)
+    value_float = models.FloatField(null=True)
 
-    value_int = None
-    value_float = None
-
-    # Override save to coalesce int/float
-    def save(self, *args, **kwargs):
+    @property
+    def value(self):
         if self.value_int != None:
-            self.value = self.value_int
-        elif self.value_float != None:
-            self.value = self.value_float
+            return self.value_int
+        else:
+            return self.value_float
 
-        return super(TypeAttribute, self).save(*args, **kwargs)
+    def __str__(self):
+        return "%s (%s)" % (
+            self.attribute.name,
+            self.value
+        )
+
+
 
 
 class Station(models.Model):
