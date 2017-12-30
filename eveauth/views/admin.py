@@ -107,6 +107,12 @@ def adminassets_index(request, user_id):
                     29,             # Capsule
                     237,            # Noobship
                 ]
+            ).prefetch_related(
+                'system',
+                'system__region',
+                'character',
+                'type',
+                'type__group'
             ).order_by(
                 'system__region__name',
                 'system__name',
