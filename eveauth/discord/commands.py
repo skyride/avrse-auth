@@ -95,25 +95,28 @@ class BotCommands:
             )
 
         if chars != None:
-            self.event.reply(
-                self.monowrap(
-                    "Characters in %s\n%s" % (
-                        location.name,
-                        "\n".join(
-                            map(
-                                lambda x: "%s %s (%s): %s" % (
-                                    x.system.name,
-                                    x.name,
-                                    x.owner.profile.character.name,
-                                    x.ship.name
-                                ),
-                                chars.order_by(
-                                    'system__name',
-                                    'name'
-                                ).all()
-                            )
-                        )
-                    )
+            table = [["Owner", "Char", "Ship", "System", "Fatigue"]]
+
+            for char in chars.order_by(
+                'system__name',
+                'ship__group__name',
+                'ship__name',
+                'name'
+            ).all():
+                table.append(
+                    [
+                        char.owner.profile.character.name,
+                        char.name,
+                        char.ship.name,
+                        char.system.name,
+                        char.fatigue_text()
+                    ]
+                )
+
+            self.reply_chunked(
+                "Characters in %s\n%s" % (
+                    location.name,
+                    AsciiTable(table).table
                 )
             )
 
