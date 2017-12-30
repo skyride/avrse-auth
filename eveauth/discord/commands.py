@@ -114,11 +114,10 @@ class BotCommands:
                         target.name,
                         "\n".join(
                             map(
-                                lambda x: "%s (%s): %s (%s ly) Fatigue: %s" % (
+                                lambda x: "%s (%s) %s Fatigue: %s" % (
                                     x.name,
                                     x.owner.profile.character.name,
                                     x.ship.name,
-                                    round(target.distance(x.system, True), 2),
                                     x.fatigue_text()
                                 ),
                                 in_range
