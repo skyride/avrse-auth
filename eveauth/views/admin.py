@@ -96,6 +96,7 @@ def adminassets_index(request, user_id):
     user = User.objects.get(id=user_id)
 
     context = {
+        "view_ship": "adminassets_viewship",
         "user": user,
         "assets": Asset.objects.filter(
                 character__owner=user,

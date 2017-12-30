@@ -21,6 +21,9 @@ urlpatterns = [
     url(r'^services/mumble/update_password/$', views.update_mumble_password, name="update_mumble_password"),
     url(r'^services/forum/update_password/$', views.update_forum_password, name="update_forum_password"),
 
+    url(r'^ships/$', views.assets_index, name="assets_index"),
+    url(r'^ship/([0-9]+)$', views.assets_viewship, name="assets_viewship"),
+
     url(r'^admin/users/(?P<page>[0-9]+)/(?P<order_by>[a-zA-Z_]+)?$', views.registeredusers_index, name="registeredusers_index"),
     url(r'^admin/user/([0-9]+)$', views.view_user, name="view_user"),
     url(r'^admin/user/([0-9]+)/updategroups$', views.user_updategroups, name="user_updategroups"),
