@@ -1,4 +1,5 @@
 import json
+import requests
 
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -9,7 +10,7 @@ from django.db.models import Q
 from avrseauth.settings import members, blues
 from avrseauth.celery import app
 
-from sde.models import System, Station
+from sde.models import System, Station, Type
 
 from eveauth import ipb
 from eveauth.models.character import Character
@@ -290,18 +291,18 @@ def update_character(character_id):
                         db_asset.parent_id = asset['location_id']
                     db_asset.save()
 
-                # Fetch names for all ships/containers
-                items = list(
-                    Asset.objects.filter(
-                        Q(character=db_char),
-                        Q(type__group__category_id=6) | Q(type__group__in=[12 , 340, 448])
-                    ).values_list(
-                        'id',
-                        flat=True
-                    )
-                )
-
                 page = page + 1
+
+            # Fetch names for all ships/containers
+            items = list(
+                Asset.objects.filter(
+                    Q(character=db_char),
+                    Q(type__group__category_id=6) | Q(type__group__in=[12 , 340, 448])
+                ).values_list(
+                    'id',
+                    flat=True
+                )
+            )
 
             asset_names = api.post("/v1/characters/$id/assets/names/", data=json.dumps(items))
             for asset in asset_names:
@@ -344,3 +345,46 @@ def update_character_location(character_id):
     db_char.save()
 
     print "Updated location info for character %s" % db_char.name
+
+
+@app.task(name="spawn_price_updates")
+def spawn_price_updates():
+    def chunks(l, n):
+        for i in range(0, len(l), n):
+            yield l[i:i + n]
+
+    id_chunks = chunks(
+        list(
+            Type.objects.filter(
+                published=True,
+                market_group__isnull=False
+            ).values_list(
+                'id',
+                flat=True
+            )
+        ),
+        500
+    )
+
+    for chunk in id_chunks:
+        update_prices.delay(chunk)
+    print "Queued price updates"
+
+
+@app.task(name="update_prices")
+def update_prices(item_ids):
+    r = requests.get(
+        "https://market.fuzzwork.co.uk/aggregates/",
+        params={
+            "region": 10000002,
+            "types": ",".join(map(str, item_ids))
+        }
+    ).json()
+
+    with transaction.atomic():
+        for key in r.keys():
+            item = r[key]
+            db_type = Type.objects.get(id=int(key))
+            db_type.buy = item['buy']['percentile']
+            db_type.sell = item['sell']['percentile']
+            db_type.save()

@@ -116,6 +116,9 @@ class Type(models.Model):
     market_group = models.ForeignKey(MarketGroup, null=True)
     icon_id = models.IntegerField(null=True)
 
+    buy = models.DecimalField(max_digits=16, decimal_places=2, default=0)
+    sell = models.DecimalField(max_digits=16, decimal_places=2, default=0)
+
     def __str__(self):
         return "%s:%s" % (self.id, self.name)
 

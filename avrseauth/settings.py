@@ -187,6 +187,10 @@ CELERYBEAT_SCHEDULE = {
         'task': 'spawn_groupupdates',
         'schedule': timedelta(hours=USER_UPDATE_DELAY)
     },
+    'spawn_price_updates': {
+        'task': 'spawn_price_updates',
+        'schedule': timedelta(hours=24)
+    },
     'spawn_character_location_updates': {
         'task': 'spawn_character_location_updates',
         'schedule': timedelta(minutes=5)
