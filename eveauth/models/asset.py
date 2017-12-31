@@ -50,7 +50,9 @@ class Asset(models.Model):
                 self.mods()
             )
         ).order_by(
-            'flag'
+            'flag',
+            '-type__sell',
+            'type__name'
         )
 
     @property
