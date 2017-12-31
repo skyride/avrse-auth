@@ -388,3 +388,8 @@ def update_prices(item_ids):
             db_type.buy = item['buy']['percentile']
             db_type.sell = item['sell']['percentile']
             db_type.save()
+
+    print "Price updates completed for %s:%s" % (
+        item_ids[:1],
+        item_ids[1:]
+    )
