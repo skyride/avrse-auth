@@ -166,7 +166,11 @@ class Asset(models.Model):
 
 
     def _slots(self, attribute_id, flag):
-        slot_count = self.type.attributes.filter(attribute_id=attribute_id).first().value
+        slot_count = self.type.attributes.filter(attribute_id=attribute_id).first()
+        if slot_count != None:
+            slot_count = slot_count.value
+        else:
+            slot_count = 0
         slots = list(
             self.items.filter(
                 flag__startswith=flag,
