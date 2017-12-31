@@ -1,5 +1,5 @@
 {% extends 'eveauth/base.html' %}
-{% load static humanize %}
+{% load static humanize mathfilters %}
 
 {% block title %}View Ship{% endblock %}
 
@@ -130,6 +130,7 @@
         <th>Location</th>
         <th colspan="2">Item</th>
         <th>Quantity</th>
+        <th>Volume</th>
         <th>Price</th>
       </tr>
 
@@ -152,7 +153,8 @@
           {{ item.type.name }}
           {% endif %}
         </td>
-        <td>{{ item.quantity }}</td>
+        <td>{{ item.quantity|intcomma }}</td>
+        <td>{{ item.type.volume|mul:item.quantity|floatformat:2 }} m3</td>
         <td>{{ item.price|intcomma }} ISK</td>
       </tr>
       {% endfor %}

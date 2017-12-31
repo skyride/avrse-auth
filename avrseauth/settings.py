@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
 
     'social_django',
+    'mathfilters',
 
     'eveauth',
     'esi',
