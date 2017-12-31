@@ -348,7 +348,7 @@ def update_character_location(character_id):
 
 
 @app.task(name="spawn_price_updates")
-def spawn_price_updates():
+def spawn_price_updates(inline=False):
     def chunks(l, n):
         for i in range(0, len(l), n):
             yield l[i:i + n]
@@ -367,7 +367,10 @@ def spawn_price_updates():
     )
 
     for chunk in id_chunks:
-        update_prices.delay(chunk)
+        if inline:
+            update_prices(chunk)
+        else:
+            update_prices.delay(chunk)
     print "Queued price updates"
 
 
@@ -390,6 +393,6 @@ def update_prices(item_ids):
             db_type.save()
 
     print "Price updates completed for %s:%s" % (
-        item_ids[:1],
-        item_ids[1:]
+        item_ids[0],
+        item_ids[-1]
     )

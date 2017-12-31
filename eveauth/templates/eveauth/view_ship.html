@@ -1,5 +1,5 @@
 {% extends 'eveauth/base.html' %}
-{% load static %}
+{% load static humanize %}
 
 {% block title %}View Ship{% endblock %}
 
@@ -8,40 +8,147 @@
 <h2>View Ship: {{ ship.type.name }} - <i>{{ ship.name }}</i></h2>
 <hr />
 
-{% with highs=ship.highs mids=ship.mids lows=ship.lows rigs=ship.rigs subs=ship.subs mods=ship.mods  %}
-<div id="Fitting_Panel" style="position: relative; height:398px; width:398px; z-index: 3">
-  <div id="mask" style="position:absolute; left: 0px; top: 0 px; width:398px; height:398px; z-index:-1;">
-    <img style="position:absolute; left: 0px; top: 0px;  height:398px; width:398px; border:0px" src="//zkillboard.com/img/panel/tyrannis.png" alt="">
-  </div>
+{% with highs=ship.highs mids=ship.mids lows=ship.lows rigs=ship.rigs subs=ship.subs mods=ship.mods %}
+<div class="row">
+  <div class="col-md-6">
+    <div id="fitting-panel" style="position: relative; height:398px; width:398px; z-index: 3">
+      <div id="mask" style="position:absolute; left: 0px; top: 0 px; width:398px; height:398px; z-index:-1;">
+        <img style="position:absolute; left: 0px; top: 0px;  height:398px; width:398px; border:0px" src="//zkillboard.com/img/panel/tyrannis.png" alt="">
+      </div>
 
-  {% for mod in mods %}
-    {% if mod %}
-    <div id="{{ mod.div_id }}" style="{{ mod.style }}">
-      <a data-toggle="tooltip" title="{{ mod.type.name }}">
-        <img src="https://imageserver.eveonline.com/Type/{{ mod.type.id }}_32.png" style="height: 32px; width: 32px;" alt="{{ mod.type.name }}">
-      </a>
+      {% for mod in mods %}
+        {% if mod %}
+        <div id="{{ mod.div_id }}" style="{{ mod.style }}">
+          <a data-toggle="tooltip" title="{{ mod.type.name }}">
+            <img src="https://imageserver.eveonline.com/Type/{{ mod.type.id }}_32.png" style="height: 32px; width: 32px;" alt="{{ mod.type.name }}">
+          </a>
+        </div>
+        {% endif %}
+      {% endfor %}
+
+      <div id="highx" style="position:absolute; left: 0px; top: 0px; width: 398px; height: 398px; z-index:-1;">
+        <img src="//zkillboard.com/img/panel/{{ highs|length }}h.png" alt="" style="border:0px;">
+      </div>
+      <div id="midx" style="position:absolute; left: 0px; top: 0px; width: 398px; height: 398px; z-index:-1;">
+        <img src="//zkillboard.com/img/panel/{{ mids|length }}m.png" alt="" style="border:0px;">
+      </div>
+      <div id="lowx" style="position:absolute; left: 0px; top: 0px; width: 398px; height: 398px; z-index:-1;">
+        <img src="//zkillboard.com/img/panel/{{ lows|length }}l.png" alt="" style="border:0px;">
+      </div>
+      <div id="rigxx" style="position:absolute; left: 0px; top: 0px; width: 398px; height: 398px; z-index:-1;">
+        <img src="//zkillboard.com/img/panel/{{ rigs|length }}r.png" alt="" style="border:0px;">
+      </div>
+      <div id="subx" style="position:absolute; left: 0px; top: 0px; width: 398px; height: 398px; z-index:-1;">
+        <img src="//zkillboard.com/img/panel/{{ subs|length }}s.png" alt="" style="border:0px;">
+      </div>
+
+      <div id="bigship" style="position:absolute; left:72px; top:71px; width:256px; height:256px; z-index:-2;">
+        <img src="https://imageserver.eveonline.com/Render/{{ ship.type.id }}_256.png" style="height: 256px; width: 256px;" class="eveimage img-rounded" alt="Avatar">
+      </div>
     </div>
-    {% endif %}
-  {% endfor %}
-
-  <div id="highx" style="position:absolute; left: 0px; top: 0px; width: 398px; height: 398px; z-index:-1;">
-    <img src="//zkillboard.com/img/panel/{{ highs|length }}h.png" alt="" style="border:0px;">
-  </div>
-  <div id="midx" style="position:absolute; left: 0px; top: 0px; width: 398px; height: 398px; z-index:-1;">
-    <img src="//zkillboard.com/img/panel/{{ mids|length }}m.png" alt="" style="border:0px;">
-  </div>
-  <div id="lowx" style="position:absolute; left: 0px; top: 0px; width: 398px; height: 398px; z-index:-1;">
-    <img src="//zkillboard.com/img/panel/{{ lows|length }}l.png" alt="" style="border:0px;">
-  </div>
-  <div id="rigxx" style="position:absolute; left: 0px; top: 0px; width: 398px; height: 398px; z-index:-1;">
-    <img src="//zkillboard.com/img/panel/{{ rigs|length }}r.png" alt="" style="border:0px;">
-  </div>
-  <div id="subx" style="position:absolute; left: 0px; top: 0px; width: 398px; height: 398px; z-index:-1;">
-    <img src="//zkillboard.com/img/panel/{{ subs|length }}s.png" alt="" style="border:0px;">
   </div>
 
-  <div id="bigship" style="position:absolute; left:72px; top:71px; width:256px; height:256px; z-index:-2;">
-    <img src="https://imageserver.eveonline.com/Render/{{ ship.type.id }}_256.png" style="height: 256px; width: 256px;" class="eveimage img-rounded" alt="Avatar">
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <ul class="list-group">
+        <li class="list-group-item" style="padding: 0; height: 128px;">
+          <div style="float: left;">
+            <img style="border-radius: 6px;" width="128" src="https://imageserver.eveonline.com/Character/{{ ship.character.id }}_256.jpg">
+          </div>
+
+          <div style="float: left;">
+            <div><img style="background-color: #DDD; border-radius: 6px;" width="64" src="https://imageserver.eveonline.com/Corporation/98115742_128.png"></div>
+            {% if ship.character.alliance %}
+            <div><img style="background-color: #DDD; border-radius: 6px;" width="64" src="https://imageserver.eveonline.com/Alliance/864733958_128.png"></div>
+            {% endif %}
+          </div>
+
+          <div style="float: left; height: 128px; align-items: center; display: flex; padding-left: 8px;">
+            <ul class="list-unstyled">
+              <li><h4><strong>{{ ship.character.name }}</strong></h4></li>
+              <li><h4>{{ ship.character.corp.name }}</h4></li>
+              {% if ship.character.alliance %}
+              <li><h4>{{ ship.character.alliance.name }}</h4></li>
+              {% endif %}
+            </ul>
+          </div>
+        </li>
+
+        <li class="list-group-item" style="padding: 0;">
+          <table class="table table-striped" style="margin-bottom: 0px;">
+            <tr>
+              <th>Ship:</th>
+              <td>{{ ship.type.name }} ({{ ship.type.group.name }})</td>
+            </tr>
+
+            {% if ship.station %}
+            <tr>
+              <th>Station:</th>
+              <td>{{ ship.station.name }}</td>
+            </tr>
+            {% endif %}
+
+            <tr>
+              <th>System:</th>
+              <td>
+                {{ ship.system.name }} ({{ ship.system.security|floatformat:1 }})
+              </td>
+            </tr>
+
+            <tr>
+              <th>Region:</th>
+              <td>{{ ship.system.region.name }}</td>
+            </tr>
+
+            <tr>
+              <th>Price:</th>
+              <td>{{ ship.price|intcomma }} ISK</td>
+            </tr>
+
+            <tr>
+              <th>Volume:</th>
+              <td>{{ ship.type.volume|intword }} m3</td>
+            </tr>
+
+            <tr>
+              <th>Mass:</th>
+              <td>{{ ship.type.mass|intword }} KG</td>
+            </tr>
+          </table>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<br />
+
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-striped table-condensed">
+      <tr>
+        <th>Location</th>
+        <th colspan="2">Item</th>
+        <th>Quantity</th>
+        <th>Price</th>
+      </tr>
+
+      {% for item in ship.ship_items %}
+      <tr>
+        <td>
+          {% ifchanged %}
+          {{ item.flag }}
+          {% endifchanged %}
+        </td>
+        <td style="padding: 1;">
+          <img width="32" style="background-color: #DDD; border-radius: 3px;" src="https://imageserver.eveonline.com/Type/{{ item.type.id }}_32.png">
+        </td>
+        <td>{{ item.type.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.price|intcomma }} ISK</td>
+      </tr>
+      {% endfor %}
+    </table>
   </div>
 </div>
 

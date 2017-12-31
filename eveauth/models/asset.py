@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, F, Sum
 
 from eveauth.models.character import Character
 from sde.models import Type, System, Station
@@ -26,6 +26,34 @@ class Asset(models.Model):
             self.quantity
         )
 
+    @property
+    def price(self):
+        return float(
+            self.items.aggregate(
+                total = Sum(
+                    F('type__sell') * F('quantity'),
+                    output_field=models.FloatField()
+                )
+            )['total']
+        or 0) + (float(self.type.sell) * self.quantity)
+
+    def ship_items(self):
+        def getid(x):
+            if x != None:
+                return x.id
+            else:
+                return -1
+
+        return self.items.exclude(
+            id__in=map(
+                getid,
+                self.mods()
+            )
+        ).order_by(
+            'flag'
+        )
+
+    @property
     def div_id(self):
         if self.type.group.category.id == 8:
             return self.flag
@@ -119,7 +147,11 @@ class Asset(models.Model):
         )
 
     def mods(self):
-        return self.highs() + self.mids() + self.lows() + self.rigs() + self.subs() + self.scripts()
+        mods = self.highs() + self.mids() + self.lows() + self.rigs() + self.subs() + self.scripts()
+        if mods == None:
+            return []
+        else:
+            return mods
 
     def scripts(self):
         return list(
