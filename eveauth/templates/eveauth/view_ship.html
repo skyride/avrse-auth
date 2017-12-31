@@ -143,7 +143,15 @@
         <td style="padding: 1;">
           <img width="32" style="background-color: #DDD; border-radius: 3px;" src="https://imageserver.eveonline.com/Type/{{ item.type.id }}_32.png">
         </td>
-        <td>{{ item.type.name }}</td>
+        <td>
+          {% if item.is_ship %}
+          <a href="{% url view_ship item.id %}">
+            {{ item.type.name }} - <i>{{ item.name }}</i>
+          </a>
+          {% else %}
+          {{ item.type.name }}
+          {% endif %}
+        </td>
         <td>{{ item.quantity }}</td>
         <td>{{ item.price|intcomma }} ISK</td>
       </tr>

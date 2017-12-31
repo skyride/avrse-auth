@@ -81,6 +81,7 @@ def assets_viewship(request, id):
 
     if ship.character.owner == request.user:
         context = {
-            "ship": ship
+            "ship": ship,
+            "view_ship": "assets_viewship"
         }
         return render(request, "eveauth/view_ship.html", context)

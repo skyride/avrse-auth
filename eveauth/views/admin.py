@@ -133,7 +133,8 @@ def adminassets_viewship(request, id):
     ship = Asset.objects.get(id=id)
 
     context = {
-        "ship": ship
+        "ship": ship,
+        "view_ship": "adminassets_viewship"
     }
 
     return render(request, "eveauth/view_ship.html", context)

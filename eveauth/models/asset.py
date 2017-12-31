@@ -60,6 +60,10 @@ class Asset(models.Model):
         else:
             return "%s-charge" % self.flag
 
+    @property
+    def is_ship(self):
+        return self.singleton and self.type.group.category.id == 6
+
     # Style for items on the fitting panel
     def style(self):
         if self.type.group.category.id != 8:
