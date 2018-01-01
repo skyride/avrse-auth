@@ -57,7 +57,7 @@ class Asset(models.Model):
 
     @property
     def div_id(self):
-        if self.type.group.category.id == 8:
+        if self.type.group.category.id != 8:
             return self.flag
         else:
             return "%s-charge" % self.flag
@@ -161,10 +161,14 @@ class Asset(models.Model):
 
     def scripts(self):
         return list(
-            self.items.filter(
+            Asset.objects.filter(
                 Q(flag__startswith='HiSlot')
                 | Q(flag__startswith='MedSlot')
                 | Q(flag__startswith='LowSlot'),
+                type__group__category_id=8,
+                parent__id__in=list(
+                    self.items.all().values_list('id', flat=True)
+                ) + [self.id]
             ).order_by(
                 'flag'
             ).all()

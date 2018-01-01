@@ -18,7 +18,7 @@
 
       {% for mod in mods %}
         {% if mod %}
-        <div id="{{ mod.div_id }}" style="{{ mod.style }}">
+        <div id="{{ mod.div_id }}" style="{{ mod.style }}" asset="{{ mod.id }}">
           <a data-toggle="tooltip" title="{{ mod.type.name }}">
             <img src="https://imageserver.eveonline.com/Type/{{ mod.type.id }}_32.png" style="height: 32px; width: 32px;" alt="{{ mod.type.name }}">
           </a>
