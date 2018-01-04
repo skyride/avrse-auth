@@ -126,7 +126,7 @@ class ServerAuthenticatorI(Murmur.ServerUpdatingAuthenticator):
         
         out = {}
         for user in users:
-            out[user.id] = x."#%s - %s" % (
+            out[user.id] = "#%s - %s" % (
                     user.profile.corporation.ticker,
                     user.profile.character.name
                 )
