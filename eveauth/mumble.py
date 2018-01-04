@@ -114,7 +114,7 @@ class ServerAuthenticatorI(Murmur.ServerUpdatingAuthenticator):
       return -2
       
      
-    def getRegisteredUsers(self, filter=""):
+    def getRegisteredUsers(self, filter="", *args):
         users = User.objects.filter(
             profile__character__name__icontains=filter,
             profile__level__gte=settings.MUMBLE_ACCESS_LEVEL
