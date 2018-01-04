@@ -112,6 +112,26 @@ class ServerAuthenticatorI(Murmur.ServerUpdatingAuthenticator):
     def unregisterUser(self, id, current=None):
       print "Unregister ", id
       return -2
+      
+     
+    def getRegisteredUsers(self, filter=""):
+        users = User.objects.filter(
+            profile__character__name__icontains=filter,
+            profile__level__gte=settings.MUMBLE_ACCESS_LEVEL
+        ).select_related(
+            'profile',
+            'profile__character',
+            'profile__corporation'
+        ).all()
+        
+        return map(
+            lambda x: (x.id, "#%s - %s" % (
+                    x.profile.corporation.ticker,
+                    x.profile.character.name
+                )
+            ),
+            users
+        )
 
 
     def getRegistration(self, id, current=None):
