@@ -124,14 +124,13 @@ class ServerAuthenticatorI(Murmur.ServerUpdatingAuthenticator):
             'profile__corporation'
         ).all()
         
-        return map(
-            lambda x: (x.id, "#%s - %s" % (
-                    x.profile.corporation.ticker,
-                    x.profile.character.name
+        out = {}
+        for user in users:
+            out[user.id] = x."#%s - %s" % (
+                    user.profile.corporation.ticker,
+                    user.profile.character.name
                 )
-            ),
-            users
-        )
+        return out
 
 
     def getRegistration(self, id, current=None):
