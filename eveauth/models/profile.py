@@ -4,9 +4,9 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from character import Character
-from corporation import Corporation
-from alliance import Alliance
+from .character import Character
+from .corporation import Corporation
+from .alliance import Alliance
 
 from eveauth.tasks import update_groups
 

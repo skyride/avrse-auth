@@ -82,7 +82,7 @@ class ServerAuthenticatorI(Murmur.ServerUpdatingAuthenticator):
 
 
     def getInfo(self, id, current=None):
-      print "User Connected: %s" % (id)
+      print("User Connected: %s" % (id))
       name = self.idToName(id);
       if (name == -2):
         return (False, {})
@@ -105,12 +105,12 @@ class ServerAuthenticatorI(Murmur.ServerUpdatingAuthenticator):
     # The expanded methods from UpdatingAuthenticator. We only implement a subset for this example, but
     # a valid implementation has to define all of them
     def registerUser(self, name, current=None):
-      print "Someone tried to register " + name[Murmur.UserInfo.UserName]
+      print("Someone tried to register " + name[Murmur.UserInfo.UserName])
       return -2
 
 
     def unregisterUser(self, id, current=None):
-      print "Unregister ", id
+      print("Unregister ", id)
       return -2
       
      
@@ -138,7 +138,7 @@ class ServerAuthenticatorI(Murmur.ServerUpdatingAuthenticator):
 
 
     def setInfo(self, id, info, current=None):
-      print "Set", id, info
+      print("Set", id, info)
       return -1
 
 
@@ -156,14 +156,14 @@ if __name__ == "__main__":
       serverR=Murmur.ServerUpdatingAuthenticatorPrx.uncheckedCast(adapter.addWithUUID(ServerAuthenticatorI(server, adapter)))
       server.setAuthenticator(serverR)
 
-    print "Done"
-    print 'Script running (press CTRL-C to abort)';
+    print("Done")
+    print('Script running (press CTRL-C to abort)')
     try:
         ice.waitForShutdown()
     except KeyboardInterrupt:
-        print 'CTRL-C caught, aborting'
+        print('CTRL-C caught, aborting')
 
     #meta.removeCallback(metaR)
     ice.shutdown()
     ice.destroy()
-    print "Goodbye"
+    print("Goodbye")

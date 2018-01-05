@@ -41,7 +41,7 @@ def spawn_groupupdates():
     for user in users:
         update_groups.delay(user.id)
 
-    print "Spawned group update tasks for %s users" % users.count()
+    print("Spawned group update tasks for %s users" % users.count())
     return users.count()
 
 
@@ -54,7 +54,7 @@ def spawn_character_location_updates():
     for char in chars:
         update_character_location.delay(char.id)
 
-    print "Spawned character location update tasks for %s chars" % chars.count()
+    print("Spawned character location update tasks for %s chars" % chars.count())
 
 
 # Set expired templinks inactive and kick anyone using them from mumble
@@ -71,7 +71,7 @@ def purge_expired_templinks():
 
         purge_templink_users.delay(templink.id, reason="Templink expired")
 
-        print "Purged templink [%s] %s" % (templink.tag, templink.link)
+        print("Purged templink [%s] %s" % (templink.tag, templink.link))
 
 
 # Move people to mumble
@@ -119,7 +119,7 @@ def purge_templink_users(templink_id, reason="Templink deactivated"):
 @app.task(name="update_groups")
 def update_groups(user_id):
     user = User.objects.get(id=user_id)
-    print "Updating groups for %s" % user.username
+    print("Updating groups for %s" % user.username)
     social = user.social_auth.filter(provider="eveonline").first()
 
     # Queue character updates
@@ -180,7 +180,7 @@ def update_discord(user_id):
         return
 
     user = User.objects.get(id=user_id)
-    print "Updating discord for %s" % user.username
+    print("Updating discord for %s" % user.username)
 
     social_discord = user.social_auth.filter(provider="discord").first()
     if social_discord != None:
@@ -206,7 +206,7 @@ def update_discord(user_id):
             ).all()
             for group in groups:
                 roles.append(group.name)
-            print "Updating roles: %s" % str(roles)
+            print("Updating roles: %s" % str(roles))
             api.update_roles(social_discord.uid, roles)
 
 
@@ -324,7 +324,7 @@ def update_character(character_id):
                     #print db_asset.parent_id
                 db_asset.save()
 
-        print "Updated all info for character %s" % db_char.name
+        print("Updated all info for character %s" % db_char.name)
 
 
 
@@ -344,7 +344,7 @@ def update_character_location(character_id):
 
     db_char.save()
 
-    print "Updated location info for character %s" % db_char.name
+    print("Updated location info for character %s" % db_char.name)
 
 
 @app.task(name="spawn_price_updates")
@@ -371,7 +371,7 @@ def spawn_price_updates(inline=False):
             update_prices(chunk)
         else:
             update_prices.delay(chunk)
-    print "Queued price updates"
+    print("Queued price updates")
 
 
 @app.task(name="update_prices")
@@ -392,7 +392,7 @@ def update_prices(item_ids):
             db_type.sell = item['sell']['percentile']
             db_type.save()
 
-    print "Price updates completed for %s:%s" % (
+    print ("Price updates completed for %s:%s" % (
         item_ids[0],
         item_ids[-1]
-    )
+    ))

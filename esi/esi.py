@@ -54,7 +54,7 @@ class ESI():
         # Try request
         full_url = "%s%s?%s" % (self.url, full_url, self._get_variables(get_vars))
         if debug:
-            print full_url
+            print(full_url)
 
         # Check the cache for a response
         if self.token == None:
