@@ -19,6 +19,7 @@ from eveauth.models.alliance import Alliance
 from eveauth.models.templink import Templink
 from eveauth.models.skill import Skill
 from eveauth.models.asset import Asset
+from eveauth.models.kill import Kill
 from eveauth.esi import ESI, parse_api_date
 from eveauth.discord.api import DiscordAPI, is_bot_active
 
@@ -396,4 +397,48 @@ def update_prices(item_ids):
     print "Price updates completed for %s:%s" % (
         item_ids[0],
         item_ids[-1]
+    )
+
+
+@app.task(name="spawn_kill_updates")
+def spawn_kill_updates():
+    chars = Character.objects.filter(owner__isnull=False)
+    for char in chars.all():
+        update_kills.delay(char.id)
+    print "Spawned kill updates for %s characters" % chars.count()
+
+
+@app.task(name="update_kills")
+def update_kills(char_id):
+    char = Character.objects.get(id=char_id)
+    kills = requests.get("https://zkillboard.com/api/kills/characterID/%s/" % char_id).json()
+
+    with transaction.atomic():
+        new = 0
+        for kill in kills:
+            if "character_id" in kill['victim']:
+                db_kill, created = Kill.objects.get_or_create(
+                    id=kill['killmail_id'],
+                    defaults={
+                        'victim': Character.get_or_create(
+                                kill['victim']['character_id']
+                            ),
+                        'ship_id': kill['victim']['ship_type_id'],
+                        'system_id': kill['solar_system_id'],
+                        'price': kill['zkb']['totalValue'],
+                        'date': parse_api_date(kill['killmail_time'])
+                    }
+                )
+
+                if created:
+                    new = new + 1
+                    for attacker in kill['attackers']:
+                        if "character_id" in attacker:
+                            db_kill.killers.add(
+                                Character.get_or_create(attacker['character_id'])
+                            )
+
+    print "Added %s new kills for %s" % (
+        new,
+        char.name
     )
