@@ -32,6 +32,9 @@ While the pages/bot commands (and in some cases the API scraping itself) is a co
 * Location
 * Current Ship
 
+### Every 12 hours
+* Killboard history (from Zkill)
+
 
 ## Integrations
 ### Discord
