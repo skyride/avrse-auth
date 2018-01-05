@@ -66,6 +66,8 @@ class AuthPlugin(Plugin):
                         intcomma(wallet['wallet__sum'])
                     )
                 )
+            elif tokens[0].lower() == "!kills":
+                commands.kills()
 
             admin = user.groups.filter(name="fc").exists()
             # Admin only commands

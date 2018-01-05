@@ -1,11 +1,14 @@
+from datetime import timedelta
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.utils import timezone
 
 from terminaltables import AsciiTable
 
 from avrseauth.settings import members, blues
-from eveauth.models import Character
+from eveauth.models import Character, Kill
 from sde.models import System, Region
 
 ranges = {
@@ -80,6 +83,33 @@ class BotCommands:
                     self.event.reply(self.monowrap(out))
                     out = cur
             self.event.reply(self.monowrap(out))
+
+
+    def kills(self):
+        user = self.get_user()
+        if user is None:
+            user = self.user
+        chars = user.characters.all()
+
+        last30 = Kill.objects.filter(
+            killers__in=chars,
+            date__gte=timezone.now() - timedelta(days=30)
+        ).distinct().count()
+
+        last90 = Kill.objects.filter(
+            killers__in=chars,
+            date__gte=timezone.now() - timedelta(days=90)
+        ).distinct().count()
+
+        self.event.reply(
+            self.monowrap(
+                "Kills for %s\nLast 30 Days: %s\nLast 90 Days: %s" % (
+                    user.profile.character.name,
+                    last30,
+                    last90
+                )
+            )
+        )
 
 
     def supers(self):
