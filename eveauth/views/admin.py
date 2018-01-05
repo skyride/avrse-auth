@@ -15,7 +15,7 @@ from django.utils import timezone
 from django.db.models import Q, Count
 from django.db import IntegrityError
 
-from eveauth.models import GroupApp, Character, Asset
+from eveauth.models import GroupApp, Character, Asset, Kill
 from eveauth.tasks import get_server, update_groups, spawn_groupupdates, update_discord
 
 
@@ -80,11 +80,20 @@ def user_updategroups_all(request):
 @user_passes_test(lambda x: x.groups.filter(name="admin").exists())
 def view_user(request, id):
     user = User.objects.get(id=id)
+    chars = user.characters.all()
 
     context = {
         "user": user,
         "discord": user.social_auth.filter(provider="discord").first(),
-        "forum_address": settings.FORUM_ADDRESS
+        "forum_address": settings.FORUM_ADDRESS,
+        "kills_last_30": Kill.objects.filter(
+                killers__in=chars,
+                date__gte=timezone.now() - timedelta(days=30)
+            ).distinct().count(),
+        "kills_last_90": Kill.objects.filter(
+                killers__in=chars,
+                date__gte=timezone.now() - timedelta(days=90)
+            ).distinct().count(),
     }
 
     return render(request, "eveauth/user_view.html", context)

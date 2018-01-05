@@ -44,6 +44,8 @@
           {% endif %}
         </li>
         <li><strong>Access Level:</strong> {{ user.profile.level|level }}</li>
+        <li><strong>Kills Last 30 Days:</strong> {{ kills_last_30 }}</li>
+        <li><strong>Kills Last 90 Days:</strong> {{ kills_last_90 }}</li>
       </ul>
 
       {% if user.profile.forum_id %}
@@ -65,7 +67,7 @@
     </div>
 
     <div class="well">
-      <h3>Characters</h3>
+      <h3>Characters ({{ user.characters.count }})</h3>
 
       <table class="table table-striped">
         {% for char in user.characters.all %}
