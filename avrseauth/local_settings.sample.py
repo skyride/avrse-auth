@@ -55,6 +55,8 @@ members = {
     "alliances": [
     ],
     "corps": [
+    ],
+    "chars": [
     ]
 }
 
@@ -62,5 +64,7 @@ blues = {
     "alliances": [
     ],
     "corps": [
+    ],
+    "chars": [
     ]
 }

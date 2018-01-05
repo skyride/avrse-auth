@@ -152,12 +152,13 @@ def update_groups(user_id):
 
 
     # Update access level
+    char_id = user.profile.character_id
     corp_id = user.profile.corporation_id
     alliance_id = user.profile.alliance_id
 
-    if corp_id in members['corps'] or alliance_id in members['alliances']:
+    if corp_id in members['corps'] or alliance_id in members['alliances'] or char_id in members['chars']:
         user.profile.level = 2
-    elif corp_id in blues['corps'] or alliance_id in blues['alliances']:
+    elif corp_id in blues['corps'] or alliance_id in blues['alliances'] or char_id in members['chars']:
         user.profile.level = 1
     else:
         user.profile.level = 0
