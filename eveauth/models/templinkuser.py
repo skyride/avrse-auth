@@ -1,6 +1,6 @@
 from django.db import models
 
-from templink import Templink
+from .templink import Templink
 
 class TemplinkUser(models.Model):
     templink = models.ForeignKey(Templink, related_name="users")

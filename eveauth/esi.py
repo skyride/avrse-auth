@@ -4,7 +4,7 @@ import datetime
 import pytz
 
 from base64 import b64encode
-from urllib import urlencode
+from urllib.parse import urlencode
 from hashlib import sha256
 
 from django.core.cache import cache

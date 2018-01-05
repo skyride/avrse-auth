@@ -1,1 +1,1 @@
-from oauth import *
+from .oauth import *

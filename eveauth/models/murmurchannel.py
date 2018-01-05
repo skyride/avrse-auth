@@ -1,6 +1,6 @@
 from django.db import models
 
-from murmurserver import MurmurServer
+from .murmurserver import MurmurServer
 
 
 class MurmurChannel(models.Model):

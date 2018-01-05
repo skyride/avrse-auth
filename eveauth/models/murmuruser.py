@@ -2,8 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django_unixdatetimefield import UnixDateTimeField
 
-from murmurserver import MurmurServer
-from murmurchannel import MurmurChannel
+from .murmurserver import MurmurServer
+from .murmurchannel import MurmurChannel
 
 
 class MurmurUser(models.Model):

@@ -1,5 +1,3 @@
-from sets import Set
-
 from disco.api.client import APIClient
 from disco.api.http import Routes
 from django.conf import settings
