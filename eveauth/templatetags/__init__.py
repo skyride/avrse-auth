@@ -1,1 +1,1 @@
-from authtags import *
+from .authtags import *
