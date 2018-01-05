@@ -87,7 +87,7 @@ class BotCommands:
 
     def kills(self):
         user = self.get_user()
-        if user is None:
+        if self.search == "":
             user = self.user
         chars = user.characters.all()
 
