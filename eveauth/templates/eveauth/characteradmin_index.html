@@ -10,13 +10,6 @@
   <div class="col-sm-6">
     <h2>Characters</h2>
   </div>
-
-  <div class="col-sm-6">
-    <a class="btn btn-success pull-right" href="{% url 'user_updategroups_all' %}">
-      <span class="glyphicon glyphicon-refresh"></span>
-      Refresh All
-    </a>
-  </div>
 </div>
 <hr />
 
@@ -27,7 +20,6 @@
     <th><a href="{% url 'characteradmin_index' page=1 order_by='corp' %}">Corp</a></th>
     <th><a href="{% url 'characteradmin_index' page=1 order_by='alliance' %}">Alliance</a></th>
     <th><a href="{% url 'characteradmin_index' page=1 order_by='ship' %}">Ship</a></th>
-    <!-- <th><a href="{% url 'characteradmin_index' page=1 order_by='ship_type' %}">Ship Type</a></th>-->
     <th><a href="{% url 'characteradmin_index' page=1 order_by='system' %}">System</a></th>
     <th><a href="{% url 'characteradmin_index' page=1 order_by='region' %}">Region</a></th>
   </tr>
