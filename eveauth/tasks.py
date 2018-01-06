@@ -348,7 +348,7 @@ def update_character(character_id):
             db_clone = Clone(
                 id=clone['jump_clone_id'],
                 character=db_char,
-                name=clone['name'],
+                name=clone['name'] or "",
                 location=Station.get_or_create(clone['location_id'], api)
             )
             db_clone.save()
