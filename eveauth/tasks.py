@@ -345,10 +345,15 @@ def update_character(character_id):
 
         db_char.clones.all().delete()
         for clone in clones['jump_clones']:
+            if "name" in clone:
+                name = clone['name']
+            else:
+                name = ""
+
             db_clone = Clone(
                 id=clone['jump_clone_id'],
                 character=db_char,
-                name=clone['name'] or "",
+                name=name,
                 location=Station.get_or_create(clone['location_id'], api)
             )
             db_clone.save()
