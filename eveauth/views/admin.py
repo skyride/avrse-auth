@@ -12,7 +12,7 @@ from django.core.paginator import Paginator
 from django.utils.crypto import get_random_string
 from django.conf import settings
 from django.utils import timezone
-from django.db.models import Q, Count
+from django.db.models import Q, Count, Sum
 from django.db import IntegrityError
 
 from eveauth.models import GroupApp, Character, Asset, Kill
@@ -305,3 +305,58 @@ def characteradmin_index(request, page=1, order_by=None):
     }
 
     return render(request, "eveauth/characteradmin_index.html", context)
+
+
+@login_required
+@user_passes_test(lambda x: x.groups.filter(name="admin").exists())
+def characteradmin_view(request, id):
+    char = Character.objects.prefetch_related(
+            'skills',
+            'corp',
+            'alliance',
+            'home',
+            'ship',
+            'implants',
+            'implants__type',
+            'clones',
+            'clones__implants',
+            'clones__implants__type'
+        ).annotate(
+            total_sp=Sum('skills__skillpoints_in_skill')
+        ).get(id=id)
+
+    skill_groups = char.skills.values_list(
+        'type__group__name',
+        flat=True
+    ).order_by(
+        'type__group__name'
+    ).distinct()
+
+    skills = []
+    for group in skill_groups:
+        group_skills = char.skills.filter(
+            type__group__name=group
+        ).prefetch_related(
+            'type',
+            'type__attributes'
+        ).order_by(
+            'type__name'
+        )
+        total = group_skills.aggregate(
+            total=Sum('skillpoints_in_skill')
+        )['total']
+
+        skills.append(
+            (
+                group,
+                group_skills,
+                total
+            )
+        )
+
+    context = {
+        "character": char,
+        "skill_groups": skills
+    }
+
+    return render(request, "eveauth/character_view.html", context)

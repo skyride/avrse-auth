@@ -74,7 +74,7 @@
         <tr>
           <td>
             <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Character/{{ char.id }}_32.jpg">
-            {{ char.name }}
+            <a href="{% url 'characteradmin_view' char.id %}">{{ char.name }}</a>
           </td>
           <td>
             <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Corporation/{{ char.corp_id }}_32.png">

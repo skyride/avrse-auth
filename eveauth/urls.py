@@ -34,6 +34,7 @@ urlpatterns = [
     url(r'admin/ship/([0-9]+)$', views.adminassets_viewship, name="adminassets_viewship"),
 
     url(r'^admin/characters/(?P<page>[0-9]+)/(?P<order_by>[a-zA-Z_]+)?$', views.characteradmin_index, name="characteradmin_index"),
+    url(r'^admin/chararacter/([0-9]+)$', views.characteradmin_view, name="characteradmin_view"),
 
     url(r'^admin/groups/$', views.groupadmin_index, name="groupadmin_index"),
     url(r'^admin/groups/create$', views.groupadmin_create, name="groupadmin_create"),
