@@ -17,6 +17,59 @@ def characters_index(request):
     return render(request, "eveauth/characters.html", context)
 
 
+def characters_view(request, id):
+    char = request.user.characters.prefetch_related(
+            'skills',
+            'corp',
+            'alliance',
+            'home',
+            'ship',
+            'implants',
+            'implants__type',
+            'clones',
+            'clones__implants',
+            'clones__implants__type'
+        ).annotate(
+            total_sp=Sum('skills__skillpoints_in_skill')
+        ).get(id=id)
+
+    skill_groups = char.skills.values_list(
+        'type__group__name',
+        flat=True
+    ).order_by(
+        'type__group__name'
+    ).distinct()
+
+    skills = []
+    for group in skill_groups:
+        group_skills = char.skills.filter(
+            type__group__name=group
+        ).prefetch_related(
+            'type',
+            'type__attributes'
+        ).order_by(
+            'type__name'
+        )
+        total = group_skills.aggregate(
+            total=Sum('skillpoints_in_skill')
+        )['total']
+
+        skills.append(
+            (
+                group,
+                group_skills,
+                total
+            )
+        )
+
+    context = {
+        "character": char,
+        "skill_groups": skills
+    }
+
+    return render(request, "eveauth/character_view.html", context)
+
+
 @login_required
 def characters_delete(request, id):
     character = Character.objects.get(id=id)

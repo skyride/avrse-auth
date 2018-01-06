@@ -21,20 +21,24 @@
   <div class="col-md-3 col-sm-4 col-xs-6">
     <div class="panel panel-default">
       <div class="panel-heading">
-        {{ character.name }}
+        <a href="{% url 'characters_view' character.id %}" style="text-decoration: underline;">
+          <strong>{{ character.name }}</strong>
+        </a>
       </div>
 
-      <div style="
-        min-height: 260px;
-        background-size: cover;
-        background-image: url('https://imageserver.eveonline.com/Character/{{ character.id }}_512.jpg');
-        padding: 5px;
-      ">
-        <div><img src="https://imageserver.eveonline.com/Corporation/{{ character.corp_id }}_64.png"></div>
-        {% if character.alliance %}
-        <div><img src="https://imageserver.eveonline.com/Alliance/{{ character.alliance_id }}_64.png"></div>
-        {% endif %}
-      </div>
+      <a href="{% url 'characters_view' character.id %}">
+        <div style="
+          min-height: 260px;
+          background-size: cover;
+          background-image: url('https://imageserver.eveonline.com/Character/{{ character.id }}_512.jpg');
+          padding: 5px;
+        ">
+          <div><img src="https://imageserver.eveonline.com/Corporation/{{ character.corp_id }}_64.png"></div>
+          {% if character.alliance %}
+          <div><img src="https://imageserver.eveonline.com/Alliance/{{ character.alliance_id }}_64.png"></div>
+          {% endif %}
+        </div>
+      </a>
 
       <ul class="list-group">
         <li class="list-group-item">

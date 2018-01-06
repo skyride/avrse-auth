@@ -1,0 +1,181 @@
+{% extends 'eveauth/base.html' %}
+{% load static authtags humanize mathfilters %}
+
+{% block title %}{{ user.profile.character.name }}{% endblock %}
+
+
+{% block content %}
+<div class="row">
+  <div class="col-md-3 col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+          <strong>{{ character.name }}</strong>
+      </div>
+
+      <div style="
+        min-height: 260px;
+        background-size: cover;
+        background-image: url('https://imageserver.eveonline.com/Character/{{ character.id }}_512.jpg');
+        padding: 5px;
+      ">
+        <div><img src="https://imageserver.eveonline.com/Corporation/{{ character.corp_id }}_64.png"></div>
+        {% if character.alliance %}
+        <div><img src="https://imageserver.eveonline.com/Alliance/{{ character.alliance_id }}_64.png"></div>
+        {% endif %}
+      </div>
+
+      <ul class="list-group">
+        <li class="list-group-item">
+          {{ character.corp.name }}
+        </li>
+
+        <li class="list-group-item">
+          {% if character.alliance %}
+          {{ character.alliance.name }}
+          {% else %}
+          N/A
+          {% endif %}
+        </li>
+
+        <li class="list-group-item">
+          {{ character.system.name }} - {{ character.ship.name }}
+        </li>
+
+        <li class="list-group-item">
+          Home: {{ character.home.name }}
+        </li>
+
+        <li class="list-group-item">
+          {% if character.has_fatigue %}
+          {{ character.fatigue|fatiguetime }}
+          {% else %}
+          No Jump Fatigue
+          {% endif %}
+        </li>
+
+        <li class="list-group-item">
+          {{ character.total_sp|intcomma }} SP
+        </li>
+
+        <li class="list-group-item">
+          {{ character.wallet|intcomma }} ISK
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div class="col-md-9 col-sm-8">
+    {% if character.implants.count > 0 %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        Implants
+      </div>
+
+      <div class="panel-body">
+        {% for implant in character.implants.all %}
+        <li class="list-unstyled">
+          <img src="//imageserver.eveonline.com/Type/{{ implant.type_id }}_32.png">
+          Slot {{ implant.slot|floatformat }}: {{ implant.type.name }}
+        </li>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <ul class="nav nav-tabs" id="tabs">
+      <li class="active">
+        <a href="#tab_skills" data-toggle="tab">Skills</a>
+      </li>
+      {% if character.clones.count > 0 %}
+      <li>
+        <a href="#tab_clones" data-toggle="tab">Jump Clones</a>
+      </li>
+      {% endif %}
+    </ul>
+    <br />
+
+    <div class="tab-content">
+      <div id="tab_skills" class="tab-pane active">
+        {% for group_name, skills, total_sp in skill_groups %}
+        <span style="font-size: 19.5px;">
+          <strong>{{ group_name }}</strong> --
+        </span>
+        <strong>{{ skills.count }}</strong> skill(s) trained for <strong>{{ total_sp|intcomma }} SP</strong>
+        <br />
+
+        <table class="table table-striped table-condensed table-hover">
+          {% for skill in skills %}
+          <tr>
+            <td>{{ skill.type.name }} {{ skill.trained_skill_level|roman }}</td>
+            <td>Rank {{ skill.rank }}</td>
+
+            <td>
+              <span class="pull-right">
+                {{ skill.skillpoints_in_skill|intcomma }}
+              </span>
+            </td>
+            <td>/</td>
+            <td style="width: 110px;">
+              <span class="pull-right">
+                {{ skill.rank|mul:256000|intcomma }} SP
+              </span>
+            </td>
+
+            <td>
+              <span class="pull-right">
+                {{ skill|levelicon:1 }}
+                {{ skill|levelicon:2 }}
+                {{ skill|levelicon:3 }}
+                {{ skill|levelicon:4 }}
+                {{ skill|levelicon:5 }}
+              </span>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+        <br />
+        {% endfor %}
+      </div>
+
+      <div id="tab_clones" class="tab-pane">
+        {% for clone in character.clones.all %}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            {{ clone.location.name }}
+            {% if clone.name %}
+            | <strong><i>{{ clone.name }}</i></strong>
+            {% endif %}
+          </div>
+          <table class="table table-condensed table-striped">
+            {% if clone.implants.count > 0 %}
+              {% for implant in clone.implants.all %}
+              <tr>
+                <td class="col-sm-8">
+                  <img src="//image.eveonline.com/Type/{{ implant.type_id }}_32.png">
+                  {{ implant.type.name }}
+                </td>
+                <td class="col-sm-3">
+                  <span class="">
+                    {{ implant.type.sell|intcomma }} ISK
+                  </span>
+                </td>
+              </tr>
+              {% endfor %}
+              <tr>
+                <td></td>
+                <td><strong>{{ clone.implants|typesum|intcomma }} ISK</strong></td>
+              </tr>
+            {% else %}
+            <tr>
+              <td><i>No Implants</i></td>
+            </tr>
+            {% endif %}
+          </table>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

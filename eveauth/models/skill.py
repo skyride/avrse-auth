@@ -10,3 +10,7 @@ class Skill(models.Model):
     trained_skill_level = models.IntegerField()
     active_skill_level = models.IntegerField()
     skillpoints_in_skill = models.IntegerField()
+
+    @property
+    def rank(self):
+        return int(self.type.attributes.get(attribute_id=275).value)

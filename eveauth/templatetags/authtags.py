@@ -4,7 +4,9 @@ from django import template
 from django.conf import settings
 from django.core.cache import cache
 from django.contrib.auth.models import Group
+from django.db.models import Sum
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 
 from eveauth.tasks import get_server
 
@@ -76,6 +78,29 @@ def until(timestamp):
 @register.filter(name="outstandingapps")
 def outstandingapps(group):
     return group.apps.filter(accepted=None).count()
+
+
+@register.filter(name="roman")
+def roman(num):
+    return ["", "I", "II", "III", "IV", "V"][num]
+
+
+@register.filter(name="levelicon")
+def levelicon(skill, level):
+    if level > skill.active_skill_level:
+        return mark_safe('<i class="far fa-square"></i>')
+    if level <= skill.trained_skill_level:
+        if skill.trained_skill_level > skill.active_skill_level:
+            return mark_safe('<i class="fas fa-square text-warning"></i>')
+        else:
+            return mark_safe('<i class="fas fa-square"></i>')
+
+
+@register.filter(name="typesum")
+def typesum(types):
+    return types.aggregate(
+        total=Sum('type__sell')
+    )['total']
 
 
 @register.filter(name="fatiguetime")
