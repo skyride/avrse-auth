@@ -69,7 +69,7 @@ class AuthPlugin(Plugin):
             elif tokens[0].lower() == "!kills":
                 commands.kills()
 
-            admin = user.groups.filter(name="fc").exists()
+            admin = user.groups.filter(name="FC").exists()
             # Admin only commands
             if admin:
                 if tokens[0].lower() == "!fatigue":

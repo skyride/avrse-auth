@@ -13,13 +13,14 @@ from avrseauth.celery import app
 from sde.models import System, Station, Type
 
 from eveauth import ipb
+from eveauth.models.alliance import Alliance
+from eveauth.models.asset import Asset
 from eveauth.models.character import Character
 from eveauth.models.corporation import Corporation
-from eveauth.models.alliance import Alliance
+from eveauth.models.implant import Implant
+from eveauth.models.kill import Kill
 from eveauth.models.templink import Templink
 from eveauth.models.skill import Skill
-from eveauth.models.asset import Asset
-from eveauth.models.kill import Kill
 from eveauth.esi import ESI, parse_api_date
 from eveauth.discord.api import DiscordAPI, is_bot_active
 
@@ -325,6 +326,17 @@ def update_character(character_id):
                     pass
                     #print db_asset.parent_id
                 db_asset.save()
+
+        # Implants
+        with transaction.atomic():
+            implants = api.get("/v1/characters/$id/implants/")
+            db_char.implants.all().delete()
+            for implant in implants:
+                Implant(
+                    character=db_char,
+                    type_id=implant
+                ).save()
+
 
         print "Updated all info for character %s" % db_char.name
 

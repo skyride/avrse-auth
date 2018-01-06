@@ -7,6 +7,7 @@ from corporation import Corporation
 from alliance import Alliance
 
 from asset import Asset
+from implant import Implant
 from skill import Skill
 from kill import Kill
 

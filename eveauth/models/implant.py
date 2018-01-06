@@ -1,0 +1,13 @@
+from django.db import models
+
+from sde.models import Type
+from character import Character
+
+
+class Implant(models.Model):
+    character = models.ForeignKey(Character, related_name="implants")
+    type = models.ForeignKey(Type)
+
+    @property
+    def slot(self):
+        return self.type.attributes.get(attribute_id=331).value
