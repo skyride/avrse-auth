@@ -8,6 +8,7 @@ from alliance import Alliance
 
 from asset import Asset
 from implant import Implant
+from clone import Clone, CloneImplant
 from skill import Skill
 from kill import Kill
 

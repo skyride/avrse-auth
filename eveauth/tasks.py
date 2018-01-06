@@ -17,6 +17,7 @@ from eveauth.models.alliance import Alliance
 from eveauth.models.asset import Asset
 from eveauth.models.character import Character
 from eveauth.models.corporation import Corporation
+from eveauth.models.clone import Clone, CloneImplant
 from eveauth.models.implant import Implant
 from eveauth.models.kill import Kill
 from eveauth.models.templink import Templink
@@ -337,6 +338,26 @@ def update_character(character_id):
                     type_id=implant
                 ).save()
 
+        # Clones
+        clones = api.get("/v3/characters/$id/clones/")
+        db_char.home = Station.get_or_create(clones['home_location']['location_id'], api)
+        db_char.save()
+
+        db_char.clones.all().delete()
+        for clone in clones['jump_clones']:
+            db_clone = Clone(
+                id=clone['jump_clone_id'],
+                character=db_char,
+                name=clone['name'],
+                location=Station.get_or_create(clone['location_id'], api)
+            )
+            db_clone.save()
+
+            for implant in clone['implants']:
+                CloneImplant(
+                    clone=db_clone,
+                    type_id=implant
+                ).save()
 
         print "Updated all info for character %s" % db_char.name
 

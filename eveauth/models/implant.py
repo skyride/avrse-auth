@@ -6,7 +6,7 @@ from character import Character
 
 class Implant(models.Model):
     character = models.ForeignKey(Character, related_name="implants")
-    type = models.ForeignKey(Type)
+    type = models.ForeignKey(Type, related_name="implants")
 
     @property
     def slot(self):

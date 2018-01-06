@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from social_django.models import UserSocialAuth
 
-from sde.models import System, Type
+from sde.models import System, Type, Station
 
 from .corporation import Corporation
 from .alliance import Alliance
@@ -26,6 +26,7 @@ class Character(models.Model):
     wallet = models.DecimalField(max_digits=16, decimal_places=2, default=0)
     system = models.ForeignKey(System, null=True, default=None)
     ship = models.ForeignKey(Type, null=True, default=None)
+    home = models.ForeignKey(Station, null=True, default=None, related_name="characters")
 
     fatigue_expire_date = models.DateTimeField(null=True, default=None)
     last_jump_date = models.DateTimeField(null=True, default=None)
