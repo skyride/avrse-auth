@@ -11,3 +11,10 @@ class Implant(models.Model):
     @property
     def slot(self):
         return self.type.attributes.get(attribute_id=331).value
+
+
+    def __str__(self):
+        return "%s:%s" % (
+            self.slot,
+            self.type.name
+        )
