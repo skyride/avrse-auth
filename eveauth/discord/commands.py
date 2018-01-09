@@ -95,7 +95,7 @@ class BotCommands:
         if self.search == "":
             self.event.reply(
                 self.monowrap(
-                    "!fatigue <partial character name>"
+                    "!strip <partial character name>"
                 )
             )
 
