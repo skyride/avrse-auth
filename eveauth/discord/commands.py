@@ -134,9 +134,16 @@ class BotCommands:
                         injectors
                     ),
                     intcomma(
-                        injectors * Type.objects.get(
-                            id=40520
-                        ).sell
+                        injectors * \
+                        (
+                            Type.objects.get(
+                                id=40520
+                            ).sell \
+                            - \
+                             Type.objects.get(
+                                id=40519
+                            ).sell
+                        )
                     )
                 )
             )
