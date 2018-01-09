@@ -2,14 +2,15 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.utils import timezone
+from django.contrib.humanize.templatetags.humanize import intcomma
 
 from terminaltables import AsciiTable
 
 from avrseauth.settings import members, blues
 from eveauth.models import Character, Kill
-from sde.models import System, Region
+from sde.models import System, Region, Type
 
 ranges = {
     30: 6,      # Titans
@@ -83,6 +84,62 @@ class BotCommands:
                     self.event.reply(self.monowrap(out))
                     out = cur
             self.event.reply(self.monowrap(out))
+            
+            
+    def strip(self, admin=False):
+        if admin:
+            chars = self.get_all_chars()
+        else:
+            chars = self.get_personal_chars()
+
+        if self.search == "":
+            self.event.reply(
+                self.monowrap(
+                    "!fatigue <partial character name>"
+                )
+            )
+
+        elif chars.count() == 0:
+            self.event.reply("No Characters Found")
+
+        elif chars.count() > 1:
+            self.event.reply(
+                self.monowrap(
+                    "Multiple Chars Found:\n%s" % (
+                        ", ".join(
+                            map(lambda x: x.name,
+                                chars.filter(
+                                    Q(corp__id__in=members['corps'])
+                                    | Q(alliance__id__in=members['alliances'])
+                                    | Q(corp__id__in=blues['corps'])
+                                    | Q(alliance__id__in=blues['alliances'])
+                                ).all()
+                            )
+                        )
+                    )
+                )
+            )
+
+        else:
+            char = chars.first()
+            sp = char.skills.aggregate(total_sp=Sum('skillpoints_in_skill'))['total_sp']
+            injectors = (sp - 5500000) / 500000
+            if injectors < 0:
+                injectors = 0
+            
+            self.event.reply(
+                "**%s**: %s Injectors (%s ISK)" % (
+                    char.name,
+                    intcomma(
+                        injectors
+                    ),
+                    intcomma(
+                        injectors * Type.objects.get(
+                            id=40520
+                        ).sell
+                    )
+                )
+            )
 
 
     def kills(self):

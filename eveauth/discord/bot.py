@@ -82,11 +82,15 @@ class AuthPlugin(Plugin):
                     commands.whoinrange()
                 elif tokens[0].lower() == "!supers":
                     commands.supers()
+                elif tokens[0].lower() == "!strip":
+                    commands.strip(admin=True)
 
             # public commands with limitations
             else:
                 if tokens[0].lower() == "!fatigue":
                     commands.fatigue(admin=False)
+                elif tokens[0].lower() == "!strip":
+                    commands.strip(admin=False)
 
 
     # Handle guild member joins
