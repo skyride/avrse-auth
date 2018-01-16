@@ -68,6 +68,7 @@
     </div>
   </div>
 
+  {% if mumble_host != "" %}
   <div class="col-sm-6 col-md-4">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -121,10 +122,13 @@
         {% endif %}
       </div>
 
+
     </div>
   </div>
+  {% endif %}
 
 
+  {% if forum_address != "" %}
   <div class="col-sm-6 col-md-4">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -171,6 +175,7 @@
       </div>
     </div>
   </div>
+  {% endif %}
 
 
   {% if user.profile.level >= discord_access_level %}
