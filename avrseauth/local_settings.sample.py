@@ -5,6 +5,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # These are the settings you should update
 # SECURITY WARNING: keep the secret key used in production secret! Generate a random string
 SECRET_KEY = 'asdasd'
+AUTH_NAME = "AVRSE Auth"
 
 DATABASES = {
     'default': {

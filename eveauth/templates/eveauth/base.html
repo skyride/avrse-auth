@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="AVRSE Auth">
 
-    <title>AVRSE Auth // {% block title %}{% endblock %}</title>
+    <title>{{ AUTH_NAME }} // {% block title %}{% endblock %}</title>
 
     <!-- CSS -->
     {% if request.session.theme == "darkly" %}
@@ -28,7 +28,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">AVRSE Auth</a>
+          <a class="navbar-brand" href="/">{{ AUTH_NAME }}</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
