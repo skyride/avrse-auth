@@ -48,8 +48,8 @@
         <li><strong>Kills Last 90 Days:</strong> {{ kills_last_90 }}</li>
       </ul>
 
-      {% if user.profile.forum_id %}
       <a class="btn btn-default" href="{% url 'adminassets_index' user.id %}">Ships</a>
+      {% if user.profile.forum_id %}
       <a class="btn btn-default" href="{{ forum_address }}index.php?/profile/{{ user.profile.forum_id }}-asd/">Forum Account</a>
       {% endif %}
       <a class="btn btn-default" href="https://evewho.com/pilot/{{ user.profile.character.name }}">EVEWho</a>
