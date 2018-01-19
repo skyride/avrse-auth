@@ -19,6 +19,11 @@ from eveauth.models import GroupApp, Character, Asset, Kill
 from eveauth.tasks import get_server, update_groups, spawn_groupupdates, update_discord
 
 
+@login_required
+@user_passes_test(lambda x: x.groups.filter(name="admin").exists())
+def corpaudit_search(request):
+    return render(request, "eveauth/corpaudit_search.html", {})
+
 
 @login_required
 @user_passes_test(lambda x: x.groups.filter(name="admin").exists())
