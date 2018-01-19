@@ -91,7 +91,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
-                'eveauth.middleware.auth_name_middleware'
+                'eveauth.middleware.auth_name_middleware',
+                'eveauth.middleware.mumble_host'
             ],
         },
     },

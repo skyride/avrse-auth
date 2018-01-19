@@ -49,16 +49,17 @@
                   <li><a href="{% url 'characteradmin_index' 1 %}">Characters</a></li>
                 </ul>
               </li>
-
-              <li>
-                <a href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                  Mumble <span class="caret">
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a href="{% url 'mumbleadmin_index' %}">Admin</a></li>
-                  <li><a href="{% url 'templink_index' %}">Templinks</a></li>
-                </ul>
-              </li>
+                {% if MUMBLE %}
+                <li>
+                  <a href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    Mumble <span class="caret">
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="{% url 'mumbleadmin_index' %}">Admin</a></li>
+                    <li><a href="{% url 'templink_index' %}">Templinks</a></li>
+                  </ul>
+                </li>
+                {% endif %}
               {% endif %}
             {% endif %}
           </ul>
