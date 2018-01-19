@@ -33,7 +33,8 @@ def corpaudit_search(request):
     corps = Corporation.objects.filter(
         Q(name__istartswith=search)
         | Q(ticker__istartswith=search),
-        characters__owner__isnull=False
+        characters__owner__isnull=False,
+        id__gt=1001000
     ).annotate(
         chars=Count('characters')
     ).filter(
