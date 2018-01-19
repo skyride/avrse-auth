@@ -22,7 +22,7 @@ var app = new Vue({
 
     <div class="list-group">
       {% for corp in corps %}
-      <a href="#" class="list-group-item">
+      <a href="{% url 'corpaudit_view' corp.id %}" class="list-group-item">
         <img style="float: left; margin-right: 8px;" width="43" src="https://imageserver.eveonline.com/Corporation/{{ corp.id }}_64.png">
         <h4 class="list-group-item-heading">{{ corp.name }}</h4>
         <p class="list-group-item-text">{{ corp.chars }}/{{ corp.members }} characters ({{ 100|div:corp.members|mul:corp.chars|floatformat:1 }} %)</p>

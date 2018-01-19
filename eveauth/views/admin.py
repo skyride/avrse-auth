@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 import json
 import requests
+import math
 from datetime import timedelta
 
 from django.http import HttpResponseRedirect, JsonResponse
@@ -17,7 +18,7 @@ from django.db.models import Q, Count, Sum
 from django.db import IntegrityError
 
 from eveauth.esi import ESI
-from eveauth.models import GroupApp, Character, Corporation, Asset, Kill
+from eveauth.models import GroupApp, Character, Corporation, Alliance, Asset, Kill
 from eveauth.tasks import get_server, update_groups, spawn_groupupdates, update_discord
 
 
@@ -67,7 +68,47 @@ def corpaudit_search(request):
 @login_required
 @user_passes_test(lambda x: x.groups.filter(name="admin").exists())
 def corpaudit_view(request, id):
-    return
+    r = ESI().get("/v4/corporations/%s/" % id)
+    corp = Corporation.objects.prefetch_related(
+        'characters',
+        'characters__owner'
+    ).get(id=id)
+
+    # Populate corp object with extra data
+    corp.member_count = r['member_count']
+    corp.ceo = Character.get_or_create(r['ceo_id'])
+    corp.description = r['description']
+    corp.tax_rate = r['tax_rate']
+    corp.founder = Character.get_or_create(r['creator_id'])
+    if "alliance_id" in r:
+        corp.alliance = Alliance.get_or_create(r['alliance_id'])
+
+    # Call evewho
+    r = requests.get("https://evewho.com/api.php?type=corplist&id=%s&page=0" % id).json()
+    chars = r['characters']
+    if int(r['info']['memberCount']) > 200:
+        for i in range(1, int(math.ceil((int(r['info']['memberCount'])) / 200) + 1)):
+            r = requests.get("https://evewho.com/api.php?type=corplist&id=%s&page=%s" % (id, i)).json()
+            chars = chars + r['characters']
+
+    for char in chars:
+        try:
+            char['char'] = Character.objects.get(
+                id=char['character_id'],
+                owner__isnull=False
+            )
+        except Exception:
+            pass
+
+    context = {
+        "corp": corp,
+        "char_count": corp.characters.filter(
+                owner__isnull=False
+            ).count(),
+        "chars": sorted(chars, key=lambda x: x['name'])
+    }
+
+    return render(request, "eveauth/corpaudit_view.html", context)
 
 
 @login_required

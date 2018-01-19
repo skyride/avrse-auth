@@ -44,6 +44,7 @@ urlpatterns = [
     url(r'^admin/groups/app/([0-9]+)/([\\w]*)$', views.groupadmin_app_complete, name="groupadmin_app_complete"),
 
     url(r'^admin/corp/audit/$', views.corpaudit_search, name="corpaudit_search"),
+    url(r'^admin/corp/audit/([0-9]+)$', views.corpaudit_view, name="corpaudit_view"),
 
     url(r'^mumble/$', views.mumbleadmin_index, name="mumbleadmin_index"),
     url(r'^mumble/kick/([0-9]+)$', views.mumbleadmin_kick, name="mumbleadmin_kick"),
