@@ -20,8 +20,8 @@ class Character(models.Model):
     # Extra details, these are default null
     token = models.ForeignKey(UserSocialAuth, null=True, default=None)
     owner = models.ForeignKey(User, null=True, default=None, related_name="characters")
-    corp = models.ForeignKey(Corporation, null=True, default=None)
-    alliance = models.ForeignKey(Alliance, null=True, default=None)
+    corp = models.ForeignKey(Corporation, null=True, default=None, related_name="characters")
+    alliance = models.ForeignKey(Alliance, null=True, default=None, related_name="characters")
 
     wallet = models.DecimalField(max_digits=16, decimal_places=2, default=0)
     system = models.ForeignKey(System, null=True, default=None)
