@@ -24,9 +24,7 @@ from eveauth.tasks import get_server, update_groups, spawn_groupupdates, update_
 @login_required
 @user_passes_test(lambda x: x.groups.filter(name="admin").exists())
 def corpaudit_search(request):
-    search = request.GET.get("search", False)
-    if search == False:
-        return render(request, "eveauth/corpaudit_search.html", {})
+    search = request.GET.get("search", "")
 
     # Get corp info for live search
     corps = Corporation.objects.filter(
@@ -62,6 +60,12 @@ def corpaudit_search(request):
     }
 
     return render(request, "eveauth/corpaudit_search.html", context)
+
+
+@login_required
+@user_passes_test(lambda x: x.groups.filter(name="admin").exists())
+def corpaudit_view(request, id):
+    return
 
 
 @login_required
