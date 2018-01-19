@@ -32,7 +32,8 @@ def corpaudit_search(request):
     # Get corp info for live search
     corps = Corporation.objects.filter(
         Q(name__istartswith=search)
-        | Q(ticker__istartswith=search)
+        | Q(ticker__istartswith=search),
+        characters__owner__isnull=False
     ).annotate(
         chars=Count('characters')
     ).filter(
