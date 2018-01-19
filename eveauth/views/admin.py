@@ -24,7 +24,9 @@ from eveauth.tasks import get_server, update_groups, spawn_groupupdates, update_
 @login_required
 @user_passes_test(lambda x: x.groups.filter(name="admin").exists())
 def corpaudit_search(request):
-    search = request.GET.get("search", "")
+    search = request.GET.get("search", False)
+    if search == False:
+        return render(request, "eveauth/corpaudit_search.html", {})
 
     # Get corp info for live search
     corps = Corporation.objects.filter(
