@@ -1,9 +1,33 @@
 {% extends 'eveauth/base.html' %}
-{% load static %}
+{% load static mathfilters %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Corp Audit{% endblock %}
+
+{% block extra_js %}
+var app = new Vue({
+  el: '#app',
+  data: {}
+})
+{% endblock %}
 
 
 {% block content %}
-asd
+<h2>Corp Audit</h2>
+<hr />
+
+<div id="app">
+  <form method="GET">
+    <input name="search" type="text" class="form-control" value="{{ search }}" placeholder="Corporation Name">
+    <br />
+
+    <div class="list-group">
+      {% for corp in corps %}
+      <a href="#" class="list-group-item">
+        <h4 class="list-group-item-heading">{{ corp.name }}</h4>
+        <p class="list-group-item-text">{{ corp.chars }}/{{ corp.members }} characters ({{ 100|div:corp.members|mul:corp.chars|floatformat:1 }} %)</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
 {% endblock %}

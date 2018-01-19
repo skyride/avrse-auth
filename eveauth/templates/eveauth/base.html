@@ -107,6 +107,8 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
     <script src="{% static 'eveauth/js/jquery.min.js' %}"></script>
     <script src="{% static 'eveauth/js/bootstrap.min.js' %}"></script>
+    {% block extra_script %}
+    {% endblock %}
     <script>
     {% block extra_js %}
     {% endblock %}

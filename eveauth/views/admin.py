@@ -1,9 +1,10 @@
 from __future__ import unicode_literals
 
 import json
+import requests
 from datetime import timedelta
 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -15,14 +16,52 @@ from django.utils import timezone
 from django.db.models import Q, Count, Sum
 from django.db import IntegrityError
 
-from eveauth.models import GroupApp, Character, Asset, Kill
+from eveauth.esi import ESI
+from eveauth.models import GroupApp, Character, Corporation, Asset, Kill
 from eveauth.tasks import get_server, update_groups, spawn_groupupdates, update_discord
 
 
 @login_required
 @user_passes_test(lambda x: x.groups.filter(name="admin").exists())
 def corpaudit_search(request):
-    return render(request, "eveauth/corpaudit_search.html", {})
+    search = request.GET.get("search", False)
+    if search == False:
+        return render(request, "eveauth/corpaudit_search.html", {})
+
+    # Get corp info for live search
+    corps = Corporation.objects.filter(
+        Q(name__istartswith=search)
+        | Q(ticker__istartswith=search)
+    ).annotate(
+        chars=Count('characters')
+    ).filter(
+        chars__gt=0
+    ).order_by(
+        '-chars'
+    ).all()
+
+    api = ESI()
+    def get_member_count(id):
+        r = api.get("/v4/corporations/%s/" % id)
+        return r['member_count']
+
+    corps = map(
+        lambda x: {
+            "id": x.id,
+            "name": x.name,
+            "tickers": x.ticker,
+            "chars": x.chars,
+            "members": get_member_count(x.id)
+        },
+        corps
+    )
+
+    context = {
+        "search": search,
+        "corps": corps
+    }
+
+    return render(request, "eveauth/corpaudit_search.html", context)
 
 
 @login_required
