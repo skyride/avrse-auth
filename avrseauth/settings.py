@@ -14,7 +14,7 @@ import os
 _PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '../..'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
