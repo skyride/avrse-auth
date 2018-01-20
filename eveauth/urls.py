@@ -41,7 +41,7 @@ urlpatterns = [
     url(r'^admin/groups/([0-9]+)/$', views.groupadmin_edit, name="groupadmin_edit"),
     url(r'^admin/groups/([0-9]+)/delete$', views.groupadmin_delete, name="groupadmin_delete"),
     url(r'^admin/groups/([0-9]+)/kick/([0-9]+)$', views.groupadmin_kick, name="groupadmin_kick"),
-    url(r'^admin/groups/app/([0-9]+)/([\\w]*)$', views.groupadmin_app_complete, name="groupadmin_app_complete"),
+    url(r'^admin/groups/app/([0-9]+)/([\w]*)$', views.groupadmin_app_complete, name="groupadmin_app_complete"),
 
     url(r'^admin/corp/audit/$', views.corpaudit_search, name="corpaudit_search"),
     url(r'^admin/corp/audit/([0-9]+)$', views.corpaudit_view, name="corpaudit_view"),
