@@ -50,6 +50,9 @@ class System(models.Model):
     sun = models.ForeignKey('Type')
     security_class = models.CharField(max_length=2, null=True)
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         #return "%s:%s" % (self.id, self.name)
         return self.name
@@ -119,6 +122,9 @@ class Type(models.Model):
 
     buy = models.DecimalField(max_digits=16, decimal_places=2, default=0)
     sell = models.DecimalField(max_digits=16, decimal_places=2, default=0)
+
+    class Meta:
+        ordering = ['name']
 
     def __str__(self):
         #return "%s:%s" % (self.id, self.name)
