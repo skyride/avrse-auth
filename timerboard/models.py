@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from datetime import timedelta
+from django.utils.timezone import now
 
 from django.contrib.auth.models import User, Group
 from django.db import models
@@ -47,3 +49,7 @@ class Timer(models.Model):
             self.stage,
             self.date
         )
+
+    @property
+    def time_until(self):
+        return now() - self.date

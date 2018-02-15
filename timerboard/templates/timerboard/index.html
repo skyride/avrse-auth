@@ -1,5 +1,5 @@
 {% extends 'eveauth/base.html' %}
-{% load static %}
+{% load static authtags %}
 
 {% block title %}Timerboard{% endblock %}
 
@@ -8,9 +8,62 @@
 <h2>Timerboard</h2>
 <hr />
 
+<h4>Timers</h4>
 <table class="table table-striped">
   <tr>
-    <th></th>
+    <th>Side:</th>
+    <th>Timer:</th>
+    <th>System:</th>
+    <th>Date:</th>
+    <th>Time Until:</th>
+    <th>Created By:</th>
   </tr>
+
+  {% for timer in timers %}
+    {% with time_until=timer.time_until.seconds %}
+    <tr>
+      <td>{{ timer.get_side_display }}</td>
+      <td>{{ timer.structure.name }} {{ timer.get_stage_display }} - <i>{{ timer.name }}</i></td>
+      <td>{{ timer.system.name }}</td>
+      <td>{{ timer.date }}</td>
+      {% if timer.date > now %}
+        <td>{{ time_until|time }}</td>
+      {% else %}
+        <td>{{ time_until|time }} ago</td>
+      {% endif %}
+      <td>{{ timer.created_by.profile.character.name }}</td>
+    </tr>
+    {% endwith %}
+  {% endfor %}
+</table>
+
+<br />
+<h4>Archive</h4>
+<table class="table table-striped">
+  <tr>
+    <th>Side:</th>
+    <th>Timer:</th>
+    <th>System:</th>
+    <th>Date:</th>
+    <th>Started:</th>
+    <th>Created By:</th>
+  </tr>
+
+  {% for timer in archive %}
+    {% with time_until=timer.time_until.seconds %}
+    <tr>
+      <td>{{ timer.get_side_display }}</td>
+      <td>{{ timer.structure.name }} {{ timer.get_stage_display }} - <i>{{ timer.name }}</i></td>
+      <td>{{ timer.system.name }}</td>
+      <td>{{ timer.date }}</td>
+      {% if timer.date > now %}
+        <td>{{ time_until|time }}</td>
+      {% else %}
+        <td>{{ time_until|time }} ago</td>
+      {% endif %}
+      <td>{{ timer.created_by.profile.character.name }}</td>
+    </tr>
+    {% endwith %}
+  {% endfor %}
 </table>
 {% endblock %}
