@@ -38,6 +38,7 @@
             <li><a href="{% url 'characters_index' %}">Characters</a></li>
             <li><a href="{% url 'assets_index' %}">My Ships</a></li>
             <li><a href="{% url 'groups_index' %}">Groups</a></li>
+            <li><a href="{% url 'timerboard:index' %}">Timerboard</a></li>
               {% if request.user|has_group:"admin" %}
               <li>
                 <a href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
