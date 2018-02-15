@@ -1,5 +1,5 @@
 {% extends 'eveauth/base.html' %}
-{% load static authtags %}
+{% load static authtags mathfilters %}
 
 {% block title %}Timerboard{% endblock %}
 
@@ -20,20 +20,18 @@
   </tr>
 
   {% for timer in timers %}
-    {% with time_until=timer.time_until.seconds %}
     <tr>
       <td>{{ timer.get_side_display }}</td>
       <td>{{ timer.structure.name }} {{ timer.get_stage_display }} - <i>{{ timer.name }}</i></td>
       <td>{{ timer.system.name }}</td>
       <td>{{ timer.date }}</td>
       {% if timer.date > now %}
-        <td>{{ time_until|time }}</td>
+        <td>{{ timer.time_until.total_seconds|time }}</td>
       {% else %}
-        <td>{{ time_until|time }} ago</td>
+        <td>Started {{ timer.time_until.total_seconds|mul:-1|time }} ago</td>
       {% endif %}
       <td>{{ timer.created_by.profile.character.name }}</td>
     </tr>
-    {% endwith %}
   {% endfor %}
 </table>
 
@@ -45,25 +43,17 @@
     <th>Timer:</th>
     <th>System:</th>
     <th>Date:</th>
-    <th>Started:</th>
     <th>Created By:</th>
   </tr>
 
   {% for timer in archive %}
-    {% with time_until=timer.time_until.seconds %}
     <tr>
       <td>{{ timer.get_side_display }}</td>
       <td>{{ timer.structure.name }} {{ timer.get_stage_display }} - <i>{{ timer.name }}</i></td>
       <td>{{ timer.system.name }}</td>
       <td>{{ timer.date }}</td>
-      {% if timer.date > now %}
-        <td>{{ time_until|time }}</td>
-      {% else %}
-        <td>{{ time_until|time }} ago</td>
-      {% endif %}
       <td>{{ timer.created_by.profile.character.name }}</td>
     </tr>
-    {% endwith %}
   {% endfor %}
 </table>
 {% endblock %}

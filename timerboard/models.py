@@ -52,4 +52,4 @@ class Timer(models.Model):
 
     @property
     def time_until(self):
-        return now() - self.date
+        return self.date - now()

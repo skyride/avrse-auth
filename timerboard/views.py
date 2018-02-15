@@ -14,11 +14,15 @@ from timerboard.models import Timer
 def index(request):
     context = {
         "timers": Timer.objects.filter(
-                date__gte=now() - timedelta(minutes=35)
+                date__gte=now() - timedelta(minutes=60)
+            ).order_by(
+                'date'
             ),
         "archive": Timer.objects.filter(
-                date__lt=now() - timedelta(minutes=35),
+                date__lt=now() - timedelta(minutes=60),
                 date__gt=now() - timedelta(days=30)
+            ).order_by(
+                '-date'
             ),
         "now": now()
     }
