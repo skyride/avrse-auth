@@ -39,6 +39,8 @@ class Timer(models.Model):
     visible_to_level = models.IntegerField(choices=VISIBLE_TO_LEVEL_CHOICES, default=2)
     visible_to_groups = models.ManyToManyField(Group, related_name="timers", blank=True)
 
+    deleted = models.BooleanField(default=False)
+    deleted_by = models.ForeignKey(User, related_name="deleted_timers", on_delete=models.CASCADE, null=True, default=None)
     created_by = models.ForeignKey(User, related_name="timers", on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
 
@@ -50,10 +52,29 @@ class Timer(models.Model):
             self.date
         )
 
+    def delete(self, user):
+        self.deleted = True
+        self.deleted_by = user
+        self.save()
+
     @property
     def time_until(self):
         return self.date - now()
 
+    def user_can_edit(self, user):
+        if self.user_has_access(user):
+            if user.groups.filter(name__in=['admin', 'FC']).count() > 0:
+                return True
+            elif self.created_by == user:
+                return True
+
+        return False
+
+    def user_has_access(self, user):
+        if user.profile.level >= self.visible_to_level:
+            return self.user_in_groups(user)
+        else:
+            return False
     
     def user_in_groups(self, user):
         if self.visible_to_groups.count() == 0:
