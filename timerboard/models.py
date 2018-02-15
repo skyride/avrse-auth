@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from datetime import timedelta
-from django.utils.timezone import now
 
 from django.contrib.auth.models import User, Group
 from django.db import models
+from django.db.models import Q
+from django.utils.timezone import now
 
 from sde.models import Type, System
 
 
 class Timer(models.Model):
     STAGE_CHOICES = (
+        ("AN", "Anchoring"),
         ("AR", "Armor"),
         ("ST", "Structure"),
     )
@@ -27,7 +29,17 @@ class Timer(models.Model):
         (2, "Third-Party")
     )
 
-    structure = models.ForeignKey(Type, related_name="timers", on_delete=models.CASCADE)
+    structure = models.ForeignKey(
+        Type,
+        related_name="timers",
+        on_delete=models.CASCADE,
+        limit_choices_to=Q(
+                Q(group__category_id=65) |
+                Q(group_id=365),
+                market_group__isnull=False
+            )
+    )
+
     name = models.CharField(max_length=128, blank=True)
     owner = models.CharField(max_length=32)
     side = models.IntegerField(choices=SIDE_CHOICES, default=1)
@@ -37,7 +49,15 @@ class Timer(models.Model):
     stage = models.CharField(max_length=2, choices=STAGE_CHOICES, db_index=True)
 
     visible_to_level = models.IntegerField(choices=VISIBLE_TO_LEVEL_CHOICES, default=2)
-    visible_to_groups = models.ManyToManyField(Group, related_name="timers", blank=True)
+    visible_to_groups = models.ManyToManyField(
+        Group,
+        related_name="timers",
+        blank=True,
+        limit_choices_to=Q(
+            ~Q(name__startswith="Corp:"),
+            ~Q(name__startswith="Alliance:")
+        )
+    )
 
     deleted = models.BooleanField(default=False)
     deleted_by = models.ForeignKey(User, related_name="deleted_timers", on_delete=models.CASCADE, null=True, default=None)

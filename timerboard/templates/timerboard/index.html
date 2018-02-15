@@ -41,6 +41,9 @@
       <td>{{ timer.created_by.profile.character.name }}</td>
       <td>
         {% if timer|user_can_edit:user %}
+        <a class="btn btn-success btn-xs" href="{% url 'timerboard:edit' timer.id %}">
+          <span class="glyphicon glyphicon-pencil"></span>
+        </a>
         <a class="btn btn-danger btn-xs" href="{% url 'timerboard:delete' timer.id %}">
           <span class="glyphicon glyphicon-trash"></span>
         </a>
@@ -78,6 +81,9 @@
       <td>{{ timer.created_by.profile.character.name }}</td>
       <td>
         {% if timer|user_can_edit:user %}
+        <a class="btn btn-success btn-xs" href="{% url 'timerboard:edit' timer.id %}">
+          <span class="glyphicon glyphicon-pencil"></span>
+        </a>
         <a class="btn btn-danger btn-xs" href="{% url 'timerboard:delete' timer.id %}">
           <span class="glyphicon glyphicon-trash"></span>
         </a>

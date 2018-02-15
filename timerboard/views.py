@@ -5,13 +5,14 @@ from datetime import timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.utils.timezone import now
 
+from timerboard.forms import TimerForm
 from timerboard.models import Timer
 
 
-
+@login_required
 def index(request):
     context = {
         "timers": filter(
@@ -41,6 +42,7 @@ def index(request):
     return render(request, "timerboard/index.html", context)
 
 
+@login_required
 def delete(request, id):
     timer = Timer.objects.get(id=id)
 
@@ -48,3 +50,43 @@ def delete(request, id):
         timer.delete(request.user)
         messages.success(request, "Successfully deleted timer")
         return redirect("timerboard:index")
+
+
+@login_required
+def edit(request, timer=None):
+    if request.method == "POST":
+        form = TimerForm(request.POST)
+        form.instance.created_by = request.user
+        form.save()
+        messages.success(request, "Successfully updated timer")
+        return redirect("timerboard:edit", form.instance.id)
+
+    if timer == None:
+        method = "Add Timer"
+        form = TimerForm()
+    else:
+        method = "Edit Timer"
+        timer = Timer.objects.get(id=timer)
+        diff = timer.date - now()
+        days = diff.days
+
+        form = TimerForm(
+            instance=timer,
+            initial={
+                'days': diff.days,
+                'hours': int((diff.total_seconds() % 86400) // 3600),
+                'minutes': int((diff.total_seconds() % 3600) / 60)
+            }
+        )
+
+    context = {
+        "method": method,
+        "form": form
+    }
+
+    return render(request, "timerboard/edit.html", context)
+
+
+@login_required
+def add(request):
+    return edit(request)
