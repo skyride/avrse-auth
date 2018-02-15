@@ -19,4 +19,5 @@ from django.contrib import admin
 urlpatterns = [
     url('', include('social_django.urls', namespace='social')),
     url(r'', include('eveauth.urls')),
+    url(r'timerboard/', include('timerboard.urls', namespace="timerboard"))
 ]

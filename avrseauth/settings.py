@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'mathfilters',
 
     'eveauth',
+    'timerboard',
     'esi',
     'sde'
 ]
