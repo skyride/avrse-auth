@@ -13,6 +13,7 @@
   <tr>
     <th>Side:</th>
     <th>Timer:</th>
+    <th>Owner:</th>
     <th>System:</th>
     <th>Date:</th>
     <th>Time Until:</th>
@@ -23,6 +24,7 @@
     <tr>
       <td>{{ timer.get_side_display }}</td>
       <td>{{ timer.structure.name }} {{ timer.get_stage_display }} - <i>{{ timer.name }}</i></td>
+      <td>{{ timer.owner }}</td>
       <td>{{ timer.system.name }}</td>
       <td>{{ timer.date }}</td>
       {% if timer.date > now %}
@@ -41,6 +43,7 @@
   <tr>
     <th>Side:</th>
     <th>Timer:</th>
+    <th>Owner:</th>
     <th>System:</th>
     <th>Date:</th>
     <th>Created By:</th>
@@ -50,6 +53,7 @@
     <tr>
       <td>{{ timer.get_side_display }}</td>
       <td>{{ timer.structure.name }} {{ timer.get_stage_display }} - <i>{{ timer.name }}</i></td>
+      <td>{{ timer.owner }}</td>
       <td>{{ timer.system.name }}</td>
       <td>{{ timer.date }}</td>
       <td>{{ timer.created_by.profile.character.name }}</td>
