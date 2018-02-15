@@ -20,6 +20,11 @@
     <th>Created By:</th>
   </tr>
 
+  {% if timers|length == 0 %}
+    <tr>
+      <td colspan="7"><i>No timers to see here</i></td>
+    </tr>
+  {% endif %}
   {% for timer in timers %}
     <tr>
       <td>{{ timer.get_side_display }}</td>
@@ -49,6 +54,11 @@
     <th>Created By:</th>
   </tr>
 
+  {% if archive|length == 0 %}
+    <tr>
+      <td colspan="7"><i>No timers to see here</i></td>
+    </tr>
+  {% endif %}
   {% for timer in archive %}
     <tr>
       <td>{{ timer.get_side_display }}</td>

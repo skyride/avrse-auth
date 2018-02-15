@@ -53,3 +53,16 @@ class Timer(models.Model):
     @property
     def time_until(self):
         return self.date - now()
+
+    
+    def user_in_groups(self, user):
+        if self.visible_to_groups.count() == 0:
+            return True
+
+        group_ids = user.groups.values_list('id', flat=True)
+        if self.visible_to_groups.filter(
+            id__in=group_ids
+        ).count() > 0:
+            return True
+
+        return False
