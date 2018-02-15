@@ -16,10 +16,19 @@ class Timer(models.Model):
     VISIBLE_TO_LEVEL_CHOICES = (
         (0, "Non-Members"),
         (1, "Blues"),
-        (2, "Members"),        
+        (2, "Members"),
+    )
+
+    SIDE_CHOICES = (
+        (0, "Friendly"),
+        (1, "Hostile"),
+        (2, "Third-Party")
     )
 
     structure = models.ForeignKey(Type, related_name="timers", on_delete=models.CASCADE)
+    name = models.CharField(max_length=128, blank=True)
+    owner = models.CharField(max_length=32)
+    side = models.IntegerField(choices=SIDE_CHOICES, default=1)
     system = models.ForeignKey(System, related_name="timers", on_delete=models.CASCADE)
 
     date = models.DateTimeField(db_index=True)
