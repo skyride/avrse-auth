@@ -14,8 +14,8 @@ class TimerForm(forms.ModelForm):
         widget=forms.NumberInput(
             attrs={
                 'class':'form-control',
-                'min': 1,
-                'max': 31
+                'min': 0,
+                'max': 365
             },
         )
     )
@@ -23,7 +23,7 @@ class TimerForm(forms.ModelForm):
         widget=forms.NumberInput(
             attrs={
                 'class':'form-control',
-                'min': 1,
+                'min': 0,
                 'max': 23
             },
         )
@@ -32,7 +32,7 @@ class TimerForm(forms.ModelForm):
         widget=forms.NumberInput(
             attrs={
                 'class':'form-control',
-                'min': 1,
+                'min': 0,
                 'max': 59
             },
         )
