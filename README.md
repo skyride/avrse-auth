@@ -12,6 +12,7 @@ Users can now connect their characters to the auth using ESI. The user can then 
 * SSO Login
 * Groups with granular permissions
 * Multiple membership levels (Member, Blues, Non-member) defined in config file by Corp and Alliance
+* Timerboard
 * Updates all members/characters hourly
 * Light/Dark mode
 
