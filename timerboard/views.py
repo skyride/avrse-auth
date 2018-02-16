@@ -11,6 +11,8 @@ from django.utils.timezone import now
 from timerboard.forms import TimerForm
 from timerboard.models import Timer
 
+from sde.models import Type, System
+
 
 @login_required
 def index(request):
@@ -76,7 +78,13 @@ def edit(request, timer=None):
 
     if timer == None:
         method = "Add Timer"
-        form = TimerForm()
+        form = TimerForm(
+            initial={
+                'structure': Type.objects.get(name="Raitaru"),
+                'stage': 'AR',
+                'system': System.objects.get(name="Jita")
+            }
+        )
     else:
         method = "Edit Timer"
         timer = Timer.objects.get(id=timer)
