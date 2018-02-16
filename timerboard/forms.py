@@ -11,18 +11,11 @@ from sde.models import Type, System
 
 class TimerForm(forms.ModelForm):
     days = forms.IntegerField(
-        widget=forms.NumberInput(
-            attrs={
-                'class':'form-control',
-                'min': 0,
-                'max': 365
-            },
-        )
+        widget=forms.NumberInput()
     )
     hours = forms.IntegerField(
         widget=forms.NumberInput(
             attrs={
-                'class':'form-control',
                 'min': 0,
                 'max': 23
             },
@@ -31,7 +24,6 @@ class TimerForm(forms.ModelForm):
     minutes = forms.IntegerField(
         widget=forms.NumberInput(
             attrs={
-                'class':'form-control',
                 'min': 0,
                 'max': 59
             },
