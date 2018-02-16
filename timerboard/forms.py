@@ -42,13 +42,12 @@ class TimerForm(forms.ModelForm):
         cleaned_data = super(TimerForm, self,).clean()
 
         cleaned_data['date'] = now() + timedelta(
-            days=self.cleaned_data['days'],
-            hours=self.cleaned_data['hours'],
-            minutes=self.cleaned_data['minutes']
+            days=cleaned_data['days'],
+            hours=cleaned_data['hours'],
+            minutes=cleaned_data['minutes']
         )
 
         self.instance.date = cleaned_data['date']
-
         return cleaned_data
 
     class Meta:

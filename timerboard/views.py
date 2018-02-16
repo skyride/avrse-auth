@@ -55,11 +55,24 @@ def delete(request, id):
 @login_required
 def edit(request, timer=None):
     if request.method == "POST":
-        form = TimerForm(request.POST)
-        form.instance.created_by = request.user
-        form.save()
-        messages.success(request, "Successfully updated timer")
-        return redirect("timerboard:edit", form.instance.id)
+        if timer == None:
+            form = TimerForm(request.POST)
+            form.instance.created_by = request.user
+        else:
+            form = TimerForm(request.POST, instance=Timer.objects.get(id=timer))
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Successfully updated timer")
+            return redirect("timerboard:index") 
+        else:
+            messages.warning(request, "Errors were found")
+            context = {
+                "method": "Edit Timer",
+                "form": form
+            }
+            return render(request, "timerboard/edit.html", context)
+
 
     if timer == None:
         method = "Add Timer"
