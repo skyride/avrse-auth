@@ -20,6 +20,7 @@ from django.db import IntegrityError
 from eveauth.esi import ESI
 from eveauth.models import GroupApp, Character, Corporation, Alliance, Asset, Kill
 from eveauth.tasks import get_server, update_groups, spawn_groupupdates, update_discord
+from eveauth.discord.api import DiscordAPI
 
 
 @login_required
@@ -190,6 +191,33 @@ def view_user(request, id):
     }
 
     return render(request, "eveauth/user_view.html", context)
+
+
+@login_required
+@user_passes_test(lambda x: x.groups.filter(name="admin").exists())
+def unlink_discord(request, id):
+    user = User.objects.get(id=id)
+    discord = user.social_auth.get(provider="discord")
+
+    if request.method == "POST":
+        if request.POST.get("confirm", False) != False:
+            # Kick user from discord
+            api = DiscordAPI()
+            api.kick_member(discord.uid)
+
+            # Delete social auth entry
+            discord.delete()
+
+            # Return
+            messages.success(request, "Disconnected discord account for user %s" % user.profile.character.name)
+            return redirect(view_user, user.id)
+
+    context = {
+        'user': user,
+        'discord': discord
+    }
+
+    return render(request, "eveauth/unlink_discord_confirm.html", context)
 
 
 @login_required

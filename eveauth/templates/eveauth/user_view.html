@@ -57,6 +57,14 @@
     </div>
 
     <div class="well">
+      <h3>Actions</h3>
+
+      {% if discord %}
+      <a class="btn btn-default" href="{% url 'unlink_discord' user.id %}">Unlink Discord Account</a>
+      {% endif %}
+    </div>
+
+    <div class="well">
       <h3>Groups</h3>
 
       <ul class="">

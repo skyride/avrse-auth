@@ -27,6 +27,7 @@ urlpatterns = [
 
     url(r'^admin/users/(?P<page>[0-9]+)/(?P<order_by>[a-zA-Z_]+)?$', views.registeredusers_index, name="registeredusers_index"),
     url(r'^admin/user/([0-9]+)$', views.view_user, name="view_user"),
+    url(r'^admin/user/([0-9]+)/unlinkdiscord$', views.unlink_discord, name="unlink_discord"),
     url(r'^admin/user/([0-9]+)/updategroups$', views.user_updategroups, name="user_updategroups"),
     url(r'^admin/user/all/updategroups$', views.user_updategroups_all, name="user_updategroups_all"),
 

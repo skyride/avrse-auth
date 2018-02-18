@@ -1,0 +1,33 @@
+{% extends 'eveauth/base.html' %}
+{% load static %}
+
+{% block title %}Unlink Discord{% endblock %}
+
+
+{% block content %}
+<h2>Unlink Discord Account</h2>
+<hr />
+
+<div class="col-sm-6 col-sm-offset-3">
+  <div class="well well-md">
+    <form method="POST">
+      <p style="font-size: 18px;">
+        Are you sure you wish to unlink this discord account? Doing so will kick this user from the discord server.
+      </p>
+
+      <p>
+        Unlink <strong>{{ discord.extra_data.username }}#{{ discord.extra_data.discriminator }}</strong> from <strong>{{ user.profile.character.name }}</strong>
+      </p>
+      <br />
+
+      <div>
+        <button type="submit" class="btn btn-block btn-danger">Confirm</button>
+      </div>
+      {% csrf_token %}
+      <input type="hidden" name="confirm" value="yes" />
+    </form>
+  </div>
+</div>
+
+</form>
+{% endblock %}
