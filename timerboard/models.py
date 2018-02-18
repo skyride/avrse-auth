@@ -35,9 +35,9 @@ class Timer(models.Model):
         related_name="timers",
         on_delete=models.CASCADE,
         limit_choices_to=Q(
-                Q(group__category_id=65) |
-                Q(group_id=365),
-                market_group__isnull=False
+                Q(group__category_id=65, market_group__isnull=False) |
+                Q(group_id=365, market_group__isnull=False) |
+                Q(id=2233),
             )
     )
 
