@@ -15,6 +15,7 @@ class Timer(models.Model):
         ("AN", "Anchoring"),
         ("AR", "Armor"),
         ("ST", "Structure"),
+        ("UN", "Unanchoring"),
     )
 
     VISIBLE_TO_LEVEL_CHOICES = (
