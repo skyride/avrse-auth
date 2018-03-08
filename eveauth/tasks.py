@@ -2,10 +2,12 @@ import json
 import requests
 
 from django.utils import timezone
+from django.core.cache import cache
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.db import transaction
 from django.db.models import Q
+from django.utils.timezone import now
 
 from avrseauth.settings import members, blues
 from avrseauth.celery import app
@@ -234,6 +236,24 @@ def update_character(character_id):
     # Grab non-public info
     if db_char.token != None:
         api = ESI(db_char.token)
+
+        # Check refresh token to see if it's still valid
+        if api._refresh_access_token() == False:
+            # Check if we've had 24 within the last 72hrs failures. This runs hourly so that means EVE would need to be dead for a full day.
+            cache_key = "fail_history_character_%s" % db_char.id
+            fail_history = cache.get(cache_key, [])
+            if len(fail_history) > 24:
+                db_char.token.delete()
+                db_char.owner = None
+                db_char.token = None
+                db_char.save()
+
+                fail_history = []
+            else:
+                fail_history.append(now())
+
+            cache.set(cache_key, fail_history, 259200)
+            return
 
         # Wallet
         db_char.wallet = api.get("/v1/characters/$id/wallet/")
