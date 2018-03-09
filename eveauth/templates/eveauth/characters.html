@@ -3,6 +3,12 @@
 
 {% block title %}Characters{% endblock %}
 
+{% block extra_js %}
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+{% endblock %}
+
 
 {% block content %}
 <div class="row">
@@ -24,6 +30,15 @@
         <a href="{% url 'characters_view' character.id %}" style="text-decoration: underline;">
           <strong>{{ character.name }}</strong>
         </a>
+        <span style="margin-top: 3px;" class="pull-right">
+          {% if character.are_scopes_updated %}
+          <span title="ESI scopes are up-to-date" data-toggle="tooltip" data-placement="top" class="text-success">
+          {% else %}
+          <span title="ESI scopes are out of date but its only corp/director stuff so don't worry" data-toggle="tooltip" data-placement="top" class="text-warning">
+          {% endif %}
+            <i class="fas fa-square"></i>
+          </span>
+        </span>
       </div>
 
       <a href="{% url 'characters_view' character.id %}">

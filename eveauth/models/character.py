@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -37,6 +38,14 @@ class Character(models.Model):
 
     def __str__(self):
         return self.name
+
+
+    def are_scopes_updated(self):
+        if self.token != None:
+            for scope in settings.SOCIAL_AUTH_CHARACTER_AUTH_SCOPE:
+                if scope not in self.token.extra_data['scopes']:
+                    return False
+            return True
 
 
     def fatigue(self):
