@@ -147,7 +147,7 @@ SOCIAL_AUTH_CHARACTER_AUTH_SCOPE = [
     "esi-corporations.read_structures.v1",          # SEE UR CORP'S STRUCTURES
     "esi-corporations.read_standings.v1",           # SEE UR CORP'S STANDINGS
     "esi-corporations.read_titles.v1",              # SEE UR CORP'S TITLES
-    "esi-assets.read_corporation_assets.v1",        # SEE UR CORP'S ASSSETS
+    "esi-assets.read_corporation_assets.v1",        # SEE UR CORP'S STUFF
 ]
 SOCIAL_AUTH_DISCORD_SCOPE = [
     "identify"

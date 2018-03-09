@@ -2,11 +2,13 @@ from django.db import models
 from django.db.models import Q, F, Sum
 
 from eveauth.models.character import Character
+from eveauth.models.corporation import Corporation
 from sde.models import Type, System, Station
 
 class Asset(models.Model):
     id = models.BigIntegerField(primary_key=True)
-    character = models.ForeignKey(Character, related_name="assets")
+    character = models.ForeignKey(Character, related_name="assets", null=True, default=None)
+    corporation = models.ForeignKey(Corporation, related_name="assets", null=True, default=None)
     parent = models.ForeignKey('self', null=True, default=None, db_constraint=False, related_name="items")
 
     type = models.ForeignKey(Type)
