@@ -60,7 +60,10 @@ def channel(id):
 
 @register.filter(name="level")
 def level(id):
-    return ["Non-member", "Blue", "Member"][id]
+    if id in [0, 1, 2]:
+        return ["Non-member", "Blue", "Member"][id]
+    else:
+        return "ERROR"
 
 
 @register.filter(name="since")
