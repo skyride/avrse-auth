@@ -164,6 +164,18 @@ def assetsearch_index(request):
 
     assets = assets.filter(
         type__group__category_id=6
+    ).order_by(
+        'system__region__name',
+        'system__name',
+        'character__owner__username',
+        'character__name',
+        '-type__mass',
+    ).prefetch_related(
+        'type',
+        'character',
+        'character__owner__profile__character',
+        'system',
+        'system__region'
     ).all()
 
     context = {

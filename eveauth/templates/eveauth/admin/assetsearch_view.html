@@ -36,13 +36,13 @@
         {% endifchanged %}
       </td>
       <td>
-          {% ifchanged asset.system asset.character.owner %}
+          {% ifchanged asset.character.owner %}
           <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Character/{{ asset.character_id }}_32.jpg">
           {{ asset.character.owner.profile.character.name }}
           {% endifchanged %}
         </td>
       <td>
-        {% ifchanged asset.system asset.character %}
+        {% ifchanged asset.character %}
         <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Character/{{ asset.character_id }}_32.jpg">
         {{ asset.character.name }}
         {% endifchanged %}
