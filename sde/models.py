@@ -153,7 +153,7 @@ class AttributeType(models.Model):
 
 
 class TypeAttribute(models.Model):
-    type = models.ForeignKey(Type, related_name="attributes")
+    type = models.ForeignKey(Type, related_name="attributes", db_constraint=False)
     attribute = models.ForeignKey(AttributeType, related_name="types")
     value_int = models.IntegerField(null=True)
     value_float = models.FloatField(null=True)
