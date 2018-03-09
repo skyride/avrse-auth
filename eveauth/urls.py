@@ -47,6 +47,8 @@ urlpatterns = [
     url(r'^admin/corp/audit/$', views.corpaudit_search, name="corpaudit_search"),
     url(r'^admin/corp/audit/([0-9]+)$', views.corpaudit_view, name="corpaudit_view"),
 
+    url(r'^admin/assets/search/$', views.assetsearch_index, name="assetsearch_index"),
+
     url(r'^mumble/$', views.mumbleadmin_index, name="mumbleadmin_index"),
     url(r'^mumble/kick/([0-9]+)$', views.mumbleadmin_kick, name="mumbleadmin_kick"),
 

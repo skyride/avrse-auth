@@ -22,6 +22,8 @@ from eveauth.models import GroupApp, Character, Corporation, Alliance, Asset, Ki
 from eveauth.tasks import get_server, update_groups, spawn_groupupdates, update_discord
 from eveauth.discord.api import DiscordAPI
 
+from sde.models import Type, Group, System
+
 
 @login_required
 @user_passes_test(lambda x: x.groups.filter(name="admin").exists())
@@ -112,6 +114,62 @@ def corpaudit_view(request, id):
     }
 
     return render(request, "eveauth/corpaudit_view.html", context)
+
+
+@login_required
+@user_passes_test(lambda x: x.groups.filter(name="admin").exists())
+def assetsearch_index(request):
+    # Return search window
+    if request.GET.get("types", None) == None:
+        context = {
+            "types": Type.objects.filter(
+                    group__category_id=6,
+                    published=True
+                ).all(),
+            "groups": Group.objects.filter(
+                    category_id=6,
+                    published=True
+                ).order_by(
+                    'name'
+                ).all(),
+            "systems": System.objects.order_by(
+                    'name'
+                ).prefetch_related(
+                    'region'
+                ).all()
+        }
+
+        return render(request, "eveauth/admin/assetsearch_index.html", context)
+
+
+    # Apply asset filters
+    assets = Asset.objects
+    types = request.GET.get("types")
+    groups = request.GET.get("groups")
+    systems = request.GET.get("systems")
+    name = request.GET.get("name")
+
+    if types != "":
+        assets = assets.filter(type__name__in=types.splitlines())
+        print assets
+    if groups != "":
+        assets = assets.filter(type__group__name__in=groups.splitlines())
+        print assets
+    if systems != "":
+        assets = assets.filter(system__name__in=systems.splitlines())
+        print assets
+    if name != "":
+        assets = assets.filter(name__icontains=name)
+        print assets
+
+    assets = assets.filter(
+        type__group__category_id=6
+    ).all()
+
+    context = {
+        "assets": assets
+    }
+    return render(request, "eveauth/admin/assetsearch_view.html", context)
 
 
 @login_required

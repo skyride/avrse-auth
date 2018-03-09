@@ -1,0 +1,89 @@
+{% extends 'eveauth/base.html' %}
+{% load static mathfilters %}
+
+{% block title %}Asset Search{% endblock %}
+
+{% block extra_js %}
+
+{% endblock %}
+
+
+{% block content %}
+<h2>Asset Search</h2>
+<hr />
+
+<div id="app">
+  <div class="well">
+    <form method="GET" class="form-horizontal">
+      <fieldset>
+        <div class="form-group">
+          <label class="col-md-1 control-label">Types</label>
+          <div class="col-md-7">
+            <textarea id="types" name="types" class="form-control"></textarea>
+          </div>
+          <div class="col-md-4">
+            <div class="input-group">
+              <select id="types-option" class="form-control">
+                {% for type in types %}
+                <option value="{{ type.name }}">{{ type.name }}</option>
+                {% endfor %}
+              </select>
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="button" onclick="$('#types').val($('#types').val() + $('#types-option').val() + '\n');">Add</button>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-md-1 control-label">Groups</label>
+          <div class="col-md-7">
+            <textarea id="groups" name="groups" class="form-control"></textarea>
+          </div>
+          <div class="col-md-4">
+            <div class="input-group">
+              <select id="groups-option" class="form-control">
+                {% for group in groups %}
+                <option value="{{ group.name }}">{{ group.name }}</option>
+                {% endfor %}
+              </select>
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="button" onclick="$('#groups').val($('#groups').val() + $('#groups-option').val() + '\n');">Add</button>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-md-1 control-label">Systems</label>
+          <div class="col-md-7">
+            <textarea id="systems" name="systems" class="form-control"></textarea>
+          </div>
+          <div class="col-md-4">
+            <div class="input-group">
+              <select id="systems-option" class="form-control">
+                {% for system in systems %}
+                <option value="{{ system.name }}">{{ system.name }} ({{ system.region.name }})</option>
+                {% endfor %}
+              </select>
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="button" onclick="$('#systems').val($('#systems').val() + $('#systems-option').val() + '\n');">Add</button>
+              </span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="col-md-1 control-label">Name</label>
+          <div class="col-md-7">
+            <input name="name" class="form-control">
+          </div>
+          <div class="col-md-4">
+            <button type="submit" class="btn btn-block btn-primary">Search</button>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</div>
+{% endblock %}
