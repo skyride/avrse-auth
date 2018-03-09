@@ -24,6 +24,7 @@ from eveauth.models.implant import Implant
 from eveauth.models.kill import Kill
 from eveauth.models.templink import Templink
 from eveauth.models.skill import Skill
+from eveauth.models.role import Role
 from eveauth.esi import ESI, parse_api_date
 from eveauth.discord.api import DiscordAPI, is_bot_active
 
@@ -271,6 +272,18 @@ def update_character(character_id):
         if "jump_fatigue_expire_date" in fatigue:
             db_char.fatigue_expire_date = parse_api_date(fatigue['jump_fatigue_expire_date'])
             db_char.last_jump_date = parse_api_date(fatigue['last_jump_date'])
+
+        # Roles
+        with transaction.atomic():
+            roles = api.get("/v2/characters/$id/roles/")
+            db_char.roles.all().delete()
+
+            if "roles" in roles:
+                for role in roles['roles']:
+                    Role(
+                        character=db_char,
+                        name=role
+                    ).save()
 
         db_char.save()
 
