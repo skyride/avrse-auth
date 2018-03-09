@@ -143,7 +143,10 @@ SOCIAL_AUTH_CHARACTER_AUTH_SCOPE = [
     "esi-universe.read_structures.v1",
     "esi-skills.read_skills.v1",                    # SEE UR SKILLS
     "esi-skills.read_skillqueue.v1",
-    "esi-wallet.read_character_wallet.v1"           # SEE UR SPACE GOLD
+    "esi-wallet.read_character_wallet.v1",          # SEE UR SPACE GOLD
+    "esi-corporations.read_structures.v1",          # SEE UR CORP'S STRUCTURES
+    "esi-corporations.read_standings.v1",           # SEE UR CORP'S STANDINGS
+    "esi-corporations.read_titles.v1",              # SEE UR CORP'S TITLES
 ]
 SOCIAL_AUTH_DISCORD_SCOPE = [
     "identify"
