@@ -33,7 +33,15 @@ class AuthPlugin(Plugin):
             if system.count() > 1:
                 event.reply(
                     "```Multiple Systems Found:\n%s```" % (
-                        ", ".join(system.all().values_list('name', flat=True))
+                        ", ".join(
+                            map(
+                                lambda x: "%s (%s)" % (
+                                    x.name,
+                                    x.region.name
+                                ),
+                                system.all()
+                            )
+                        )
                     )
                 )
             elif system.count() == 1:
