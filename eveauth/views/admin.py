@@ -22,7 +22,7 @@ from eveauth.models import GroupApp, Character, Corporation, Alliance, Asset, Ki
 from eveauth.tasks import get_server, update_groups, spawn_groupupdates, update_discord
 from eveauth.discord.api import DiscordAPI
 
-from sde.models import Type, Group, System
+from sde.models import Type, Group as TypeGroup, System
 
 
 @login_required
@@ -126,7 +126,7 @@ def assetsearch_index(request):
                     group__category_id=6,
                     published=True
                 ).all(),
-            "groups": Group.objects.filter(
+            "groups": TypeGroup.objects.filter(
                     category_id=6,
                     published=True
                 ).order_by(
