@@ -215,7 +215,7 @@ def update_corporation(corp_id):
                         )
                         timer.save()
 
-                        # CODE TO PING ON DISCORD GOES HERE
+                        # CODE TO PING ON DISCORD GOES HERE 
 
         print "Updated all info for Corporation %s" % corp.name
 
