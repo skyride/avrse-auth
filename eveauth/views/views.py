@@ -88,7 +88,7 @@ def groups_join(request, group_id):
         request.user.groups.add(group)
         messages.success(request, "Joined group %s" % group.name)
 
-        update_discord.delay(request.user.id)
+        update_discord(request.user.id)
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 

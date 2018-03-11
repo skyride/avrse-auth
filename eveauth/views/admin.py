@@ -402,7 +402,7 @@ def groupadmin_app_complete(request, app_id, yesno):
     app = GroupApp.objects.get(id=app_id)
     if yesno == "accept":
         app.complete(True, request.user)
-        update_discord.delay(app.user.id)
+        update_discord(app.user.id)
     else:
         app.complete(False, request.user)
 
