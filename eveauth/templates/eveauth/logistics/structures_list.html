@@ -17,12 +17,12 @@ $('[data-toggle="tooltip"]').tooltip({html: true})
 
   <table class="table table-striped table-condensed">
     <tr>
-      <th>Region</th>
-      <th>Structure</th>
-      <th>Type</th>
-      <th>Services</th>
-      <th>State</th>
-      <th>Fuel Expires</th>
+      <th><a href="{% url 'structures_list' corp.id '' %}">Region</a></th>
+      <th><a href="{% url 'structures_list' corp.id 'name' %}">Structure</a></th>
+      <th><a href="{% url 'structures_list' corp.id 'type' %}">Type</a></th>
+      <th><a href="{% url 'structures_list' corp.id 'services' %}">Services</a></th>
+      <th><a href="{% url 'structures_list' corp.id 'state' %}">State</a></th>
+      <th><a href="{% url 'structures_list' corp.id 'fuel' %}">Fuel Expires</a></th>
     </tr>
 
     {% for structure in structures %}
