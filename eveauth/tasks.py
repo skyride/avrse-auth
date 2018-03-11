@@ -136,6 +136,13 @@ def update_corporation(corp_id):
 
         # Structures
         structures = api.get("/v2/corporations/%s/structures/" % corp.id)
+        corp.structures.exclude(
+            id__in=map(
+                lambda x: x['structure_id'],
+                structures
+            )
+        ).delete()
+
         for structure in structures:
             with transaction.atomic():
                 db_structure = Structure.objects.filter(id=structure['structure_id']).first()
