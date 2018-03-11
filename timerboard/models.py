@@ -64,6 +64,7 @@ class Timer(models.Model):
     deleted_by = models.ForeignKey(User, related_name="deleted_timers", on_delete=models.CASCADE, null=True, default=None)
     created_by = models.ForeignKey(User, related_name="timers", on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
+    generated = models.BooleanField(default=False)
 
     def __str__(self):
         return "%s %s-%s on %s" % (

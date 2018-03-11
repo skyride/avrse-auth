@@ -29,6 +29,8 @@ from eveauth.models.role import Role
 from eveauth.esi import ESI, parse_api_date
 from eveauth.discord.api import DiscordAPI, is_bot_active
 
+from timerboard.models import Timer
+
 
 def get_server():
     import Ice
@@ -160,6 +162,8 @@ def update_corporation(corp_id):
                 if db_structure == None:
                     db_structure = Structure(id=structure['structure_id'])
 
+                previous_state = db_structure.state
+
                 db_structure.corporation = corp
                 db_structure.type_id = structure['type_id']
                 db_structure.station = Station.get_or_create(structure['structure_id'], api)
@@ -193,6 +197,25 @@ def update_corporation(corp_id):
                             name=service['name'],
                             state={'online': True, 'offline': False}[service['state']]
                         ).save()
+
+                # Create timer if this is newly reinforced
+                if previous_state != structure['state']:
+                    if "reinforce" in structure['state'] or structure['state'] == "anchoring":
+                        timer = Timer(
+                            structure_id=structure['type_id'],
+                            name=db_structure.station.name.replace("%s - " % db_structure.system.name, ""),
+                            owner=corp.ticker,
+                            side=0,
+                            system_id=structure['system_id'],
+                            date=db_structure.state_timer_end,
+                            stage={"armor_reinforce": "AR", "hull_reinforce": "ST", "anchoring": "AN"}[structure['state']],
+                            visible_to_level=2,
+                            created_by=User.objects.first(),
+                            generated=True
+                        )
+                        timer.save()
+
+                        # CODE TO PING ON DISCORD GOES HERE
 
         print "Updated all info for Corporation %s" % corp.name
 
