@@ -39,18 +39,23 @@
             <li><a href="{% url 'assets_index' %}">My Ships</a></li>
             <li><a href="{% url 'groups_index' %}">Groups</a></li>
             <li><a href="{% url 'timerboard:index' %}">Timerboard</a></li>
-              {% if request.user|has_group:"admin" %}
+              {% if request.user|has_group:"admin,Audit,Logistics" %}
               <li>
                 <a href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                   Admin <span class="caret">
                 </a>
                 <ul class="dropdown-menu">
+                  {% if request.user|has_group:"admin" %}
                   <li><a href="{% url 'registeredusers_index' 1 %}">Users</a></li>
                   <li><a href="{% url 'groupadmin_index' %}">Groups</a></li>
                   <li><a href="{% url 'characteradmin_index' 1 %}">Characters</a></li>
                   <li class="divider"></li>
                   <li><a href="{% url 'assetsearch_index' %}">Asset Search</a></li>
                   <li><a href="{% url 'corpaudit_search' %}">Corp Audit</a></li>
+                  {% endif %}
+                  {% if request.user|has_group:"admin,Logistics" %}
+                  <li><a href="{% url 'structures_index' %}">Structures</a></li>
+                  {% endif %}
                 </ul>
               </li>
                 {% if MUMBLE %}
