@@ -290,6 +290,40 @@ class BotCommands:
             )
 
 
+    def jcs(self):
+        target = self.get_system()
+        if target != None:
+            target = target.first()
+            chars = Character.objects.filter(
+                owner__isnull=False,
+                clones__location__system=target
+            )
+            table = [["Owner", "Char", "JC Cooldown", "Fatigue"]]
+
+            for char in chars.prefetch_related(
+                'owner'
+            ).order_by(
+                'owner__username',
+                'name'
+            ).distinct():
+                table.append(
+                    [
+                        char.owner.profile.character.name,
+                        char.name,
+                        char.jc_cooldown_text(),
+                        char.fatigue_text()
+                    ]
+                )
+
+            self.reply_chunked(
+                "Characters ready to JC to %s (%s)\n%s" % (
+                    target.name,
+                    target.region.name,
+                    AsciiTable(table).table
+                )
+            )
+
+
     def alts(self):
         user = self.get_user()
         self.event.reply(

@@ -92,6 +92,8 @@ class AuthPlugin(Plugin):
                     commands.supers()
                 elif tokens[0].lower() == "!strip":
                     commands.strip(admin=True)
+                elif tokens[0].lower() == "!jcs":
+                    commands.jcs()
 
             # public commands with limitations
             else:

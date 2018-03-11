@@ -78,6 +78,33 @@ class Character(models.Model):
             else:
                 return "None"
 
+    def jc_cooldown(self):
+        if self.clone_jump_ready != None:
+            return self.clone_jump_ready - timezone.now()
+
+    def has_jc_cooldown(self):
+        if self.clone_jump_ready == None:
+            return False
+        cooldown = self.clone_jump_ready - timezone.now()
+        return cooldown.total_seconds() > 0
+
+    def jc_cooldown_text(self):
+        if self.has_jc_cooldown():
+            delta = self.jc_cooldown()
+            out = "%.2i:%.2i:%.2i" % (
+                (delta.seconds / 60 / 60) % 24,
+                (delta.seconds / 60) % 60,
+                delta.seconds % 60
+            )
+
+            if delta.days > 0:
+                out = "%sD %s" % (str(delta.days), out)
+
+            return out
+        else:
+            return "Ready"
+
+
 
     @staticmethod
     def get_or_create(id):
