@@ -481,7 +481,8 @@ def update_character(character_id):
 
         clones = api.get("/v3/characters/$id/clones/")
         db_char.home = Station.get_or_create(clones['home_location']['location_id'], api)
-        db_char.clone_jump_ready = parse_api_date(clones['last_clone_jump_date']) - info_sync
+        if "last_clone_jump_date" in clones:
+            db_char.clone_jump_ready = parse_api_date(clones['last_clone_jump_date']) - info_sync
         db_char.save()
 
         db_char.clones.all().delete()
