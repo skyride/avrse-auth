@@ -64,6 +64,17 @@ def spawn_character_location_updates():
     print "Spawned character location update tasks for %s chars" % chars.count()
 
 
+# Update data on all corporations with director tokens
+@app.task(name="spawn_corporation_updates")
+def spawn_corporation_updates():
+    corps = Corporation.objects.filter(
+        characters__token__isnull=False,
+        characters__roles__name="director"
+    ).distinct()
+    for corp in corps:
+        update_corporation.delay(corp.id)
+
+
 # Set expired templinks inactive and kick anyone using them from mumble
 @app.task(name="purge_expired_templinks")
 def purge_expired_templinks():

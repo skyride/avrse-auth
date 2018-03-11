@@ -204,6 +204,10 @@ CELERYBEAT_SCHEDULE = {
         'task': 'spawn_kill_updates',
         'schedule': timedelta(hours=12)
     },
+    'spawn_corporation_updates': {
+        'task': 'spawn_corporation_updates',
+        'schedule': timedelta(hours=1)
+    },
     'spawn_character_location_updates': {
         'task': 'spawn_character_location_updates',
         'schedule': timedelta(minutes=5)
