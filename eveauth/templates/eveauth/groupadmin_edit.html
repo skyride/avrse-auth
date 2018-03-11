@@ -20,7 +20,7 @@
           <div class="form-group">
             <label for="name" class="col-lg-2" control-label>Name</label>
             <div class="col-lg-10">
-              <input type="text" class="form-control" id="name" name="name" value="{{ group.name }}" placeholder="Name" {% if group.name == "admin" %}readonly{% endif %}>
+              <input type="text" class="form-control" id="name" name="name" value="{{ group.name }}" placeholder="Name" {% if group.name == "admin" or group.name == "FC" or group.name == "Audit" or group.name == "Logistics" %}readonly{% endif %}>
             </div>
           </div>
 

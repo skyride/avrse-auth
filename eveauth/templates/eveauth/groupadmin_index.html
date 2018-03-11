@@ -92,7 +92,7 @@
     <td>{{ group.details.forum|yesno }}</td>
     <td>{{ group.details.discord|yesno }}</td>
     <td>
-      {% if group.name != "admin" and group.name != "FC" %}
+      {% if group.name != "admin" and group.name != "FC" and group.name != "Audit" and group.name != "Logistics" %}
       <a class="btn btn-danger btn-xs" href="{% url 'groupadmin_delete' group.id %}">Delete</a>
       {% endif %}
     </td>
