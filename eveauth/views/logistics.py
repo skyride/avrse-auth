@@ -8,14 +8,23 @@ from eveauth.models import Corporation
 @login_required
 @user_passes_test(lambda x: x.groups.filter(name__in=["admin", "logistics"]).exists())
 def structures_index(request):
+    corps = []
+    for corp in Corporation.objects.annotate(
+        structure_count=Count('structures'),
+    ).filter(
+        structure_count__gt=0,
+    ).order_by(
+        '-structure_count',
+        'name'
+    ).all():
+        if corp.characters.filter(
+            roles__name="Director",
+            token__isnull=False
+        ).exists():
+            corps.append(corp)
+
     context = {
-        "corps": Corporation.objects.annotate(
-                structure_count=Count('structures')
-            ).filter(
-                structure_count__gt=0
-            ).order_by(
-                '-structure_count'
-            ).all()
+        "corps": corps
     }
 
     return render(request, "eveauth/logistics/structures_index.html", context)
