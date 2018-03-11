@@ -46,10 +46,14 @@ $('[data-toggle="tooltip"]').tooltip({html: true})
         </span>
       </td>
       <td>
-        {% if structure.fuel_expires == None %}
-        <span class="text-warning"><i>Low Power</i></span>
+        {% if structure.state_timer_end != None %}
+        <span class="text-danger">Timer Exit {{ structure.state_timer_end }}</span>
         {% else %}
-        {{ structure.fuel_expires }}
+          {% if structure.fuel_expires == None %}
+          <span class="text-warning"><i>Low Power</i></span>
+          {% else %}
+          {{ structure.fuel_expires }}
+          {% endif %}
         {% endif %}
       </td>
     </tr>
