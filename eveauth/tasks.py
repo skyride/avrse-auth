@@ -24,6 +24,7 @@ from eveauth.models.implant import Implant
 from eveauth.models.kill import Kill
 from eveauth.models.templink import Templink
 from eveauth.models.skill import Skill
+from eveauth.models.structure import Structure, Service
 from eveauth.models.role import Role
 from eveauth.esi import ESI, parse_api_date
 from eveauth.discord.api import DiscordAPI, is_bot_active
@@ -119,6 +120,56 @@ def purge_templink_users(templink_id, reason="Templink deactivated"):
 
     server.ice_getCommunicator().destroy()
 
+
+# Update all corp data from the first available director API
+@app.task(name="update_corporation")
+def update_corporation(corp_id):
+    # Look for character with the right roles
+    corp = Corporation.objects.get(id=corp_id)
+    director = corp.characters.filter(
+        roles__name="director",
+        token__isnull=False
+    ).first()
+
+    if director != None:
+        api = ESI(director.token)
+
+        # Structures
+        structures = api.get("/v2/corporations/%s/structures/" % corp.id)
+        for structure in structures:
+            with transaction.atomic():
+                db_structure = Structure.objects.filter(id=structure['structure_id']).first()
+                if db_structure == None:
+                    db_structure = Structure(id=structure['structure_id'])
+
+                db_structure.corporation = corp
+                db_structure.type_id = structure['type_id']
+                db_structure.station = Station.get_or_create(structure['structure_id'], api)
+                db_structure.system_id = structure['system_id']
+                db_structure.profile_id = structure['profile_id']
+                db_structure.state = structure['state']
+                db_structure.reinforce_weekday = structure['reinforce_weekday']
+                db_structure.reinforce_hour = structure['reinforce_hour']
+                
+                if "state_timer_start" in structure:
+                    db_structure.state_timer_start = parse_api_date(structure['state_timer_start'])
+                else:
+                    db_structure.state_timer_start = None
+
+                if "state_timer_end" in structure:
+                    db_structure.state_timer_end = parse_api_date(structure['state_timer_end'])
+                else:
+                    db_structure.state_timer_end = None
+                db_structure.save()
+
+                db_structure.services.all().delete()
+                if "services" in structure:
+                    for service in structure['services']:
+                        Service(
+                            structure=db_structure,
+                            name=service['name'],
+                            state={'online': True, 'offline': False}[service['state']]
+                        ).save()
 
 
 # Update a users groups from the API
