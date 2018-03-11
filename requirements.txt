@@ -12,7 +12,7 @@ celery==4.1.0
 certifi==2017.7.27.1
 chardet==3.0.4
 daemon==1.1
-disco-py==0.0.11
+disco-py==0.0.12
 django-appconf==1.0.2
 django-discord-bind==0.2.0
 django-unixdatetimefield==0.1.6
