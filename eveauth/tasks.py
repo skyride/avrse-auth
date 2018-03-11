@@ -150,6 +150,11 @@ def update_corporation(corp_id):
                 db_structure.state = structure['state']
                 db_structure.reinforce_weekday = structure['reinforce_weekday']
                 db_structure.reinforce_hour = structure['reinforce_hour']
+
+                if "fuel_expires" in structure:
+                    db_structure.fuel_expires = parse_api_date(structure['fuel_expires'])
+                else:
+                    db_structure.fuel_expires = None
                 
                 if "state_timer_start" in structure:
                     db_structure.state_timer_start = parse_api_date(structure['state_timer_start'])
@@ -170,6 +175,8 @@ def update_corporation(corp_id):
                             name=service['name'],
                             state={'online': True, 'offline': False}[service['state']]
                         ).save()
+
+        print "Updated all info for Corporation %s" % corp.name
 
 
 # Update a users groups from the API

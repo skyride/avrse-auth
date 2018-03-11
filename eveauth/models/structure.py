@@ -23,6 +23,7 @@ class Structure(models.Model):
     profile_id = models.IntegerField()
 
     state = models.CharField(max_length=64)
+    fuel_expires = models.DateTimeField(null=True, default=None)
     reinforce_weekday = models.IntegerField(choices=REINFORCE_WEEKDAY_CHOICES)
     reinforce_hour = models.IntegerField()
     state_timer_start = models.DateTimeField(null=True, default=None)
