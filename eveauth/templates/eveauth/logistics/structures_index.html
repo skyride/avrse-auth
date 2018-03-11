@@ -19,7 +19,7 @@
     <tr>
       <td>
         <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Corporation/{{ corp.id }}_32.png">
-        {{ corp.name }} [{{ corp.ticker }}]
+        <a href="{% url 'structures_list' corp.id %}">{{ corp.name }} [{{ corp.ticker }}]</a>
       </td>
       <td>{{ corp.structure_count }}</td>
     </tr>

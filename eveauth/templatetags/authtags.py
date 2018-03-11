@@ -19,6 +19,18 @@ def has_group(user, group_names):
     return user.groups.filter(name__in=group_names).exists()
 
 
+@register.filter(name="beautify")
+def beautify(string):
+    return string.replace("_", " ")
+
+@register.filter(name="servicestate")
+def servicestate(state):
+    if state:
+        return "<span class='text-success'>Online</span>"
+    else:
+        return "<span class='text-danger'>Offline</span>"
+
+
 @register.filter(name="time")
 def pretty_time_delta(seconds):
     seconds = int(seconds)
