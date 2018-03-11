@@ -1,0 +1,29 @@
+{% extends 'eveauth/base.html' %}
+{% load static mathfilters %}
+
+{% block title %}Structures{% endblock %}
+
+
+{% block content %}
+<h2>Structures</h2>
+<hr />
+
+<div>
+  <table class="table table-striped table-condensed">
+    <tr>
+      <th>Corporation</th>
+      <th>Structures</th>
+    </tr>
+
+    {% for corp in corps %}
+    <tr>
+      <td>
+        <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Corporation/{{ corp.id }}_32.png">
+        {{ corp.name }} [{{ corp.ticker }}]
+      </td>
+      <td>{{ corp.structure_count }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}
