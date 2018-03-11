@@ -247,8 +247,9 @@ class BotCommands:
                 )
 
             self.reply_chunked(
-                "Characters in %s\n%s" % (
+                "Characters in %s (%s)\n%s" % (
                     location.name,
+                    location.region.name,
                     AsciiTable(table).table
                 )
             )
@@ -283,8 +284,9 @@ class BotCommands:
                         )
 
             self.reply_chunked(
-                "Characters in range of %s\n%s" % (
+                "Characters in range of %s (%s)\n%s" % (
                     target.name,
+                    target.region.name,
                     AsciiTable(table).table
                 )
             )
