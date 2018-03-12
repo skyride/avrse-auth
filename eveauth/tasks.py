@@ -143,7 +143,8 @@ def update_corporation(corp_id):
     corp = Corporation.objects.get(id=corp_id)
     director = corp.characters.filter(
         roles__name="director",
-        token__isnull=False
+        token__isnull=False,
+        token__extra_data__contains="esi-corporations.read_structures.v1"
     ).first()
 
     if director != None:
@@ -217,7 +218,7 @@ def update_corporation(corp_id):
                         )
                         timer.save()
 
-                        # CODE TO PING ON DISCORD GOES HERE 
+                        # CODE TO PING ON DISCORD GOES HERE
 
         print "Updated all info for Corporation %s" % corp.name
 
