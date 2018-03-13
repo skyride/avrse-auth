@@ -35,8 +35,9 @@ INSTALLED_APPS = [
 
     'eveauth',
     'timerboard',
+    'alerts',
     'esi',
-    'sde'
+    'sde',
 ]
 
 MIDDLEWARE = [
