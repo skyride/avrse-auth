@@ -17,8 +17,15 @@ class Webhook(models.Model):
         ("low_fuel", "Low Fuel")
     )
 
+    NOTIFY_CHOICES = (
+        ('', ''),
+        ('@here', '@here'),
+        ('@everyone', '@everyone')
+    )
+
     event = models.CharField(max_length=64, db_index=True, choices=EVENT_CHOICES)
     url = models.CharField(max_length=512)
+    notify = models.CharField(max_length=32, default="", choices=NOTIFY_CHOICES)
     active = models.BooleanField(default=True)
 
 
