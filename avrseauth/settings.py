@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'social_django',
     'mathfilters',
     'widget_tweaks',
+    'django_extensions',
 
     'eveauth',
     'timerboard',

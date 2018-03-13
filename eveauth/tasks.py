@@ -14,6 +14,9 @@ from django.utils.timezone import now
 from avrseauth.settings import members, blues
 from avrseauth.celery import app
 
+from alerts.models import Webhook
+from alerts import embeds
+
 from sde.models import System, Station, Type
 
 from eveauth import ipb
@@ -219,6 +222,11 @@ def update_corporation(corp_id):
                         timer.save()
 
                         # CODE TO PING ON DISCORD GOES HERE
+                        Webhook.send(
+                            "structure_reinforce",
+                            embeds.timer(timer, db_structure)
+                        )
+
 
         print "Updated all info for Corporation %s" % corp.name
 

@@ -6,3 +6,4 @@ celerybeat-schedule
 .ropeproject
 sqlite-latest.sqlite
 .vscode
+test.py
