@@ -45,7 +45,7 @@ class Webhook(models.Model):
                 requests.post(
                     hook.url,
                     data={
-                        "content": "@%s ^" % hook.notify
+                        "content": "%s ^" % hook.notify
                     }
                 )
         return True
