@@ -227,6 +227,17 @@ def update_corporation(corp_id):
                             embeds.structure_reinforce(timer, db_structure)
                         )
 
+                # Ping about fuel if necessary
+                if db_structure.corporation_id in settings.members['corps']:
+                    time_left = db_structure.fuel_expires - timezone.now()
+                    if time_left <= timedelta(hours=72):
+                        hours_left = int(time_left.total_seconds() / 60 / 60)
+                        if hours_left % 12 == 0:
+                            Webhook.send(
+                                "low_fuel",
+                                embeds.low_fuel(db_structure)
+                            )
+
 
         print "Updated all info for Corporation %s" % corp.name
 
