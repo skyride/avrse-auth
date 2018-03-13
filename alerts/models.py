@@ -40,4 +40,12 @@ class Webhook(models.Model):
                 hook.url,
                 json=message
             ).content
+
+            if hook.notify != "":
+                requests.post(
+                    hook.url,
+                    data={
+                        "content": "@%s ^" % hook.notify
+                    }
+                )
         return True
