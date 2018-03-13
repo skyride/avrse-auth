@@ -12,12 +12,12 @@ def simple_message(message):
 
 
 class Webhook(models.Model):
-    NAME_CHOICES = (
+    EVENT_CHOICES = (
         ('structure_reinforce', "Structure Reinforce"),
         ("low_fuel", "Low Fuel")
     )
 
-    event = models.CharField(max_length=64, db_index=True, choices=NAME_CHOICES)
+    event = models.CharField(max_length=64, db_index=True, choices=EVENT_CHOICES)
     url = models.CharField(max_length=512)
     active = models.BooleanField(default=True)
 

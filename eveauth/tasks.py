@@ -224,7 +224,7 @@ def update_corporation(corp_id):
                         # CODE TO PING ON DISCORD GOES HERE
                         Webhook.send(
                             "structure_reinforce",
-                            embeds.timer(timer, db_structure)
+                            embeds.structure_reinforce(timer, db_structure)
                         )
 
 

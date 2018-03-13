@@ -1,6 +1,6 @@
 
 
-def timer(timer, structure):
+def structure_reinforce(timer, structure):
     return {
         "username": "Structure Bot",
         "embeds": [
@@ -34,6 +34,41 @@ def timer(timer, structure):
                     {
                         "name": "Timer",
                         "value": timer.date.strftime("%Y/%m/%d %H:%M"),
+                        "inline": True,
+                    },
+                    {
+                        "name": "Owner",
+                        "value": "%s [%s]" % (
+                            structure.corporation.name,
+                            structure.corporation.ticker
+                        ),
+                        "inline": True,
+                    }
+                ]
+            }
+        ]
+    }
+
+
+def low_fuel(structure):
+    return {
+        "username": "Structure Bot",
+        "embeds": [
+            {
+                "type": "rich",
+                "title": "%s is low on fuel" % structure.type.name,
+                "description": "%s (%s)" % (
+                    structure.station.name,
+                    structure.type.name
+                ),
+                "thumbnail": {
+                    "url": "https://imageserver.eveonline.com/Render/%s_128.png" % structure.type_id
+                },
+                "color": 0x00ffff,
+                "fields": [
+                    {
+                        "name": "Fuel Expires",
+                        "value": structure.fuel_expires.strftime("%Y/%m/%d %H:%M"),
                         "inline": True,
                     },
                     {
