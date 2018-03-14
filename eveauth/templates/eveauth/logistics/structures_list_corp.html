@@ -1,0 +1,63 @@
+{% extends 'eveauth/base.html' %}
+{% load static authtags %}
+
+{% block title %}Structures{% endblock %}
+
+{% block extra_js %}
+$('[data-toggle="tooltip"]').tooltip({html: true})
+{% endblock %}
+
+
+{% block content %}
+<h2>Structures</h2>
+<h3><img style="border-radius: 50%;" src="//imageserver.eveonline.com/Corporation/{{ corp.id }}_32.png"> {{ corp.name }} [{{ corp.ticker }}]</h3>
+<hr />
+
+<div>
+
+  <table class="table table-striped table-condensed">
+    <tr>
+      <th><a href="{% url structures_list corp.id '' %}">Region</a></th>
+      <th><a href="{% url structures_list corp.id 'name' %}">Structure</a></th>
+      <th><a href="{% url structures_list corp.id 'type' %}">Type</a></th>
+      <th><a href="{% url structures_list corp.id 'services' %}">Services</a></th>
+      <th><a href="{% url structures_list corp.id 'state' %}">State</a></th>
+      <th><a href="{% url structures_list corp.id 'fuel' %}">Fuel Expires</a></th>
+    </tr>
+
+    {% for structure in structures %}
+    <tr>
+      <th>{% ifchanged %}{{ structure.system.region.name }}{% endifchanged %}</th>
+      <td>
+        <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Type/{{ structure.type_id }}_32.png">
+        {{ structure.station.name }}
+      </td>
+      <td>{{ structure.type.name }}</td>
+      <td>
+        {% if structure.service_count > 0 %}
+        <span data-toggle="tooltip" data-placement="top" title="{% for service in structure.services.all %}{{ service.name }}: {{ service.state|servicestate|safe }}<br />{% endfor %}">
+          {{ structure.service_count }}
+        </span>
+        {% endif %}
+      </td>
+      <td>
+        <span {% if "reinforce" in structure.state %}class="text-danger"{% endif %}>
+        {{ structure.state|beautify|title }}
+        </span>
+      </td>
+      <td>
+        {% if structure.state_timer_end != None %}
+        <span class="text-danger">Timer Exit {{ structure.state_timer_end }}</span>
+        {% else %}
+          {% if structure.fuel_expires == None %}
+          <span class="text-warning"><i>Low Power</i></span>
+          {% else %}
+          {{ structure.fuel_expires }}
+          {% endif %}
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

@@ -10,24 +10,22 @@ $('[data-toggle="tooltip"]').tooltip({html: true})
 
 {% block content %}
 <h2>Structures</h2>
-<h3><img src="//imageserver.eveonline.com/Corporation/{{ corp.id }}_32.png"> {{ corp.name }} [{{ corp.ticker }}]</h3>
+<h3><img style="border-radius: 50%;" src="//imageserver.eveonline.com/Type/{{ system.sun_id }}_32.png"> {{ system.name }} ({{ system.region.name }})</h3>
 <hr />
 
 <div>
 
   <table class="table table-striped table-condensed">
     <tr>
-      <th><a href="{% url 'structures_list' corp.id '' %}">Region</a></th>
-      <th><a href="{% url 'structures_list' corp.id 'name' %}">Structure</a></th>
-      <th><a href="{% url 'structures_list' corp.id 'type' %}">Type</a></th>
-      <th><a href="{% url 'structures_list' corp.id 'services' %}">Services</a></th>
-      <th><a href="{% url 'structures_list' corp.id 'state' %}">State</a></th>
-      <th><a href="{% url 'structures_list' corp.id 'fuel' %}">Fuel Expires</a></th>
+      <th><a href="{% url structures_list system.id 'name' %}">Structure</a></th>
+      <th><a href="{% url structures_list system.id 'type' %}">Type</a></th>
+      <th><a href="{% url structures_list system.id 'services' %}">Services</a></th>
+      <th><a href="{% url structures_list system.id 'state' %}">State</a></th>
+      <th><a href="{% url structures_list system.id 'fuel' %}">Fuel Expires</a></th>
     </tr>
 
     {% for structure in structures %}
     <tr>
-      <th>{% ifchanged %}{{ structure.system.region.name }}{% endifchanged %}</th>
       <td>
         <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Type/{{ structure.type_id }}_32.png">
         {{ structure.station.name }}

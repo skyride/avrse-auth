@@ -24,7 +24,7 @@
         </td>
         <td>
           <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Type/{{ system.sun_id }}_32.png">
-          <a href="{% url 'structures_list' system.id '' %}">{{ system.name }}</a>
+          <a href="{% url 'structures_list_system' system.id '' %}">{{ system.name }}</a>
         </td>
         <td>{{ system.structure_count }}</td>
       </tr>
@@ -43,7 +43,7 @@
       <tr>
         <td>
           <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Corporation/{{ corp.id }}_32.png">
-          <a href="{% url 'structures_list' corp.id '' %}">{{ corp.name }} [{{ corp.ticker }}]</a>
+          <a href="{% url 'structures_list_corp' corp.id '' %}">{{ corp.name }} [{{ corp.ticker }}]</a>
         </td>
         <td>{{ corp.structure_count }}</td>
       </tr>
