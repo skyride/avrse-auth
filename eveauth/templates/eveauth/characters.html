@@ -5,7 +5,7 @@
 
 {% block extra_js %}
 $(function () {
-  $('[data-toggle="tooltip"]').tooltip()
+  $('[data-toggle="tooltip"]').tooltip({html: true})
 })
 {% endblock %}
 
@@ -34,7 +34,7 @@ $(function () {
           {% if character.are_scopes_updated %}
           <span title="ESI scopes are up-to-date" data-toggle="tooltip" data-placement="top" class="text-success">
           {% else %}
-          <span title="ESI scopes are out of date but its only corp/director stuff so don't worry" data-toggle="tooltip" data-placement="top" class="text-warning">
+          <span title="Missing Scopes:{% for scope in character.missing_scopes %}<br />{{ scope }}{% endfor %}" data-toggle="tooltip" data-placement="top" class="text-warning">
           {% endif %}
             <i class="fas fa-square"></i>
           </span>

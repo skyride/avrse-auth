@@ -48,6 +48,14 @@ class Character(models.Model):
                     return False
             return True
 
+    def missing_scopes(self):
+        missing = []
+        if self.token != None:
+            for scope in settings.SOCIAL_AUTH_CHARACTER_AUTH_SCOPE:
+                if scope not in self.token.extra_data['scopes']:
+                    missing.append(scope)
+        return missing
+
 
     def fatigue(self):
         if self.fatigue_expire_date != None:
