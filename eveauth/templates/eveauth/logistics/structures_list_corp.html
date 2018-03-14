@@ -9,7 +9,7 @@ $('[data-toggle="tooltip"]').tooltip({html: true})
 
 
 {% block content %}
-<h2>Structures</h2>
+<h2><a href="{% url 'structures_index' %}">Structures</a></h2>
 <h3><img style="border-radius: 50%;" src="//imageserver.eveonline.com/Corporation/{{ corp.id }}_32.png"> {{ corp.name }} [{{ corp.ticker }}]</h3>
 <hr />
 

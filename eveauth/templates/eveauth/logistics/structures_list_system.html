@@ -9,7 +9,7 @@ $('[data-toggle="tooltip"]').tooltip({html: true})
 
 
 {% block content %}
-<h2>Structures</h2>
+<h2><a href="{% url 'structures_index' %}">Structures</a></h2>
 <h3><img style="border-radius: 50%;" src="//imageserver.eveonline.com/Type/{{ system.sun_id }}_32.png"> {{ system.name }} ({{ system.region.name }})</h3>
 <hr />
 
