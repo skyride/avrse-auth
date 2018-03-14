@@ -235,16 +235,21 @@ def update_corporation(corp_id):
                             )
 
                 # Ping about fuel if necessary
-                if db_structure.fuel_notifications:
-                    if db_structure.fuel_expires != None:
-                        time_left = db_structure.fuel_expires - timezone.now()
-                        if time_left <= timedelta(hours=72):
-                            hours_left = int(time_left.total_seconds() / 60 / 60)
-                            if hours_left % 12 == 0:
+                if db_structure.fuel_expires != None:
+                    time_left = db_structure.fuel_expires - timezone.now()
+                    if time_left <= timedelta(hours=72):
+                        hours_left = int(time_left.total_seconds() / 60 / 60)
+                        if hours_left % 12 == 0:
+                            if db_structure.fuel_notifications:
                                 Webhook.send(
-                                    "low_fuel",
+                                    "low_fuel_filtered",
                                     embeds.low_fuel(db_structure)
                                 )
+
+                            Webhook.send(
+                                "low_fuel_all",
+                                embeds.low_fuel(db_structure)
+                            )
 
 
         print "Updated all info for Corporation %s" % corp.name
