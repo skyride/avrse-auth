@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Count, F
 from django.db.models.functions import Coalesce
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
-from eveauth.models import Corporation
+from eveauth.models import Corporation, Structure
 from sde.models import System
 
 
@@ -117,3 +118,18 @@ def structures_list_system(request, system_id, order_by):
     }
 
     return render(request, "eveauth/logistics/structures_list_system.html", context)
+
+
+@login_required
+@user_passes_test(lambda x: x.groups.filter(name__in=["admin", "logistics"]).exists())
+def structures_fuelnotification_toggle(request, structure_id, state):
+    structure = Structure.objects.get(id=structure_id)
+
+    if state == "on":
+        structure.fuel_notifications = True
+        structure.save()
+    elif state == "off":
+        structure.fuel_notifications = False
+        structure.save()
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

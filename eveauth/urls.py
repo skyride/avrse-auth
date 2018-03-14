@@ -52,6 +52,7 @@ urlpatterns = [
     url(r'^logistics/structures/$', views.structures_index, name="structures_index"),
     url(r'^logistics/structures/corp/([0-9]+)/([a-z]*)$', views.structures_list_corp, name="structures_list_corp"),
     url(r'^logistics/structures/system/([0-9]+)/([a-z]*)$', views.structures_list_system, name="structures_list_system"),
+    url(r'^logistics/structures/([0-9]+)/state/([a-z]+)$', views.structures_fuelnotification_toggle, name="structures_fuelnotification_toggle"),
 
     url(r'^mumble/$', views.mumbleadmin_index, name="mumbleadmin_index"),
     url(r'^mumble/kick/([0-9]+)$', views.mumbleadmin_kick, name="mumbleadmin_kick"),
