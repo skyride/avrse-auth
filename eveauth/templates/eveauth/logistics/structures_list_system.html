@@ -30,7 +30,7 @@ $('[data-toggle="tooltip"]').tooltip({html: true})
       <th>
         {% ifchanged %}
           <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Corporation/{{ structure.corporation.id }}_32.png">
-          {{ structure.corporation.name }}
+          {{ structure.corporation.ticker }}
         {% endifchanged %}
       </th>
       <td>
