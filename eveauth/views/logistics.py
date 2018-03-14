@@ -4,6 +4,7 @@ from django.db.models.functions import Coalesce
 from django.shortcuts import render
 
 from eveauth.models import Corporation
+from sde.models import System
 
 
 @login_required
@@ -24,7 +25,20 @@ def structures_index(request):
         ).exists():
             corps.append(corp)
 
+    systems = []
+    for system in System.objects.annotate(
+        structure_count=Count('structures'),
+    ).filter(
+        structure_count__gt=0,
+    ).order_by(
+        '-structure_count',
+        'region__name',
+        'name'
+    ).all():
+        systems.append(system)
+
     context = {
+        "systems": systems,
         "corps": corps
     }
 
