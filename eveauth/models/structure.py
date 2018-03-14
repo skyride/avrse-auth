@@ -29,6 +29,8 @@ class Structure(models.Model):
     state_timer_start = models.DateTimeField(null=True, default=None)
     state_timer_end = models.DateTimeField(null=True, default=None)
 
+    fuel_notifications = models.BooleanField(default=False)
+
     def __str__(self):
         return "%s:%s:%s" % (
             self.id,
