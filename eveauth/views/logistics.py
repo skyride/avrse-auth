@@ -110,8 +110,6 @@ def structures_list_system(request, system_id, order_by):
                 'station'
             ).order_by(
                 order_by,
-                'system__region__name',
-                'system__name',
                 F("timer").asc(nulls_last=True),
                 '-type__mass',
                 'station__name'
