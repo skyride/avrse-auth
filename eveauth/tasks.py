@@ -235,7 +235,7 @@ def update_corporation(corp_id):
                             )
 
                 # Ping about fuel if necessary
-                if db_structure.corporation_id in members['corps']:
+                if db_structure.fuel_notifications:
                     if db_structure.fuel_expires != None:
                         time_left = db_structure.fuel_expires - timezone.now()
                         if time_left <= timedelta(hours=72):
