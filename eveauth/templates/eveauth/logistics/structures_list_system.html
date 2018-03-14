@@ -23,6 +23,7 @@ $('[data-toggle="tooltip"]').tooltip({html: true})
       <th><a href="{% url structures_list system.id 'services' %}">Services</a></th>
       <th><a href="{% url structures_list system.id 'state' %}">State</a></th>
       <th><a href="{% url structures_list system.id 'fuel' %}">Fuel Expires</a></th>
+      <th><div align="center">Fuel Pings</div></th>
     </tr>
 
     {% for structure in structures %}
@@ -60,6 +61,18 @@ $('[data-toggle="tooltip"]').tooltip({html: true})
           {{ structure.fuel_expires }}
           {% endif %}
         {% endif %}
+      </td>
+      <td>
+        <div align="center">
+          <div class="btn-group">
+            <a href="{% url 'structures_fuelnotification_toggle' structure.id 'on' %}" class="btn btn-xs {{ structure.fuel_notifications|yesno:"btn-success active,btn-default" }}">
+              On
+            </a>
+            <a href="{% url 'structures_fuelnotification_toggle' structure.id 'off' %}" class="btn btn-xs {{ structure.fuel_notifications|yesno:"btn-default,btn-danger active" }}">
+              Off
+            </a>
+          </div>
+        </div>
       </td>
     </tr>
     {% endfor %}
