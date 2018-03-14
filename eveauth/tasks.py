@@ -230,7 +230,7 @@ def update_corporation(corp_id):
                         # Structure anchoring webhook
                         if db_structure.state in ["anchoring", "unanchoring"]:
                             Webhook.send(
-                                "structure_reinforce",
+                                "structure_anchoring",
                                 embeds.structure_state(timer, db_structure)
                             )
 
