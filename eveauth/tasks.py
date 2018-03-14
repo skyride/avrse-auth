@@ -214,18 +214,25 @@ def update_corporation(corp_id):
                             side=0,
                             system_id=structure['system_id'],
                             date=db_structure.state_timer_end,
-                            stage={"armor_reinforce": "AR", "hull_reinforce": "ST", "anchoring": "AN"}[structure['state']],
+                            stage={"armor_reinforce": "AR", "hull_reinforce": "ST", "anchoring": "AN", "unanchoring": "UN"}[structure['state']],
                             visible_to_level=2,
                             created_by=User.objects.first(),
                             generated=True
                         )
                         timer.save()
 
-                        # CODE TO PING ON DISCORD GOES HERE
-                        Webhook.send(
-                            "structure_reinforce",
-                            embeds.structure_reinforce(timer, db_structure)
-                        )
+                        # Structure reinforce webhook
+                        if db_structure.state in ["armor_reinforce", "hull_reinforce"]:
+                            Webhook.send(
+                                "structure_reinforce",
+                                embeds.structure_state(timer, db_structure)
+                            )
+                        # Structure anchoring webhook
+                        if db_structure.state in ["anchoring", "unanchoring"]:
+                            Webhook.send(
+                                "structure_reinforce",
+                                embeds.structure_state(timer, db_structure)
+                            )
 
                 # Ping about fuel if necessary
                 if db_structure.corporation_id in members['corps']:

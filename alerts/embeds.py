@@ -1,6 +1,6 @@
 
 
-def structure_reinforce(timer, structure):
+def structure_state(timer, structure):
     return {
         "username": "Structure Bot",
         "embeds": [

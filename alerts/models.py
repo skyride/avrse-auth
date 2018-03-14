@@ -14,11 +14,11 @@ def simple_message(message):
 class Webhook(models.Model):
     EVENT_CHOICES = (
         ('structure_reinforce', "Structure Reinforce"),
+        ('structure_anchoring', 'Structure Anchor/Unanchor'),
         ("low_fuel", "Low Fuel")
     )
-
     NOTIFY_CHOICES = (
-        ('', ''),
+        ('', 'No'),
         ('@here', '@here'),
         ('@everyone', '@everyone')
     )
