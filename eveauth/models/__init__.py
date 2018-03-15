@@ -5,7 +5,9 @@ from groupapp import GroupApp
 from character import Character
 from corporation import Corporation
 from alliance import Alliance
+
 from role import Role
+from notification import Notification
 
 from asset import Asset
 from structure import Structure, Service
