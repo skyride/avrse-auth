@@ -56,6 +56,10 @@
                   {% if request.user|has_group:"admin,Logistics" %}
                   <li><a href="{% url 'structures_index' %}">Structures</a></li>
                   {% endif %}
+                  {% if request.user|has_group:"admin" %}
+                  <li class="divider"></li>
+                  <li><a href="{% url 'settings_webhooks_index' %}">Webhooks</a></li>
+                  {% endif %}
                 </ul>
               </li>
                 {% if MUMBLE %}

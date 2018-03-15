@@ -63,4 +63,6 @@ urlpatterns = [
     url(r'^mumble/templinks/disable/([0-9]+)$', views.templink_disable, name="templink_disable"),
     url(r'^mumble/templinks/([0-9A-Za-z]+)/$', views.templink_landing, name="templink_landing"),
     url(r'^mumble/templinks/([0-9A-Za-z]+)/submit$', views.templink_landing_submit, name="templink_landing_submit"),
+
+    url(r'^settings/webhooks/$', views.settings_webhooks_index, name="settings_webhooks_index")
 ]

@@ -1,0 +1,42 @@
+{% extends 'eveauth/base.html' %}
+{% load static %}
+
+{% block title %}Webhooks{% endblock %}
+
+
+{% block content %}
+<h2>Webhooks</h2>
+<hr />
+
+<div>
+  <table class="table table-striped">
+    <tr>
+      <th>Event</th>
+      <th>Ping?</th>
+      <th>URL</th>
+      <th><div align="center">Active</div></th>
+      <th></th>
+    </tr>
+
+    {% for webhook in webhooks %}
+    <tr>
+      <td>{{ webhook.get_event_display }}</td>
+      <td>{{ webhook.get_notify_display }}</td>
+      <td>{{ webhook.url }}</td>
+      <td>
+        <div align="center">
+          <span class="glyphicon glyphicon-ok text-success"></span>
+        </div>
+      </td>
+      <td><a href="" class="btn btn-xs btn-success" disabled>Edit</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <div align="right">
+    <a href="" class="btn btn-success" disabled>
+      Create
+    </a>
+  </div>
+</div>
+{% endblock %}
