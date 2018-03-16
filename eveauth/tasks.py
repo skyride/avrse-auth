@@ -72,6 +72,19 @@ def spawn_character_location_updates():
     print "Spawned character location update tasks for %s chars" % chars.count()
 
 
+@app.task(name="spawn_character_notification_updates")
+def spawn_character_notification_updates():
+    chars = Character.objects.filter(
+        token__isnull=False
+    ).all()
+
+    for char in chars:
+        if "esi-characters.read_notifications.v1" in char.token.extra_data['scopes']:
+            update_character_notifications.delay(char.id)
+
+    print "Spawned notification updates for %s characters" % chars.count()
+
+
 # Update data on all corporations with director tokens
 @app.task(name="spawn_corporation_updates")
 def spawn_corporation_updates():

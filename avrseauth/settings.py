@@ -215,6 +215,10 @@ CELERYBEAT_SCHEDULE = {
         'task': 'spawn_character_location_updates',
         'schedule': timedelta(minutes=5)
     },
+    'spawn_character_notification_updates': {
+        'task': 'spawn_character_notification_updates',
+        'schedule': timedelta(minutes=5)
+    },
     'purge_expired_templinks': {
         'task': 'purge_expired_templinks',
         'schedule': timedelta(seconds=5)
