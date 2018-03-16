@@ -605,7 +605,6 @@ def update_character_notifications(character_id):
             )
         )
         new = set(map(lambda x: x['notification_id'], notifications)) - existing
-        print db_char.notifications.add(*new)
 
         print "Updated notifications for character %s" % db_char.name
 
