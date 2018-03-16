@@ -30,6 +30,7 @@ from eveauth.models.kill import Kill
 from eveauth.models.templink import Templink
 from eveauth.models.skill import Skill
 from eveauth.models.structure import Structure, Service
+from eveauth.models.notification import Notification
 from eveauth.models.role import Role
 from eveauth.esi import ESI, parse_api_date
 from eveauth.discord.api import DiscordAPI, is_bot_active
@@ -560,6 +561,59 @@ def update_character_location(character_id):
     db_char.save()
 
     print "Updated location info for character %s" % db_char.name
+
+
+@app.task(name="update_character_notifications")
+def update_character_notifications(character_id):
+    # Get the db objects we need
+    db_char = Character.objects.prefetch_related('token').get(id=character_id)
+    api = ESI(db_char.token)
+
+    # Check token has the scope
+    if "esi-characters.read_notifications.v1" in db_char.token.extra_data['scopes']:
+        notifications = api.get("/v1/characters/$id/notifications/")
+
+        # Add notifications that don't exist
+        existing = set(
+            Notification.objects.filter(
+                id__in=map(lambda x: x['notification_id'], notifications)
+            ).values_list(
+                'id',
+                flat=True
+            )
+        )
+
+        for notification in notifications:
+            with transaction.atomic():
+                if notification['notification_id'] not in existing:
+                    Notification(
+                        id=notification['notification_id'],
+                        text=notification['text'],
+                        sender_id=notification['sender_id'],
+                        sender_type=notification['sender_type'],
+                        date=parse_api_date(notification['timestamp']),
+                        type=notification['type']
+                    ).save()
+
+        # Add character to notifications it doesn't yet belong to
+        existing = set(
+            db_char.notifications.filter(
+                id__in=map(lambda x: x['notification_id'], notifications)
+            ).values_list(
+                'id',
+                flat=True
+            )
+        )
+        new = set(map(lambda x: x['notification_id'], notifications)) - existing
+        print db_char.notifications.add(*new)
+
+        print "Updated notifications for character %s" % db_char.name
+
+
+
+        
+            
+
 
 
 @app.task(name="spawn_price_updates")
