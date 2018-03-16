@@ -78,11 +78,13 @@ def spawn_character_notification_updates():
         token__isnull=False
     ).all()
 
+    count = 0
     for char in chars:
         if "esi-characters.read_notifications.v1" in char.token.extra_data['scopes']:
             update_character_notifications.delay(char.id)
+            count = count + 1
 
-    print "Spawned notification updates for %s characters" % chars.count()
+    print "Spawned notification updates for %s characters" % count
 
 
 # Update data on all corporations with director tokens
