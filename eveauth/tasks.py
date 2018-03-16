@@ -586,14 +586,24 @@ def update_character_notifications(character_id):
         for notification in notifications:
             with transaction.atomic():
                 if notification['notification_id'] not in existing:
-                    Notification(
+                    db_notification = Notification(
                         id=notification['notification_id'],
                         text=notification['text'],
                         sender_id=notification['sender_id'],
                         sender_type=notification['sender_type'],
                         date=parse_api_date(notification['timestamp']),
                         type=notification['type']
-                    ).save()
+                    )
+                    db_notification.save()
+                    
+                    # StructureUnderAttack webhook
+                    if db_notification.type == "StructureUnderAttack":
+                        # Check its within the last 30 mins
+                        if db_notification.date > timezone.now() - timedelta(minutes=30):
+                            Webhook.send(
+                                "structure_attacked",
+                                embeds.structure_attacked(db_notification, api)
+                            )
 
         # Add character to notifications it doesn't yet belong to
         existing = set(

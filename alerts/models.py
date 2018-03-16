@@ -16,7 +16,8 @@ class Webhook(models.Model):
         ('structure_reinforce', "Structure Reinforce"),
         ('structure_anchoring', 'Structure Anchor/Unanchor'),
         ("low_fuel_filtered", "Low Fuel (Filtered)"),
-        ("low_fuel_all", "Low Fuel (All)")
+        ("low_fuel_all", "Low Fuel (All)"),
+        ("structure_attacked", "Structured Attached")
     )
     NOTIFY_CHOICES = (
         ('', 'No'),
