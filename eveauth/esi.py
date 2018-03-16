@@ -1,4 +1,5 @@
 import requests
+import socket
 import json
 import datetime
 import pytz
@@ -155,8 +156,7 @@ class ESI():
 
         # If we get a 400 code, then the key has been deleted
         if r.status_code == 400:
-            #self.token.status = False
-            #self.token.save()
+            self.log(type='esi_token_refresh', success=False)
             return False
 
         # Update the ESI token
@@ -164,4 +164,24 @@ class ESI():
         self.token.extra_data['access_token'] = r['access_token']
         self.token.save()
 
+	self.log(type='esi_token_refresh', success=True)
         return True
+
+
+    def log(self, **kwargs):
+        data = {'type': 'esi_call'}
+        if self.token != None:
+            data.update({'token_id': self.token.id, 'token_uid': self.token.uid})
+        else:
+            data.update({'token_id': None})
+        data.update(kwargs)
+        self._send_log(data)
+
+
+    def _send_log(self, data):
+        if getattr(settings, 'LOGSTASH_HOST', False) != False:
+            print data
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.connect((settings.LOGSTASH_HOST, settings.LOGSTASH_PORT))
+            sock.sendall(json.dumps(data) + "\n")
+            sock.close()
