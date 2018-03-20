@@ -74,10 +74,10 @@ class ESI():
             if r != None:
                 r = json.loads(r)
                 if r == None:
-                    self.log(url=full_url, method=method, get_vars=get_vars, cache_hit=True, success=True)
+                    self.log(url=url, full_url=full_url, method=method, get_vars=get_vars, cache_hit=True, success=True)
                     return None
                 else:
-                    self.log(url=full_url, method=method, get_vars=get_vars, cache_hit=True, success=False)
+                    self.log(url=url, full_url=full_url, method=method, get_vars=get_vars, cache_hit=True, success=False)
                     return r
 
         # Nope, no cache, hit the API
@@ -90,10 +90,10 @@ class ESI():
                 # If the status code is still 403 then we fail the request
                 if r.status_code == 403:
                     cache.set(cache_key, json.dumps(None), cache_time)
-                    self.log(url=full_url, method=method.__name__, get_vars=get_vars, cache_hit=False, status_code=403, success=False)
+                    self.log(url=url, full_url=full_url, method=method.__name__, get_vars=get_vars, cache_hit=False, status_code=403, success=False)
                     return None
             else:
-                self.log(url=full_url, method=method.__name__, get_vars=get_vars, cache_hit=False, status_code=403, success=False)
+                self.log(url=url, full_url=full_url, method=method.__name__, get_vars=get_vars, cache_hit=False, status_code=403, success=False)
                 return None
 
         # ESI is buggy, so lets give it up to 10 retries for 500 error
@@ -102,18 +102,18 @@ class ESI():
                 return self.request(url, data=data, method=method, retries=retries+1)
             else:
                 cache.set(cache_key, json.dumps(None), cache_time)
-                self.log(url=url, method=method.__name__, get_vars=get_vars, cache_hit=False, status_code=r.status_code, success=False)
+                self.log(url=url, full_url=full_url, method=method.__name__, get_vars=get_vars, cache_hit=False, status_code=r.status_code, success=False)
                 return None
 
         # Load json and return
         if r.status_code == 200:
             j = json.loads(r.text)
             cache.set(cache_key, r.text, cache_time)
-            self.log(url=full_url, method=method.__name__, get_vars=get_vars, cache_hit=False, status_code=r.status_code, success=True)
+            self.log(url=url, full_url=full_url, method=method.__name__, get_vars=get_vars, cache_hit=False, status_code=r.status_code, success=True)
             return j
         else:
             cache.set(cache_key, json.dumps(None), cache_time)
-            self.log(url=full_url, method=method.__name__, get_vars=get_vars, cache_hit=False, status_code=r.status_code, success=False)
+            self.log(url=url, full_url=full_url, method=method.__name__, get_vars=get_vars, cache_hit=False, status_code=r.status_code, success=False)
             return None
 
 
