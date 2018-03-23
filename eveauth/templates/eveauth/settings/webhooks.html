@@ -1,5 +1,5 @@
 {% extends 'eveauth/base.html' %}
-{% load static %}
+{% load static bootstrap3 %}
 
 {% block title %}Webhooks{% endblock %}
 
@@ -9,7 +9,7 @@
 <hr />
 
 <div>
-  <table class="table table-striped">
+  <table class="table table-striped table-condensed">
     <tr>
       <th>Event</th>
       <th>Ping?</th>
@@ -19,24 +19,31 @@
     </tr>
 
     {% for webhook in webhooks %}
-    <tr>
-      <td>{{ webhook.get_event_display }}</td>
-      <td>{{ webhook.get_notify_display }}</td>
-      <td>{{ webhook.url }}</td>
-      <td>
-        <div align="center">
-          <span class="glyphicon glyphicon-ok text-success"></span>
-        </div>
-      </td>
-      <td><a href="" class="btn btn-xs btn-success" disabled>Edit</a></td>
-    </tr>
+    <form method="POST">
+      {% csrf_token %}
+
+      {% if webhook.instance.id %}
+      <input type="hidden" name="id" value="{{ webhook.instance.id }}" />
+      {% endif %}
+
+      <tr>
+        <td>{% bootstrap_field webhook.event form_group_class="" show_label=False %}</td>
+        <td>{% bootstrap_field webhook.notify form_group_class="" show_label=False %}</td>
+        <td>{% bootstrap_field webhook.url form_group_class="" show_label=False %}</td>
+        <td>
+          <div align="center">
+            {% bootstrap_field webhook.active form_group_class="" label="" %}
+          </div>
+        </td>
+        <td>
+          {% bootstrap_button "Save" button_type="submit" size="md" button_class="btn-primary" %}
+          {% if webhook.instance.id %}
+            {% bootstrap_button "Delete" button_type="submit" name="delete" value=webhook.instance.id size="md" button_class="btn-danger" %}
+          {% endif %}
+        </td>
+      </tr>
+    </form>
     {% endfor %}
   </table>
-
-  <div align="right">
-    <a href="" class="btn btn-success" disabled>
-      Create
-    </a>
-  </div>
 </div>
 {% endblock %}

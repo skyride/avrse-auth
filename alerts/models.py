@@ -26,10 +26,10 @@ class Webhook(models.Model):
         ('@everyone', '@everyone')
     )
 
-    event = models.CharField(max_length=64, db_index=True, choices=EVENT_CHOICES)
-    url = models.CharField(max_length=512)
-    notify = models.CharField(max_length=32, default="", choices=NOTIFY_CHOICES)
-    active = models.BooleanField(default=True)
+    event = models.CharField(max_length=64, db_index=True, choices=EVENT_CHOICES, verbose_name="Event")
+    url = models.CharField(max_length=512, verbose_name="URL")
+    notify = models.CharField(max_length=32, default="", blank=True, choices=NOTIFY_CHOICES, verbose_name="Notify")
+    active = models.BooleanField(default=True, verbose_name="Active")
 
 
     @staticmethod
