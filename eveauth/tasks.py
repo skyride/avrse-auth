@@ -322,7 +322,7 @@ def update_groups(user_id):
     user.profile.save()
 
     # Check groups are still valid with access level
-    for group in user.groups.filter(details__access_level__lt=user.profile.level):
+    for group in user.groups.filter(details__access_level__gt=user.profile.level):
         user.groups.remove(group)
 
     # Update IPB User
