@@ -52,3 +52,4 @@ django-mathfilters==0.4.0
 django-widget-tweaks==1.4.1
 python-memcached==1.59
 django-extensions==2.0.5
+django-bootstrap3==9.1.0

@@ -1,6 +1,5 @@
 {% extends 'eveauth/base.html' %}
-{% load static %}
-{% load authtags %}
+{% load static authtags bootstrap3 %}
 
 {% block title %}{{ group.name }}{% endblock %}
 
@@ -17,58 +16,13 @@
 
         <fieldset>
           <legend>Options</legend>
-          <!--<div class="form-group">
-            <label for="name" class="col-lg-2" control-label>Name</label>
-            <div class="col-lg-10">
-              <input type="text" class="form-control" id="name" name="name" value="{{ group.name }}" placeholder="Name" {% if group.name == "admin" or group.name == "FC" or group.name == "Audit" or group.name == "Logistics" %}readonly{% endif %}>
+          <div class="col-md-12">
+            {% bootstrap_form group_form %}
+            {% bootstrap_form group_details_form %}
+
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary btn-block">Save</button>
             </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-lg-2" control-label>Access</label>
-            <div class="col-lg-10">
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox" name="is_open" {{ group.details.is_open|yesno:"checked," }}> Open Group
-                </label>
-              </div>
-
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox" name="can_apply" {{ group.details.can_apply|yesno:"checked," }}> Can Apply
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-lg-2" control-label>Services</label>
-            <div class="col-lg-10">
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox" name="mumble" {{ group.details.mumble|yesno:"checked," }}> Send to Mumble
-                </label>
-              </div>
-
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox" name="forum" {{ group.details.forum|yesno:"checked," }}> Send to Forum
-                </label>
-              </div>
-
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox" name="discord" {{ group.details.discord|yesno:"checked," }}> Send to Discord
-                </label>
-              </div>
-            </div>
-          </div>-->
-
-          {{ group_form.as_p }}
-          {{ group_details_form.as_p }}
-
-          <div class="form-group">
-            <button type="submit" class="btn btn-primary btn-block">Save</button>
           </div>
         </fieldset>
       </form>

@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'mathfilters',
     'widget_tweaks',
     'django_extensions',
+    'bootstrap3',
 
     'eveauth',
     'timerboard',
