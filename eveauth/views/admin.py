@@ -377,17 +377,15 @@ def groupadmin_create(request):
 @user_passes_test(lambda x: x.groups.filter(name="admin").exists())
 def groupadmin_edit(request, id):
     group = Group.objects.get(id=id)
+    group_form = GroupForm(instance=group)
+    group_details_form = GroupDetailsForm(instance=group.details)
 
     # Check if we need to update the group
-    if request.POST.get("name", None) != None:
-        group.name = request.POST.get("name")
-        group.details.is_open = bool(request.POST.get("is_open", False))
-        group.details.can_apply = bool(request.POST.get("can_apply", False))
-        group.details.mumble = bool(request.POST.get("mumble", False))
-        group.details.forum = bool(request.POST.get("forum", False))
-        group.details.discord = bool(request.POST.get("discord", False))
-        group.save()
-        group.details.save()
+    if request.method == "POST":
+        group_form = GroupForm(request.POST, instance=group)
+        group_details_form = GroupDetailsForm(request.POST, instance=group.details)
+        group_form.save()
+        group_details_form.save()
 
     context = {
         "group": group,
