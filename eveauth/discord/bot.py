@@ -117,7 +117,7 @@ class AuthPlugin(Plugin):
                 event.member.kick()
 
         # Set their nickname to their EVE Character
-        event.member.set_nickname(social.user.profile.character.name)
+        event.member.set_nickname(social.user.profile.character.name[:32])
 
         # Set corp role
         event.member.add_role(self._get_role(event.guild, social.user.profile.corporation.ticker))
