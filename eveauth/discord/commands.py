@@ -9,7 +9,7 @@ from django.contrib.humanize.templatetags.humanize import intcomma
 from terminaltables import AsciiTable
 
 from avrseauth.settings import members, blues
-from eveauth.models import Character, Kill
+from eveauth.models import Character, Kill, Message
 from sde.models import System, Region, Type
 
 ranges = {
@@ -382,3 +382,10 @@ class BotCommands:
                     char.fatigue_text()
                 )
             )
+
+    def setmessage(self):
+        key = tokens[0]
+        value = " ".join(tokens[1:])
+
+        print key
+        print value

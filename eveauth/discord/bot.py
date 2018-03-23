@@ -94,6 +94,8 @@ class AuthPlugin(Plugin):
                     commands.strip(admin=True)
                 elif tokens[0].lower() == "!jcs":
                     commands.jcs()
+                elif tokens[0].lower() == "!setmessage":
+                    commands.setmessage()
 
             # public commands with limitations
             else:
