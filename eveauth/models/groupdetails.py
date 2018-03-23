@@ -13,13 +13,13 @@ class GroupDetails(models.Model):
 
     group = models.OneToOneField(Group, related_name="details", on_delete=models.CASCADE)
 
-    is_open = models.BooleanField(default=False)
-    can_apply = models.BooleanField(default=False)
-    access_level = models.IntegerField(default=2, choices=ACCESS_LEVEL_CHOICES)
+    is_open = models.BooleanField(default=False, verbose_name="Open Group")
+    can_apply = models.BooleanField(default=False, verbose_name="Can Apply")
+    access_level = models.IntegerField(default=2, choices=ACCESS_LEVEL_CHOICES, verbose_name="Minimum Access Level")
 
-    mumble = models.BooleanField(default=True)
-    forum = models.BooleanField(default=False)
-    discord = models.BooleanField(default=False)
+    mumble = models.BooleanField(default=True, verbose_name="Send to Mumble")
+    forum = models.BooleanField(default=False, verbose_name="Send to Forum")
+    discord = models.BooleanField(default=False, verbose_name="Send to Discord")
 
 
 @receiver(post_save, sender=Group)

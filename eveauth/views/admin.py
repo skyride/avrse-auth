@@ -18,6 +18,7 @@ from django.db.models import Q, Count, Sum
 from django.db import IntegrityError
 
 from eveauth.esi import ESI
+from eveauth.forms import GroupForm, GroupDetailsForm
 from eveauth.models import GroupApp, Character, Corporation, Alliance, Asset, Kill
 from eveauth.tasks import get_server, update_groups, spawn_groupupdates, update_discord
 from eveauth.discord.api import DiscordAPI
@@ -390,7 +391,9 @@ def groupadmin_edit(request, id):
 
     context = {
         "group": group,
-        "apps": group.apps.filter(accepted=None).order_by('created').all()
+        "apps": group.apps.filter(accepted=None).order_by('created').all(),
+        "group_form": GroupForm(instance=group),
+        "group_details_form": GroupDetailsForm(instance=group.details)
     }
 
     return render(request, "eveauth/groupadmin_edit.html", context)
