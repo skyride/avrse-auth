@@ -55,12 +55,14 @@ def groups_index(request):
     context = {
         "my_groups": my_groups,
         "open_groups": Group.objects.filter(
-            details__is_open=True
+            details__is_open=True,
+            details__access_level__lte=request.user.profile.level
         ).exclude(
             id__in=my_groups_map
         ).all(),
         "apply": Group.objects.filter(
-            details__can_apply=True
+            details__can_apply=True,
+            details__access_level__lte=request.user.profile.level
         ).exclude(
             id__in=my_groups_map
         ).all(),
@@ -85,10 +87,11 @@ def groups_leave(request, group_id):
 def groups_join(request, group_id):
     group = Group.objects.get(id=group_id)
     if group.details.is_open == True:
-        request.user.groups.add(group)
-        messages.success(request, "Joined group %s" % group.name)
+        if request.user.profile.level >= group.details.access_level:
+            request.user.groups.add(group)
+            messages.success(request, "Joined group %s" % group.name)
 
-        update_discord(request.user.id)
+            update_discord(request.user.id)
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
@@ -97,13 +100,14 @@ def groups_join(request, group_id):
 def groups_apply(request, group_id):
     group = Group.objects.get(id=group_id)
     if group.details.can_apply == True:
-        app = GroupApp(
-            user=request.user,
-            group=group
-        )
-        app.save()
+        if request.user.profile.level >= group.details.access_level:
+            app = GroupApp(
+                user=request.user,
+                group=group
+            )
+            app.save()
 
-        messages.success(request, "Applied to %s" % group.name)
+            messages.success(request, "Applied to %s" % group.name)
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
