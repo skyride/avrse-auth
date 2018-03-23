@@ -89,6 +89,26 @@ def low_fuel(structure):
     }
 
 
+def group_app(group_app):
+    return {
+        "username": "Auth Bot",
+        "embeds": [
+            {
+                "type": "rich",
+                "title": "%s applied to %s" % (
+                    group_app.user.profile.character.name,
+                    group_app.group.name
+                ),
+                "thumbnail": {
+                    "url": "https://imageserver.eveonline.com/Character/%s_512.jpg" % (
+                        group_app.user.profile.character.id
+                    )
+                }
+            }
+        ]
+    }
+
+
 def structure_attacked(notification, api=ESI()):
     data = notification.data
     system = System.objects.get(id=data['solarsystemID'])

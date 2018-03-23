@@ -1,5 +1,7 @@
 from datetime import datetime
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.contrib.auth.models import User, Group
 
 
@@ -22,3 +24,15 @@ class GroupApp(models.Model):
 
         if accepted:
             self.group.user_set.add(self.user)
+
+
+@receiver(post_save, sender=GroupApp)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        # Generate group application event
+        from alerts.models import Webhook
+        from alerts.embeds import group_app
+        Webhook.send(
+            "group_app",
+            group_app(instance)
+        )
