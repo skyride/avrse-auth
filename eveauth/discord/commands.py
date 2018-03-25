@@ -246,13 +246,21 @@ class BotCommands:
                     ]
                 )
 
-            self.reply_chunked(
-                "Characters in %s (%s)\n%s" % (
-                    location.name,
-                    location.region.name,
-                    AsciiTable(table).table
+            if location.__class__.__name__ == "System":
+                self.reply_chunked(
+                    "Characters in %s (%s)\n%s" % (
+                        location.name,
+                        location.region.name,
+                        AsciiTable(table).table
+                    )
                 )
-            )
+            else:
+                self.reply_chunked(
+                    "Characters in %s \n%s" % (
+                        location.name,
+                        AsciiTable(table).table
+                    )
+                )
 
 
     def whoinrange(self):
