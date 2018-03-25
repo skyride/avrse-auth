@@ -10,7 +10,7 @@ from terminaltables import AsciiTable
 
 from avrseauth.settings import members, blues
 from eveauth.models import Character, Kill, Message
-from sde.models import System, Region, Type
+from sde.models import System, Constellation, Region, Type
 
 ranges = {
     30: 6,      # Titans
@@ -57,6 +57,12 @@ class BotCommands:
     def get_system(self):
         self.search = " ".join(self.tokens[1:])
         return System.objects.filter(
+            name__istartswith=self.search
+        )
+
+    def get_constellation(self):
+        self.search = " ".join(self.tokens[1:])
+        return Constellation.objects.filter(
             name__istartswith=self.search
         )
 
@@ -213,6 +219,7 @@ class BotCommands:
     def whoin(self):
         # Check for location
         system = self.get_system()
+        constellation = self.get_constellation()
         region = self.get_region()
 
         chars = None
@@ -225,6 +232,11 @@ class BotCommands:
             location = region.first()
             chars = Character.objects.filter(
                 system__region=location
+            )
+        elif constellation.count() == 1:
+            location = constellation.first()
+            chars = Character.objects.filter(
+                system__constellation=location
             )
 
         if chars != None:
@@ -246,18 +258,19 @@ class BotCommands:
                     ]
                 )
 
-            if location.__class__.__name__ == "System":
+            if location.__class__.__name__ == "Region":
                 self.reply_chunked(
-                    "Characters in %s (%s)\n%s" % (
+                    "Characters in Region %s \n%s" % (
                         location.name,
-                        location.region.name,
                         AsciiTable(table).table
                     )
                 )
             else:
                 self.reply_chunked(
-                    "Characters in %s \n%s" % (
+                    "Characters in %s %s (%s)\n%s" % (
+                        location.__class__.__name__,
                         location.name,
+                        location.region.name,
                         AsciiTable(table).table
                     )
                 )
