@@ -3,10 +3,11 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-from django.contrib.auth.models import Group
 
 
-def add_groups(*args, **kwargs):
+def add_groups(apps, schema_editor):
+    Group = apps.get_model("auth", "Group")
+
     logistics, logistics_created = Group.objects.get_or_create(name="Logistics")
     audit, audit_created = Group.objects.get_or_create(name="Audit")
 
