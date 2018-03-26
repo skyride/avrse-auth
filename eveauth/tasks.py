@@ -161,7 +161,7 @@ def update_corporation(corp_id):
     # Look for character with the right roles
     corp = Corporation.objects.get(id=corp_id)
     director = corp.characters.filter(
-        roles__name="director",
+        roles__name="Director",
         token__isnull=False,
         token__extra_data__contains="esi-corporations.read_structures.v1"
     ).first()
