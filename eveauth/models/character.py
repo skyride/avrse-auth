@@ -33,7 +33,8 @@ class Character(models.Model):
     last_jump_date = models.DateTimeField(null=True, default=None)
     clone_jump_ready = models.DateTimeField(null=True, default=None)
 
-    member_visible_until = models.DateTimeField(null=True, default=None, db_index=True)
+    visible_to = models.IntegerField(null=True, default=None)
+    visible_until = models.DateTimeField(null=True, default=None)
 
     class Meta:
         ordering = ["name"]

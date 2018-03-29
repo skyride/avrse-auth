@@ -23,11 +23,12 @@ def characters_view(request, id):
     char = request.user.characters.filter(id=id)
 
     # Check if this char is member visible
-    if not char.exists() and request.user.profile.level >= 2:
+    if not char.exists():
         char = Character.objects.filter(
             id=id,
             token__isnull=False,
-            member_visible_until__gte=now()
+            visible_until__gte=now(),
+            visible_to__lte=request.user.profile.level
         )
 
     return _characters_view(request, char)
