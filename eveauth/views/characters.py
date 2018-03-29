@@ -21,6 +21,15 @@ def characters_index(request):
 @login_required
 def characters_view(request, id):
     char = request.user.characters.filter(id=id)
+
+    # Check if this char is member visible
+    if not char.exists():
+        char = Character.objects.filter(
+            id=id,
+            token__isnull=False,
+            member_visible_until__gte=now()
+        )
+
     return _characters_view(request, char)
 
 
