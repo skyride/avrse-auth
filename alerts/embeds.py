@@ -141,6 +141,11 @@ def structure_attacked(notification, api=ESI()):
                         "inline": True,
                     },
                     {
+                        "name": "Time",
+                        "value": data.date.strftime("%H:%M"),
+                        "inline": True,
+                    },
+                    {
                         "name": "Attacker",
                         "value": attacker.name,
                         "inline": True,
