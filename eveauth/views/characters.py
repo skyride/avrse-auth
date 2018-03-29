@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
+from django.utils.timezone import now
 
 from eveauth.models import Character, Asset
 
@@ -20,6 +21,15 @@ def characters_index(request):
 @login_required
 def characters_view(request, id):
     char = request.user.characters.filter(id=id)
+    return _characters_view(request, char)
+
+
+@login_required
+def characters_view_anonymous(request, key):
+    char = request.user.characters.filter(
+        public_key=key,
+        public_until__gte=now()
+    )
     return _characters_view(request, char)
 
 
