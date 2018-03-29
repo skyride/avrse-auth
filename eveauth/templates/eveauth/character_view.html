@@ -73,7 +73,7 @@
         
         <ul class="list-group">
             <li class="list-group-item">
-            {% if character.visible_until <= now %}
+            {% if not character.visible_until or character.visible_until <= now %}
               {% bootstrap_form visibility_form %}
               {% bootstrap_button content="Submit" button_type="submit" extra_classes="btn-block" button_class="btn-primary" %}
             {% else %}
