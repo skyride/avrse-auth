@@ -1,5 +1,5 @@
 {% extends 'eveauth/base.html' %}
-{% load static authtags humanize mathfilters %}
+{% load static authtags humanize mathfilters bootstrap3 %}
 
 {% block title %}{{ user.profile.character.name }}{% endblock %}
 
@@ -62,6 +62,33 @@
         </li>
       </ul>
     </div>
+
+    {% if request.user == character.owner or admin %}
+    <form method="POST">
+      {% csrf_token %}
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <strong>Make Visible</strong>
+        </div>
+        
+        <ul class="list-group">
+            <li class="list-group-item">
+            {% if character.visible_until <= now %}
+              {% bootstrap_form visibility_form %}
+              {% bootstrap_button content="Submit" button_type="submit" extra_classes="btn-block" button_class="btn-primary" %}
+            {% else %}
+              <input type="hidden" name="visible_for" value="0" />
+              <input type="hidden" name="visible_to" value="2" />
+              <div class="form-group">
+                Visible until:  {{ character.visible_until }}
+              </div>
+              {% bootstrap_button content="Reset" button_type="submit" extra_classes="btn-block" button_class="btn-danger" %}
+            {% endif %}
+          </li>
+        </ul>
+      </div>
+    </form>
+    {% endif %}
   </div>
 
 

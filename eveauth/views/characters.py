@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.db.models import Sum
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -6,6 +8,7 @@ from django.shortcuts import redirect
 from django.utils.timezone import now
 
 from eveauth.models import Character, Asset
+from eveauth.forms import CharacterVisibleToForm
 
 @login_required
 def characters_index(request):
@@ -59,6 +62,14 @@ def _characters_view(request, char):
             total_sp=Sum('skills__skillpoints_in_skill')
         ).first()
 
+    # Handle visibility form submission
+    if request.method == "POST":
+        form = CharacterVisibleToForm(request.POST)
+        if form.is_valid():
+             char.visible_to = form.cleaned_data['visible_to']
+             char.visible_until = now() + timedelta(hours=int(form.cleaned_data['visible_for']))
+             char.save()
+
     skill_groups = char.skills.values_list(
         'type__group__name',
         flat=True
@@ -88,9 +99,19 @@ def _characters_view(request, char):
             )
         )
 
+    form = CharacterVisibleToForm(
+        initial={
+            "visible_to": 2,
+            "visible_for": 168
+        }
+    )
+
     context = {
         "character": char,
-        "skill_groups": skills
+        "skill_groups": skills,
+        "visibility_form": form,
+        "admin": request.user.groups.filter(name="admin").exists(),
+        "now": now()
     }
 
     return render(request, "eveauth/character_view.html", context)
