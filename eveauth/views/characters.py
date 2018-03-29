@@ -17,8 +17,14 @@ def characters_index(request):
     return render(request, "eveauth/characters.html", context)
 
 
-def characters_view(request, id):
-    char = request.user.characters.prefetch_related(
+@login_required
+def characters_view(request, id)
+    char = request.user.characters.get(id=id)
+    return _characters_view(request, char)
+
+
+def _characters_view(request, char):
+    char = char.prefetch_related(
             'skills',
             'corp',
             'alliance',
