@@ -18,8 +18,8 @@ def characters_index(request):
 
 
 @login_required
-def characters_view(request, id)
-    char = request.user.characters.get(id=id)
+def characters_view(request, id):
+    char = request.user.characters.filter(id=id)
     return _characters_view(request, char)
 
 
@@ -37,7 +37,7 @@ def _characters_view(request, char):
             'clones__implants__type'
         ).annotate(
             total_sp=Sum('skills__skillpoints_in_skill')
-        ).get(id=id)
+        ).first()
 
     skill_groups = char.skills.values_list(
         'type__group__name',
