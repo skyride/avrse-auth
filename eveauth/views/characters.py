@@ -23,7 +23,7 @@ def characters_view(request, id):
     char = request.user.characters.filter(id=id)
 
     # Check if this char is member visible
-    if not char.exists():
+    if not char.exists() and request.user.profile.level >= 2:
         char = Character.objects.filter(
             id=id,
             token__isnull=False,
