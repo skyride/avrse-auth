@@ -16,9 +16,10 @@ from django.conf import settings
 from django.utils import timezone
 from django.db.models import Q, Count, Sum
 from django.db import IntegrityError
+from django.utils.timezone import now
 
 from eveauth.esi import ESI
-from eveauth.forms import GroupForm, GroupDetailsForm
+from eveauth.forms import GroupForm, GroupDetailsForm, CharacterVisibleToForm
 from eveauth.models import GroupApp, Character, Corporation, Alliance, Asset, Kill
 from eveauth.tasks import get_server, update_groups, spawn_groupupdates, update_discord
 from eveauth.discord.api import DiscordAPI
@@ -546,9 +547,19 @@ def characteradmin_view(request, id):
             )
         )
 
+    form = CharacterVisibleToForm(
+        initial={
+            "visible_to": 2,
+            "visible_for": 168
+        }
+    )
+
     context = {
         "character": char,
-        "skill_groups": skills
+        "skill_groups": skills,
+        "visibility_form": form,
+        "admin": request.user.groups.filter(name="admin").exists(),
+        "now": now()
     }
 
     return render(request, "eveauth/character_view.html", context)
