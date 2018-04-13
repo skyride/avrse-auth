@@ -6,53 +6,59 @@
 
 {% block content %}
 <div class="row">
-  <div class="col-md-3 col-sm-4">
+  <div class="col-md-12 col-sm-12">
     <div class="panel panel-default">
       <div class="panel-heading">
           <strong>{{ corp.name }}</strong>
       </div>
 
-      <div style="
-        min-height: 260px;
-        background-size: cover;
-        background-image: url('https://imageserver.eveonline.com/Corporation/{{ corp.id }}_256.png');
-        padding: 5px;
-      ">
-        {% if corp.alliance %}
-        <div><img src="https://imageserver.eveonline.com/Alliance/{{ corp.alliance.id }}_64.png"></div>
-        {% endif %}
+      <div class="row">
+        <div class="col-md-3">
+          <div style="
+            min-height: 256px;
+            background-size: cover;
+            background-image: url('https://imageserver.eveonline.com/Corporation/{{ corp.id }}_256.png');
+            padding: 5px;
+          ">
+            {% if corp.alliance %}
+            <div><img src="https://imageserver.eveonline.com/Alliance/{{ corp.alliance.id }}_64.png"></div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="col-md-9">
+          <ul class="list-group">
+            {% if corp.alliance %}
+            <li class="list-group-item">
+              {{ corp.alliance.name }}
+            </li>
+            {% endif %}
+
+            <li class="list-group-item">
+              {% with member_count=chars|length %}
+              {{ char_count }}/{{ member_count }} characters ({{ 100|div:member_count|mul:char_count|floatformat:1 }} %)
+              {% endwith %}
+            </li>
+
+            <li class="list-group-item">
+              CEO: {{ corp.ceo.name }}
+            </li>
+
+            <li class="list-group-item">
+              Founder: {{ corp.founder.name }}
+            </li>
+
+            <li class="list-group-item">
+              Tax Rate: {{ corp.tax_rate|mul:100|floatformat:2 }}%
+            </li>
+          </ul>
+        </div>
       </div>
-
-      <ul class="list-group">
-        {% if corp.alliance %}
-        <li class="list-group-item">
-          {{ corp.alliance.name }}
-        </li>
-        {% endif %}
-
-        <li class="list-group-item">
-          {% with member_count=chars|length %}
-          {{ char_count }}/{{ member_count }} characters ({{ 100|div:member_count|mul:char_count|floatformat:1 }} %)
-          {% endwith %}
-        </li>
-
-        <li class="list-group-item">
-          CEO: {{ corp.ceo.name }}
-        </li>
-
-        <li class="list-group-item">
-          Founder: {{ corp.founder.name }}
-        </li>
-
-        <li class="list-group-item">
-          Tax Rate: {{ corp.tax_rate|mul:100|floatformat:2 }}%
-        </li>
-      </ul>
     </div>
   </div>
 
 
-  <div class="col-md-9 col-sm-8">
+  <div class="col-md-12 col-sm-12">
     <table class="table table-striped table-condensed">
       <tr>
         <th>Character</th>
