@@ -81,6 +81,13 @@ def corpaudit_view(request, id):
         'characters__owner'
     ).get(id=id)
 
+    order_by = {
+        "character": "name",
+        "owner": "owner",
+        "location": "location",
+        "ship": "ship"
+    }[request.GET.get("orderby", "character")]
+
     # Populate corp object with extra data
     corp.member_count = r['member_count']
     corp.ceo = Character.get_or_create(r['ceo_id'])
@@ -100,19 +107,29 @@ def corpaudit_view(request, id):
 
     for char in chars:
         try:
-            char['char'] = Character.objects.get(
+            char['char'] = Character.objects.select_related(
+                "owner",
+                "ship",
+                "system"
+            ).get(
                 id=char['character_id'],
                 owner__isnull=False
             )
+
+            char['owner'] = char['char'].owner.username
+            char['location'] = char['char'].system.name
+            char['ship'] = char['char'].ship.name
         except Exception:
-            pass
+            char['owner'] = "zzzzzzzzz"
+            char['location'] = "zzzzzzzzz"
+            char['ship'] = "zzzzzzzzz"
 
     context = {
         "corp": corp,
         "char_count": corp.characters.filter(
                 owner__isnull=False
             ).count(),
-        "chars": sorted(chars, key=lambda x: x['name'])
+        "chars": sorted(chars, key=lambda x: x[order_by])
     }
 
     return render(request, "eveauth/corpaudit_view.html", context)

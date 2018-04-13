@@ -61,10 +61,10 @@
   <div class="col-md-12 col-sm-12">
     <table class="table table-striped table-condensed">
       <tr>
-        <th>Character</th>
-        <th>Owner</th>
-        <th>Location</th>
-        <th>Ship</th>
+        <th><a href="{% url 'corpaudit_view' corp.id %}?orderby=character">Character</a></th>
+        <th><a href="{% url 'corpaudit_view' corp.id %}?orderby=owner">Owner</a></th>
+        <th><a href="{% url 'corpaudit_view' corp.id %}?orderby=location">Location</th>
+        <th><a href="{% url 'corpaudit_view' corp.id %}?orderby=ship">Ship</a></th>
       </tr>
 
       {% for char in chars %}
