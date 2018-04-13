@@ -74,7 +74,7 @@ def corpaudit_search(request):
 
 @login_required
 @user_passes_test(lambda x: x.groups.filter(name="admin").exists())
-def corpaudit_view(request, id):
+def corpaudit_view(request, id, connected="all"):
     r = ESI().get("/v4/corporations/%s/" % id)
     corp = Corporation.objects.prefetch_related(
         'characters',
@@ -124,12 +124,19 @@ def corpaudit_view(request, id):
             char['location'] = "zzzzzzzzz"
             char['ship'] = "zzzzzzzzz"
 
+    if connected == "yes":
+        chars = filter(lambda char: char.get('char') is not None, chars)
+    elif connected == "no":
+        chars = filter(lambda char: char.get('char') is None, chars)
+
     context = {
         "corp": corp,
         "char_count": corp.characters.filter(
                 owner__isnull=False
             ).count(),
-        "chars": sorted(chars, key=lambda x: x[order_by])
+        "chars": sorted(chars, key=lambda x: x[order_by]),
+        "order_by": "?orderby=%s" % request.GET.get("orderby", "character"),
+        "connected": connected
     }
 
     return render(request, "eveauth/corpaudit_view.html", context)
