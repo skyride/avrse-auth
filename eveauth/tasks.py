@@ -398,10 +398,13 @@ def update_character(character_id):
             cache_key = "fail_history_character_%s" % db_char.id
             fail_history = cache.get(cache_key, [])
             if len(fail_history) > 24:
-                db_char.token.delete()
+                token = db_char.token
+
                 db_char.owner = None
                 db_char.token = None
                 db_char.save()
+
+                token.delete()
 
                 fail_history = []
             else:

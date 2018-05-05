@@ -19,15 +19,15 @@ class Character(models.Model):
     last_updated = models.DateTimeField(auto_now=True)
 
     # Extra details, these are default null
-    token = models.ForeignKey(UserSocialAuth, null=True, default=None)
-    owner = models.ForeignKey(User, null=True, default=None, related_name="characters")
-    corp = models.ForeignKey(Corporation, null=True, default=None, related_name="characters")
-    alliance = models.ForeignKey(Alliance, null=True, default=None, related_name="characters")
+    token = models.ForeignKey(UserSocialAuth, null=True, default=None, on_delete=models.SET_NULL)
+    owner = models.ForeignKey(User, null=True, default=None, related_name="characters", on_delete=models.SET_NULL)
+    corp = models.ForeignKey(Corporation, null=True, default=None, related_name="characters", on_delete=models.SET_NULL)
+    alliance = models.ForeignKey(Alliance, null=True, default=None, related_name="characters", on_delete=models.SET_NULL)
 
     wallet = models.DecimalField(max_digits=16, decimal_places=2, default=0)
-    system = models.ForeignKey(System, null=True, default=None)
-    ship = models.ForeignKey(Type, null=True, default=None)
-    home = models.ForeignKey(Station, null=True, default=None, related_name="characters")
+    system = models.ForeignKey(System, null=True, default=None, on_delete=models.SET_NULL)
+    ship = models.ForeignKey(Type, null=True, default=None, on_delete=models.SET_NULL)
+    home = models.ForeignKey(Station, null=True, default=None, related_name="characters", on_delete=models.SET_NULL)
 
     fatigue_expire_date = models.DateTimeField(null=True, default=None)
     last_jump_date = models.DateTimeField(null=True, default=None)

@@ -17,9 +17,9 @@ class Profile(models.Model):
     level = models.IntegerField(default=0)
     mumble_password = models.CharField(max_length=128, null=True, blank=True)
 
-    character = models.ForeignKey(Character, null=True)
-    corporation = models.ForeignKey(Corporation, null=True)
-    alliance = models.ForeignKey(Alliance, null=True)
+    character = models.ForeignKey(Character, null=True, on_delete=models.SET_NULL)
+    corporation = models.ForeignKey(Corporation, null=True, on_delete=models.SET_NULL)
+    alliance = models.ForeignKey(Alliance, null=True, on_delete=models.SET_NULL)
 
     forum_id = models.IntegerField(null=True)
     forum_username = models.CharField(max_length=128, null=True)
