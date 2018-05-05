@@ -7,6 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.utils.timezone import now
 
+from alerts.models import Webhook
+from alerts.embeds import character_deleted
+
 from eveauth.models import Character, Asset
 from eveauth.forms import CharacterVisibleToForm
 
@@ -130,6 +133,14 @@ def characters_delete(request, id):
 
         # Delete social auth
         token.delete()
+
+        Webhook.send(
+            "character_deleted",
+            character_deleted(
+                request.user,
+                character
+            )
+        )
 
         # Return to characters page with success message
         messages.success(request, "Disconnected auth token for %s" % character.name)

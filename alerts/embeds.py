@@ -170,3 +170,57 @@ def structure_attacked(notification, api=ESI()):
         )
 
     return out
+
+
+
+def character_embed(user, character, message, color):
+    fields = [
+        {
+            "name": "Corp",
+            "value": "%s [%s]" % (character.corp.name, character.corp.ticker),
+        }
+    ]
+    if character.alliance is not None:
+        fields.append(
+            {
+                "name": "Alliance",
+                "value": "%s [%s]" % (character.alliance.name, character.alliance.ticker),
+            }
+        )
+
+    return {
+        "username": "Auth Bot",
+        "embeds": [
+            {
+                "type": "rich",
+                "title": "%s %s %s" % (
+                    user.profile.character.name,
+                    message,
+                    character.name
+                ),
+                "thumbnail": {
+                    "url": "https://imageserver.eveonline.com/Character/%s_512.jpg" % (
+                        character.id
+                    )
+                },
+                "color": color,
+                "fields": fields
+            }
+        ]
+    }
+
+
+def character_added(user, character):
+    return character_embed(user, character, "added character", 0x0000ff)
+
+def character_deleted(user, character):
+    return character_embed(user, character, "disconnected character", 0xff0000)
+
+def character_expired(user, character):
+    return character_embed(user, character, "expired token for", 0xffff00)
+
+
+#"AN": 0x0000ff,
+#"AR": 0xffff00,
+#"ST": 0xff0000,
+#"UN": 0x0000ff

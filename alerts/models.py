@@ -19,6 +19,9 @@ class Webhook(models.Model):
         ("low_fuel_all", "Low Fuel (All)"),
         ("structure_attacked", "Structured Attacked"),
         ("group_app", "New Group Application"),
+        ("character_added", "Character Added"),
+        ("character_deleted", "Character Deleted"),
+        ("character_expired", "Character Expired")
     )
     NOTIFY_CHOICES = (
         ('', 'No'),

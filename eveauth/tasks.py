@@ -400,11 +400,21 @@ def update_character(character_id):
             if len(fail_history) > 24:
                 token = db_char.token
 
+                user = db_char.owner
+
                 db_char.owner = None
                 db_char.token = None
                 db_char.save()
 
                 token.delete()
+
+                Webhook.send(
+                    "character_expired",
+                    embeds.character_expired(
+                        user,
+                        db_char
+                    )
+                )
 
                 fail_history = []
             else:

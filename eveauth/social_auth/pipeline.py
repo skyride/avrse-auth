@@ -1,5 +1,8 @@
 from django.conf import settings
 
+from alerts.models import Webhook
+from alerts.embeds import character_added
+
 from eveauth import tasks
 from eveauth.models import Character
 
@@ -37,3 +40,10 @@ def update_character(backend, user, response, social=None, *args, **kwargs):
 
     # Call an update
     tasks.update_character(character.id)
+    character = Character.get_or_create(response['CharacterID'])
+
+    # Generate event
+    Webhook.send(
+        "character_added",
+        character_added(user, character)
+    )
