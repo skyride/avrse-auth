@@ -8,7 +8,7 @@
 * **Python 2.7**
 * **Virtualenv**
 
-And of course a WSGI server to serve the content but I'll leave that up to you. If you're unfamiliar with that then [this tutorial](http://uwsgi-docs.readthedocs.io/en/latest/tutorials/Django_and_nginx.html) should give you all the info you're looking for. For testing purposes, just running `./manage.py 0:80` will for now.
+And of course a WSGI server to serve the content but I'll leave that up to you. If you're unfamiliar with that then [this tutorial](http://uwsgi-docs.readthedocs.io/en/latest/tutorials/Django_and_nginx.html) should give you all the info you're looking for. For testing purposes, running `./manage.py 0:80` will for now.
 
 
 ## Creating the Environment
@@ -111,6 +111,39 @@ This is the main settings file you'll be editing. Let's go through all the setti
 ### eveauth/config.yaml
 
 This is just a basic config for the discord bot. All you need to do is put the same discord bot token you put in DISCORD_BOT_TOKEN above in the token field
+
+
+## Setup Commands
+
+As with any django application commands are all run using `./manage.py`. For first set up you can blindly run these commands if you've followed all the above steps. If errors occurred you've probably configured something wrong.
+
+```
+./manage.py collectstatic
+./manage.py migrate
+./manage.py updatescopes
+./manage.py fetchsde
+./manage.py updatesde
+```
+
+### collectstatic
+
+Django command that copies all the static files (CSS and images) to a folder so that they can be served by nginx/apache/etc.
+
+### migrate
+
+Migrate is just the standard django database migration command. Any time database changes are made, this is the command that runs them.
+
+### updatescopes
+
+Downloads the latest copy of the ESI spec and saves a list of all the available scopes in the database. This isn't actually use right now.
+
+### fetchsde
+
+Downloads a copy of the latest SDE from [fuzzworks](https://www.fuzzwork.co.uk/dump/)
+
+### updatesde
+
+Imports the data from that SDE you just downloaded to the database.
 
 
 ## Background Processes
