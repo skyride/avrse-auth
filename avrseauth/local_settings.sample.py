@@ -14,6 +14,13 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
+
 CELERY_APP_NAME = "avrseauth"
 BROKER_URL = "redis://127.0.0.1:6379/1"
 
