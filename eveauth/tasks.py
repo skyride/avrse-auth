@@ -92,7 +92,7 @@ def spawn_character_notification_updates():
 def spawn_corporation_updates():
     corps = Corporation.objects.filter(
         characters__token__isnull=False,
-        characters__roles__name="director"
+        characters__roles__name="Director"
     ).distinct()
     for corp in corps:
         update_corporation.delay(corp.id)
