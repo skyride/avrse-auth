@@ -47,7 +47,7 @@ class System(models.Model):
     international = models.BooleanField()
     security = models.FloatField()
     radius = models.FloatField(null=True)
-    sun = models.ForeignKey('Type')
+    sun = models.ForeignKey('Type', null=True, default=None)
     security_class = models.CharField(max_length=2, null=True)
 
     class Meta:
