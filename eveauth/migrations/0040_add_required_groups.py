@@ -3,24 +3,10 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-from django.contrib.auth.models import Group
 
 
 def add_groups(*args, **kwargs):
-    admin, admin_created = Group.objects.get_or_create(name="admin")
-    fc, fc_created = Group.objects.get_or_create(name="FC")
-
-    if admin_created:
-        admin.details.is_open = True
-        admin.details.forum = True
-        admin.details.discord = True
-        admin.details.save()
-
-    if fc_created:
-        fc.details.can_apply = True
-        fc.details.forum = True
-        fc.details.discord = True
-        fc.details.save()
+    pass
 
 
 class Migration(migrations.Migration):
