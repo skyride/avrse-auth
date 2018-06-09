@@ -314,7 +314,7 @@ def update_groups(user_id):
 
     if corp_id in members['corps'] or alliance_id in members['alliances'] or char_id in members['chars']:
         user.profile.level = 2
-    elif corp_id in blues['corps'] or alliance_id in blues['alliances'] or char_id in members['chars']:
+    elif corp_id in blues['corps'] or alliance_id in blues['alliances'] or char_id in blues['chars']:
         user.profile.level = 1
     else:
         user.profile.level = 0
