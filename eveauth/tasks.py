@@ -178,94 +178,95 @@ def update_corporation(corp_id):
             )
         ).delete()
 
-        for structure in structures:
+        if len(structures) > 0:
             with transaction.atomic():
-                db_structure = Structure.objects.filter(id=structure['structure_id']).first()
-                if db_structure == None:
-                    db_structure = Structure(id=structure['structure_id'])
+                for structure in structures:
+                    db_structure = Structure.objects.filter(id=structure['structure_id']).first()
+                    if db_structure == None:
+                        db_structure = Structure(id=structure['structure_id'])
 
-                previous_state = db_structure.state
+                    previous_state = db_structure.state
 
-                db_structure.corporation = corp
-                db_structure.type_id = structure['type_id']
-                db_structure.station = Station.get_or_create(structure['structure_id'], api)
-                db_structure.system_id = structure['system_id']
-                db_structure.profile_id = structure['profile_id']
-                db_structure.state = structure['state']
-                db_structure.reinforce_weekday = structure['reinforce_weekday']
-                db_structure.reinforce_hour = structure['reinforce_hour']
+                    db_structure.corporation = corp
+                    db_structure.type_id = structure['type_id']
+                    db_structure.station = Station.get_or_create(structure['structure_id'], api)
+                    db_structure.system_id = structure['system_id']
+                    db_structure.profile_id = structure['profile_id']
+                    db_structure.state = structure['state']
+                    db_structure.reinforce_weekday = structure['reinforce_weekday']
+                    db_structure.reinforce_hour = structure['reinforce_hour']
 
-                if "fuel_expires" in structure:
-                    db_structure.fuel_expires = parse_api_date(structure['fuel_expires'])
-                else:
-                    db_structure.fuel_expires = None
-                
-                if "state_timer_start" in structure:
-                    db_structure.state_timer_start = parse_api_date(structure['state_timer_start'])
-                else:
-                    db_structure.state_timer_start = None
+                    if "fuel_expires" in structure:
+                        db_structure.fuel_expires = parse_api_date(structure['fuel_expires'])
+                    else:
+                        db_structure.fuel_expires = None
 
-                if "state_timer_end" in structure:
-                    db_structure.state_timer_end = parse_api_date(structure['state_timer_end'])
-                else:
-                    db_structure.state_timer_end = None
-                db_structure.save()
+                    if "state_timer_start" in structure:
+                        db_structure.state_timer_start = parse_api_date(structure['state_timer_start'])
+                    else:
+                        db_structure.state_timer_start = None
 
-                db_structure.services.all().delete()
-                if "services" in structure:
-                    for service in structure['services']:
-                        Service(
-                            structure=db_structure,
-                            name=service['name'],
-                            state={'online': True, 'offline': False}[service['state']]
-                        ).save()
+                    if "state_timer_end" in structure:
+                        db_structure.state_timer_end = parse_api_date(structure['state_timer_end'])
+                    else:
+                        db_structure.state_timer_end = None
+                    db_structure.save()
 
-                # Create timer if this is newly reinforced
-                if previous_state != structure['state']:
-                    if "reinforce" in structure['state'] or structure['state'] == "anchoring":
-                        timer = Timer(
-                            structure_id=structure['type_id'],
-                            name=db_structure.station.name.replace("%s - " % db_structure.system.name, ""),
-                            owner=corp.ticker,
-                            side=0,
-                            system_id=structure['system_id'],
-                            date=db_structure.state_timer_end,
-                            stage={"armor_reinforce": "AR", "hull_reinforce": "ST", "anchoring": "AN", "unanchoring": "UN"}[structure['state']],
-                            visible_to_level=2,
-                            created_by=User.objects.first(),
-                            generated=True
-                        )
-                        timer.save()
+                    db_structure.services.all().delete()
+                    if "services" in structure:
+                        for service in structure['services']:
+                            Service(
+                                structure=db_structure,
+                                name=service['name'],
+                                state={'online': True, 'offline': False}[service['state']]
+                            ).save()
 
-                        # Structure reinforce webhook
-                        if db_structure.state in ["armor_reinforce", "hull_reinforce"]:
-                            Webhook.send(
-                                "structure_reinforce",
-                                embeds.structure_state(timer, db_structure)
+                    # Create timer if this is newly reinforced
+                    if previous_state != structure['state']:
+                        if "reinforce" in structure['state'] or structure['state'] == "anchoring":
+                            timer = Timer(
+                                structure_id=structure['type_id'],
+                                name=db_structure.station.name.replace("%s - " % db_structure.system.name, ""),
+                                owner=corp.ticker,
+                                side=0,
+                                system_id=structure['system_id'],
+                                date=db_structure.state_timer_end,
+                                stage={"armor_reinforce": "AR", "hull_reinforce": "ST", "anchoring": "AN", "unanchoring": "UN"}[structure['state']],
+                                visible_to_level=2,
+                                created_by=User.objects.first(),
+                                generated=True
                             )
-                        # Structure anchoring webhook
-                        if db_structure.state in ["anchoring", "unanchoring"]:
-                            Webhook.send(
-                                "structure_anchoring",
-                                embeds.structure_state(timer, db_structure)
-                            )
+                            timer.save()
 
-                # Ping about fuel if necessary
-                if db_structure.fuel_expires != None:
-                    time_left = db_structure.fuel_expires - timezone.now()
-                    if time_left <= timedelta(hours=72):
-                        hours_left = int(time_left.total_seconds() / 60 / 60)
-                        if hours_left % 12 == 0:
-                            if db_structure.fuel_notifications:
+                            # Structure reinforce webhook
+                            if db_structure.state in ["armor_reinforce", "hull_reinforce"]:
                                 Webhook.send(
-                                    "low_fuel_filtered",
-                                    embeds.low_fuel(db_structure)
+                                    "structure_reinforce",
+                                    embeds.structure_state(timer, db_structure)
+                                )
+                            # Structure anchoring webhook
+                            if db_structure.state in ["anchoring", "unanchoring"]:
+                                Webhook.send(
+                                    "structure_anchoring",
+                                    embeds.structure_state(timer, db_structure)
                                 )
 
-                            Webhook.send(
-                                "low_fuel_all",
-                                embeds.low_fuel(db_structure)
-                            )
+                    # Ping about fuel if necessary
+                    if db_structure.fuel_expires != None:
+                        time_left = db_structure.fuel_expires - timezone.now()
+                        if time_left <= timedelta(hours=72):
+                            hours_left = int(time_left.total_seconds() / 60 / 60)
+                            if hours_left % 12 == 0:
+                                if db_structure.fuel_notifications:
+                                    Webhook.send(
+                                        "low_fuel_filtered",
+                                        embeds.low_fuel(db_structure)
+                                    )
+
+                                Webhook.send(
+                                    "low_fuel_all",
+                                    embeds.low_fuel(db_structure)
+                                )
 
 
         print "Updated all info for Corporation %s" % corp.name
@@ -287,43 +288,44 @@ def update_groups(user_id):
     char_id = social.extra_data['id']
     char = api.get("/v4/characters/%s/" % char_id)
 
-    user.profile.character = Character.get_or_create(char_id)
-    user.profile.corporation = Corporation.get_or_create(char['corporation_id'])
-    if "alliance_id" in char:
-        user.profile.alliance = Alliance.get_or_create(char['alliance_id'])
-    else:
-        user.profile.alliance = None
+    with transaction.atomic():
+        user.profile.character = Character.get_or_create(char_id)
+        user.profile.corporation = Corporation.get_or_create(char['corporation_id'])
+        if "alliance_id" in char:
+            user.profile.alliance = Alliance.get_or_create(char['alliance_id'])
+        else:
+            user.profile.alliance = None
 
 
-    # Update groups
-    for group in user.groups.filter(name__startswith="Corp: ").all():
-        user.groups.remove(group)
-    for group in user.groups.filter(name__startswith="Alliance: ").all():
-        user.groups.remove(group)
+        # Update groups
+        for group in user.groups.filter(name__startswith="Corp: ").all():
+            user.groups.remove(group)
+        for group in user.groups.filter(name__startswith="Alliance: ").all():
+            user.groups.remove(group)
 
-    if user.profile.corporation != None:
-        user.groups.add(user.profile.corporation.group)
-    if user.profile.alliance != None:
-        user.groups.add(user.profile.alliance.group)
+        if user.profile.corporation != None:
+            user.groups.add(user.profile.corporation.group)
+        if user.profile.alliance != None:
+            user.groups.add(user.profile.alliance.group)
 
 
-    # Update access level
-    char_id = user.profile.character_id
-    corp_id = user.profile.corporation_id
-    alliance_id = user.profile.alliance_id
+        # Update access level
+        char_id = user.profile.character_id
+        corp_id = user.profile.corporation_id
+        alliance_id = user.profile.alliance_id
 
-    if corp_id in members['corps'] or alliance_id in members['alliances'] or char_id in members['chars']:
-        user.profile.level = 2
-    elif corp_id in blues['corps'] or alliance_id in blues['alliances'] or char_id in blues['chars']:
-        user.profile.level = 1
-    else:
-        user.profile.level = 0
+        if corp_id in members['corps'] or alliance_id in members['alliances'] or char_id in members['chars']:
+            user.profile.level = 2
+        elif corp_id in blues['corps'] or alliance_id in blues['alliances'] or char_id in blues['chars']:
+            user.profile.level = 1
+        else:
+            user.profile.level = 0
 
-    user.profile.save()
+        user.profile.save()
 
-    # Check groups are still valid with access level
-    for group in user.groups.filter(details__access_level__gt=user.profile.level):
-        user.groups.remove(group)
+        # Check groups are still valid with access level
+        for group in user.groups.filter(details__access_level__gt=user.profile.level):
+            user.groups.remove(group)
 
     # Update IPB User
     if ipb.is_active():
@@ -376,72 +378,73 @@ def update_character(character_id):
     # Get the db objects we need
     db_char = Character.objects.get(id=character_id)
 
-    # Grab public info from API
-    api = ESI()
-    char = api.get("/v4/characters/%s/" % db_char.id)
+    with transaction.atomic():
+        # Grab public info from API
+        api = ESI()
+        char = api.get("/v4/characters/%s/" % db_char.id)
 
-    db_char.name = char['name']
-    db_char.corp = Corporation.get_or_create(char['corporation_id'])
-    if "alliance_id" in char:
-        db_char.alliance = Alliance.get_or_create(char['alliance_id'])
-    else:
-        db_char.alliance = None
-    db_char.save()
+        db_char.name = char['name']
+        db_char.corp = Corporation.get_or_create(char['corporation_id'])
+        if "alliance_id" in char:
+            db_char.alliance = Alliance.get_or_create(char['alliance_id'])
+        else:
+            db_char.alliance = None
+        db_char.save()
 
     # Grab non-public info
     if db_char.token != None:
         api = ESI(db_char.token)
 
-        # Check refresh token to see if it's still valid
-        if api._refresh_access_token() == False:
-            # Check if we've had 24 within the last 72hrs failures. This runs hourly so that means EVE would need to be dead for a full day.
-            cache_key = "fail_history_character_%s" % db_char.id
-            fail_history = cache.get(cache_key, [])
-            if len(fail_history) > 24:
-                token = db_char.token
-
-                user = db_char.owner
-
-                db_char.owner = None
-                db_char.token = None
-                db_char.save()
-
-                token.delete()
-
-                Webhook.send(
-                    "character_expired",
-                    embeds.character_expired(
-                        user,
-                        db_char
-                    )
-                )
-
-                fail_history = []
-            else:
-                fail_history.append(now())
-
-            cache.set(cache_key, fail_history, 259200)
-            return
-
-        # Wallet
-        db_char.wallet = api.get("/v1/characters/$id/wallet/")
-
-        # Location
-        location = api.get("/v1/characters/$id/location/")
-        db_char.system_id = location['solar_system_id']
-
-        # Ship
-        ship = api.get("/v1/characters/$id/ship/")
-        db_char.ship_id = ship['ship_type_id']
-
-        # Fatigue
-        fatigue = api.get("/v1/characters/$id/fatigue/")
-        if "jump_fatigue_expire_date" in fatigue:
-            db_char.fatigue_expire_date = parse_api_date(fatigue['jump_fatigue_expire_date'])
-            db_char.last_jump_date = parse_api_date(fatigue['last_jump_date'])
-
-        # Roles
         with transaction.atomic():
+            # Check refresh token to see if it's still valid
+            if api._refresh_access_token() == False:
+                # Check if we've had 24 within the last 72hrs failures. This runs hourly so that means EVE would need to be dead for a full day.
+                cache_key = "fail_history_character_%s" % db_char.id
+                fail_history = cache.get(cache_key, [])
+                if len(fail_history) > 24:
+                    token = db_char.token
+
+                    user = db_char.owner
+
+                    db_char.owner = None
+                    db_char.token = None
+                    db_char.save()
+
+                    token.delete()
+
+                    Webhook.send(
+                        "character_expired",
+                        embeds.character_expired(
+                            user,
+                            db_char
+                        )
+                    )
+
+                    fail_history = []
+                else:
+                    fail_history.append(now())
+
+                cache.set(cache_key, fail_history, 259200)
+                return
+
+            # Wallet
+            db_char.wallet = api.get("/v1/characters/$id/wallet/")
+
+            # Location
+            location = api.get("/v1/characters/$id/location/")
+            db_char.system_id = location['solar_system_id']
+
+            # Ship
+            ship = api.get("/v1/characters/$id/ship/")
+            db_char.ship_id = ship['ship_type_id']
+
+            # Fatigue
+            fatigue = api.get("/v1/characters/$id/fatigue/")
+            if "jump_fatigue_expire_date" in fatigue:
+                db_char.fatigue_expire_date = parse_api_date(fatigue['jump_fatigue_expire_date'])
+                db_char.last_jump_date = parse_api_date(fatigue['last_jump_date'])
+
+            # Roles
             roles = api.get("/v2/characters/$id/roles/")
             db_char.roles.all().delete()
 
@@ -452,11 +455,10 @@ def update_character(character_id):
                         name=role
                     ).save()
 
-        db_char.save()
+            db_char.save()
 
-        # Skills
-        skills = api.get("/v4/characters/$id/skills/")
-        with transaction.atomic():
+            # Skills
+            skills = api.get("/v4/characters/$id/skills/")
             Skill.objects.filter(character=db_char).delete()
             for skill in skills['skills']:
                 Skill(
@@ -467,8 +469,7 @@ def update_character(character_id):
                     skillpoints_in_skill=skill['skillpoints_in_skill']
                 ).save()
 
-        # Assets
-        with transaction.atomic():
+            # Assets
             Asset.objects.filter(character=db_char).delete()
 
             page = 1
@@ -497,39 +498,38 @@ def update_character(character_id):
 
                 page = page + 1
 
-            # Fetch names for all ships/containers
-            items = list(
-                Asset.objects.filter(
-                    Q(character=db_char),
-                    Q(type__group__category_id=6) | Q(type__group__in=[12 , 340, 448])
-                ).values_list(
-                    'id',
-                    flat=True
+                # Fetch names for all ships/containers
+                items = list(
+                    Asset.objects.filter(
+                        Q(character=db_char),
+                        Q(type__group__category_id=6) | Q(type__group__in=[12 , 340, 448])
+                    ).values_list(
+                        'id',
+                        flat=True
+                    )
                 )
-            )
 
-            asset_names = api.post("/v1/characters/$id/assets/names/", data=json.dumps(items))
-            for asset in asset_names:
-                db_asset = Asset.objects.get(id=asset['item_id'])
-                db_asset.name = asset['name']
-                db_asset.save()
+                asset_names = api.post("/v1/characters/$id/assets/names/", data=json.dumps(items))
+                for asset in asset_names:
+                    db_asset = Asset.objects.get(id=asset['item_id'])
+                    db_asset.name = asset['name']
+                    db_asset.save()
 
-            # Fix systems
-            db_assets = Asset.objects.filter(
-                character=db_char,
-                system__isnull=True
-            ).all()
-            for db_asset in db_assets:
-                try:
-                    if db_asset.parent != None:
-                        db_asset.system = db_asset.parent.system
-                except Asset.DoesNotExist:
-                    pass
-                    #print db_asset.parent_id
-                db_asset.save()
+                # Fix systems
+                db_assets = Asset.objects.filter(
+                    character=db_char,
+                    system__isnull=True
+                ).all()
+                for db_asset in db_assets:
+                    try:
+                        if db_asset.parent != None:
+                            db_asset.system = db_asset.parent.system
+                    except Asset.DoesNotExist:
+                        pass
+                        #print db_asset.parent_id
+                    db_asset.save()
 
-        # Implants
-        with transaction.atomic():
+            # Implants
             implants = api.get("/v1/characters/$id/implants/")
             db_char.implants.all().delete()
             for implant in implants:
@@ -538,39 +538,39 @@ def update_character(character_id):
                     type_id=implant
                 ).save()
 
-        # Clones
-        info_sync = db_char.skills.filter(type_id=33399).first()
-        if info_sync != None:
-            info_sync = timedelta(hours=info_sync.trained_skill_level)
-        else:
-            info_sync = timedelta(hours=0)
-
-        clones = api.get("/v3/characters/$id/clones/")
-        db_char.home = Station.get_or_create(clones['home_location']['location_id'], api)
-        if "last_clone_jump_date" in clones:
-            db_char.clone_jump_ready = parse_api_date(clones['last_clone_jump_date']) - info_sync + timedelta(hours=24)
-        db_char.save()
-
-        db_char.clones.all().delete()
-        for clone in clones['jump_clones']:
-            if "name" in clone:
-                name = clone['name']
+            # Clones
+            info_sync = db_char.skills.filter(type_id=33399).first()
+            if info_sync != None:
+                info_sync = timedelta(hours=info_sync.trained_skill_level)
             else:
-                name = ""
+                info_sync = timedelta(hours=0)
 
-            db_clone = Clone(
-                id=clone['jump_clone_id'],
-                character=db_char,
-                name=name,
-                location=Station.get_or_create(clone['location_id'], api)
-            )
-            db_clone.save()
+            clones = api.get("/v3/characters/$id/clones/")
+            db_char.home = Station.get_or_create(clones['home_location']['location_id'], api)
+            if "last_clone_jump_date" in clones:
+                db_char.clone_jump_ready = parse_api_date(clones['last_clone_jump_date']) - info_sync + timedelta(hours=24)
+            db_char.save()
 
-            for implant in clone['implants']:
-                CloneImplant(
-                    clone=db_clone,
-                    type_id=implant
-                ).save()
+            db_char.clones.all().delete()
+            for clone in clones['jump_clones']:
+                if "name" in clone:
+                    name = clone['name']
+                else:
+                    name = ""
+
+                db_clone = Clone(
+                    id=clone['jump_clone_id'],
+                    character=db_char,
+                    name=name,
+                    location=Station.get_or_create(clone['location_id'], api)
+                )
+                db_clone.save()
+
+                for implant in clone['implants']:
+                    CloneImplant(
+                        clone=db_clone,
+                        type_id=implant
+                    ).save()
 
         print "Updated all info for character %s" % db_char.name
 
@@ -652,11 +652,6 @@ def update_character_notifications(character_id):
 
 
 
-        
-            
-
-
-
 @app.task(name="spawn_price_updates")
 def spawn_price_updates(inline=False):
     def chunks(l, n):
@@ -721,29 +716,30 @@ def update_kills(char_id):
     char = Character.objects.get(id=char_id)
     kills = requests.get("https://zkillboard.com/api/kills/characterID/%s/" % char_id).json()
 
-    new = 0
-    for kill in kills:
-        if "character_id" in kill['victim']:
-            db_kill, created = Kill.objects.get_or_create(
-                id=kill['killmail_id'],
-                defaults={
-                    'victim': Character.get_or_create(
-                            kill['victim']['character_id']
-                        ),
-                    'ship_id': kill['victim']['ship_type_id'],
-                    'system_id': kill['solar_system_id'],
-                    'price': kill['zkb']['totalValue'],
-                    'date': parse_api_date(kill['killmail_time'])
-                }
-            )
+    with transaction.atomic():
+        new = 0
+        for kill in kills:
+            if "character_id" in kill['victim']:
+                db_kill, created = Kill.objects.get_or_create(
+                    id=kill['killmail_id'],
+                    defaults={
+                        'victim': Character.get_or_create(
+                                kill['victim']['character_id']
+                            ),
+                        'ship_id': kill['victim']['ship_type_id'],
+                        'system_id': kill['solar_system_id'],
+                        'price': kill['zkb']['totalValue'],
+                        'date': parse_api_date(kill['killmail_time'])
+                    }
+                )
 
-            if created:
-                new = new + 1
-                for attacker in kill['attackers']:
-                    if "character_id" in attacker:
-                        db_kill.killers.add(
-                            Character.get_or_create(attacker['character_id'])
-                        )
+                if created:
+                    new = new + 1
+                    for attacker in kill['attackers']:
+                        if "character_id" in attacker:
+                            db_kill.killers.add(
+                                Character.get_or_create(attacker['character_id'])
+                            )
 
     print "Added %s new kills for %s" % (
         new,
