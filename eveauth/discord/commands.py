@@ -159,8 +159,12 @@ class BotCommands:
         user = self.get_user()
         if self.search == "":
             user = self.user
-        chars = user.characters.all()
 
+        if user is None:
+            self.reply_chunked("No characters found")
+            return
+
+        chars = user.characters.all()
         last30 = Kill.objects.filter(
             killers__in=chars,
             date__gte=timezone.now() - timedelta(days=30)
@@ -238,6 +242,9 @@ class BotCommands:
             chars = Character.objects.filter(
                 system__constellation=location
             )
+        else:
+            self.reply_chunked("No such system, constellation or region found")
+            return
 
         if chars != None:
             table = [["Owner", "Char", "Ship", "System", "Fatigue"]]
@@ -280,6 +287,11 @@ class BotCommands:
         target = self.get_system()
         if target != None:
             target = target.first()
+
+            if target is None:
+                self.reply_chunked("No such system found")
+                return
+
             chars = Character.objects.filter(owner__isnull=False)
             table = [["Owner", "Char", "Ship", "System", "Range", "Fatigue"]]
 
@@ -315,8 +327,11 @@ class BotCommands:
 
     def jcs(self):
         target = self.get_system()
-        if target != None:
-            target = target.first()
+        target = target.first()
+        if target is None:
+            self.reply_chunked("No such system found")
+
+        if target is not None:
             chars = Character.objects.filter(
                 owner__isnull=False,
                 clones__location__system=target
@@ -349,16 +364,24 @@ class BotCommands:
 
     def alts(self):
         user = self.get_user()
-        self.event.reply(
-            self.monowrap(
-                "Alts of %s\n%s" % (
-                    user.profile.character.name,
-                    ", ".join(
-                        user.characters.all().values_list('name', flat=True)
+
+        if user is not None:
+            self.event.reply(
+                self.monowrap(
+                    "Alts of %s\n%s" % (
+                        user.profile.character.name,
+                        ", ".join(
+                            user.characters.all().values_list('name', flat=True)
+                        )
                     )
                 )
             )
-        )
+        else:
+            self.event.reply(
+                self.monowrap(
+                    "No characters found"
+                )
+            )
 
 
     def fatigue(self, admin=False):
@@ -375,7 +398,7 @@ class BotCommands:
             )
 
         elif chars.count() == 0:
-            self.event.reply("No Characters Found")
+            self.event.reply("No such character Found")
 
         elif chars.count() > 1:
             self.event.reply(
