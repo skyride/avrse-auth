@@ -99,6 +99,8 @@ class AuthPlugin(Plugin):
                         commands.strip(admin=True)
                     elif tokens[0].lower() == "!jcs":
                         commands.jcs()
+                    elif tokens[0].lower() == "!locate":
+                        commands.locate(admin=True)
                     elif tokens[0].lower() == "!setmessage":
                         commands.setmessage()
 
@@ -108,6 +110,8 @@ class AuthPlugin(Plugin):
                         commands.fatigue(admin=False)
                     elif tokens[0].lower() == "!strip":
                         commands.strip(admin=False)
+                    elif tokens[0].lower() == "!locate":
+                        commands.locate(admin=False)
         except:
             traceback.print_exc()
 

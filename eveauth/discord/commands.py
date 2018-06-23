@@ -384,6 +384,20 @@ class BotCommands:
             )
 
 
+    def locate(self, admin=False):
+        if admin:
+            chars = self.get_all_chars()
+        else:
+            chars = self.get_personal_chars()
+
+        if chars.count() == 0:
+            self.reply_chunked("No such character found")
+            return
+
+        char = chars.first()
+        self.reply_chunked("I found your scum sucker %s, they're in %s in %s in a %s" % (char.name, char.system.name, char.system.region.name, char.ship.name))
+
+
     def fatigue(self, admin=False):
         if admin:
             chars = self.get_all_chars()
