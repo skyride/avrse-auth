@@ -223,7 +223,8 @@ class BotCommands:
     def sabres(self):
         chars = Character.objects.filter(
             owner__isnull=False,
-            ship__group_id=541
+            ship__group_id=541,
+            system_id__lt=31000000
         ).order_by(
             'ship__group__name',
             'ship__name',
