@@ -248,7 +248,7 @@ class BotCommands:
                 )
 
             self.reply_chunked(
-                "All Dictors\n%s" % (
+                "All Dictors in k-space\n%s" % (
                     AsciiTable(table).table
                 )
             )
