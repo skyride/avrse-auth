@@ -220,6 +220,39 @@ class BotCommands:
             )
 
 
+    def sabres(self):
+        chars = Character.objects.filter(
+            owner__isnull=False,
+            ship__group_id=541
+        ).order_by(
+            'ship__group__name',
+            'ship__name',
+            'system__region__name',
+            'system__name',
+            'owner__username',
+            'name'
+        )
+
+        if chars.count() > 1:
+            table = [["Owner", "Char", "Ship", "System", "Region"]]
+            for char in chars.all():
+                table.append(
+                    [
+                        char.owner.profile.character.name,
+                        char.name,
+                        char.ship.name,
+                        char.system.name,
+                        char.system.region.name
+                    ]
+                )
+
+            self.reply_chunked(
+                "All Dictors\n%s" % (
+                    AsciiTable(table).table
+                )
+            )
+
+
     def whoin(self):
         # Check for location
         system = self.get_system()

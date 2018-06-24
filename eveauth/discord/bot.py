@@ -95,6 +95,8 @@ class AuthPlugin(Plugin):
                         commands.whoinrange()
                     elif tokens[0].lower() == "!supers":
                         commands.supers()
+                    elif tokens[0].lower() == "!sabres" or tokens[0].lower() == "!dictors":
+                        commands.sabres()
                     elif tokens[0].lower() == "!strip":
                         commands.strip(admin=True)
                     elif tokens[0].lower() == "!jcs":
