@@ -186,6 +186,30 @@ class BotCommands:
         )
 
 
+    def sabrefeed(self):
+        chars = user.characters.all()
+        last30 = Kill.objects.filter(
+            victim__owner__profile__character__corp=98040755,
+            ship_id=22456,
+            date__gte=timezone.now() - timedelta(days=30)
+        ).distinct().count()
+
+        last90 = Kill.objects.filter(
+            victim__owner__profile__character__corp=98040755,
+            ship_id=22456,
+            date__gte=timezone.now() - timedelta(days=90)
+        ).distinct().count()
+
+        self.event.reply(
+            self.monowrap(
+                "HK Sabre losses\nLast 30 Days: %s\nLast 90 Days: %s" % (
+                    last30,
+                    last90
+                )
+            )
+        )
+
+
     def supers(self):
         chars = Character.objects.filter(
             owner__isnull=False,

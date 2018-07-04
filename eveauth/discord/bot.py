@@ -26,7 +26,6 @@ class AuthPlugin(Plugin):
             tokens = event.content.split()
 
             if tokens[0] == "!evetime":
-                raise TypeError
                 event.reply(datetime.utcnow().strftime("EVETime: %H:%M:%S"))
 
             elif tokens[0] == "!range":
@@ -114,6 +113,8 @@ class AuthPlugin(Plugin):
                         commands.strip(admin=False)
                     elif tokens[0].lower() == "!locate":
                         commands.locate(admin=False)
+                    elif tokens[0].lower() == "!sabrefeed":
+                        commands.sabrefeed()
         except:
             traceback.print_exc()
 
