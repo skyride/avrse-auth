@@ -191,13 +191,13 @@ class BotCommands:
             victim__owner__profile__level=2,
             ship_id=22456,
             date__gte=timezone.now() - timedelta(days=30)
-        ).distinct().count()
+        ).count()
 
         last90 = Kill.objects.filter(
             victim__owner__profile__level=2,
             ship_id=22456,
             date__gte=timezone.now() - timedelta(days=90)
-        ).distinct().count()
+        ).count()
 
         self.event.reply(
             self.monowrap(
