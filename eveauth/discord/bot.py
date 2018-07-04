@@ -80,6 +80,8 @@ class AuthPlugin(Plugin):
                     )
                 elif tokens[0].lower() == "!kills":
                     commands.kills()
+                elif tokens[0].lower() == "!sabrefeed":
+                    commands.sabrefeed()
 
                 admin = user.groups.filter(name="FC").exists()
                 # Admin only commands
@@ -113,8 +115,6 @@ class AuthPlugin(Plugin):
                         commands.strip(admin=False)
                     elif tokens[0].lower() == "!locate":
                         commands.locate(admin=False)
-                    elif tokens[0].lower() == "!sabrefeed":
-                        commands.sabrefeed()
         except:
             traceback.print_exc()
 
