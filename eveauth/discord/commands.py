@@ -187,7 +187,6 @@ class BotCommands:
 
 
     def sabrefeed(self):
-        chars = user.characters.all()
         last30 = Kill.objects.filter(
             victim__owner__profile__level=2,
             ship_id=22456,
