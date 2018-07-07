@@ -306,7 +306,9 @@ class BotCommands:
         if chars != None:
             table = [["Owner", "Char", "Ship", "System", "Fatigue"]]
 
-            for char in chars.order_by(
+            for char in chars.filter(
+                owner__isnull=False
+            ).order_by(
                 'system__name',
                 'ship__group__name',
                 'ship__name',
