@@ -20,7 +20,7 @@ First we need to create a virtualenv to run the application.
 * `source bin/activate`
 * Clone the repo by running `git clone https://github.com/skyride/avrse-auth`
 * `cd avrse-auth`
-* `pip install -r requirements.txt` If this generates any errors it'll just be because of missing packages on your server you can install with apt/yum/etc. If you get an error with zeroc-ice (the library used to talk to mumble) try `sudo apt-get install libssl-dev`
+* `pip install -r requirements.txt` If this generates any errors it'll just be because of missing packages on your server you can install with apt/yum/etc. If you get an error with zeroc-ice (the library used to talk to mumble) try `sudo apt-get install libssl-dev` and `sudo apt-get install libbz2-dev`
 * If using MySQL: `pip install MySQL-python`
 * If using PostgreSQL: `pip install psycopg2`
 * `cp avrseauth/local_settings.sample.py avrseauth/local_settings.py`
