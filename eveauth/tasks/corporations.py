@@ -18,7 +18,7 @@ from timerboard.models import Timer
 
 
 # Update data on all corporations with director tokens
-@app.task(name="spawn_corporation_updates")
+@app.task(name="spawn_corporation_updates", expires=3600)
 def spawn_corporation_updates():
     corps = Corporation.objects.filter(
         characters__token__isnull=False,
@@ -29,7 +29,7 @@ def spawn_corporation_updates():
 
 
 # Update all corp data from the first available director API
-@app.task(name="update_corporation")
+@app.task(name="update_corporation", expires=3600)
 def update_corporation(corp_id):
     # Look for character with the right roles
     corp = Corporation.objects.get(id=corp_id)

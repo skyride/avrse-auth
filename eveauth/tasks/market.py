@@ -6,7 +6,7 @@ from avrseauth.celery import app
 from sde.models import Type
 
 
-@app.task(name="spawn_price_updates")
+@app.task(name="spawn_price_updates", expires=86400)
 def spawn_price_updates(inline=False):
     def chunks(l, n):
         for i in range(0, len(l), n):
@@ -33,7 +33,7 @@ def spawn_price_updates(inline=False):
     print "Queued price updates"
 
 
-@app.task(name="update_prices")
+@app.task(name="update_prices", expires=86400)
 def update_prices(item_ids):
     r = requests.get(
         "https://market.fuzzwork.co.uk/aggregates/",

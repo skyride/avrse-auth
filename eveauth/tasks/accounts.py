@@ -12,7 +12,7 @@ from eveauth.models.corporation import Corporation
 
 
 # Update user groups from the API
-@app.task(name="spawn_groupupdates")
+@app.task(name="spawn_groupupdates", expires=3600)
 def spawn_groupupdates():
     users = User.objects.all()
     for user in users:
@@ -23,7 +23,7 @@ def spawn_groupupdates():
 
 
 # Update a users groups from the API
-@app.task(name="update_groups")
+@app.task(name="update_groups", expires=3600)
 def update_groups(user_id):
     from .characters import update_character
     from .services import update_discord

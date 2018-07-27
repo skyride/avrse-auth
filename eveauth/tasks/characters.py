@@ -29,7 +29,7 @@ from sde.models import Station
 
 
 # Update location for characters with tokens
-@app.task(name="spawn_character_location_updates")
+@app.task(name="spawn_character_location_updates", expires=300)
 def spawn_character_location_updates():
     chars = Character.objects.filter(
         token__isnull=False
@@ -40,7 +40,7 @@ def spawn_character_location_updates():
     print "Spawned character location update tasks for %s chars" % chars.count()
 
 
-@app.task(name="spawn_character_notification_updates")
+@app.task(name="spawn_character_notification_updates", expires=300)
 def spawn_character_notification_updates():
     chars = Character.objects.filter(
         token__isnull=False
@@ -55,7 +55,7 @@ def spawn_character_notification_updates():
     print "Spawned notification updates for %s characters" % count
 
 
-@app.task(name="update_character")
+@app.task(name="update_character", expires=3600)
 def update_character(character_id):
     # Get the db objects we need
     db_char = Character.objects.get(id=character_id)
@@ -258,7 +258,7 @@ def update_character(character_id):
 
 
 
-@app.task(name="update_character_location")
+@app.task(name="update_character_location", expires=300)
 def update_character_location(character_id):
     # Get the db objects we need
     db_char = Character.objects.get(id=character_id)
@@ -277,7 +277,7 @@ def update_character_location(character_id):
     print "Updated location info for character %s" % db_char.name
 
 
-@app.task(name="update_character_notifications")
+@app.task(name="update_character_notifications", expires=300)
 def update_character_notifications(character_id):
     # Get the db objects we need
     db_char = Character.objects.prefetch_related('token').get(id=character_id)

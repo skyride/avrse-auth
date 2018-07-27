@@ -11,7 +11,7 @@ from eveauth.models.templink import Templink
 #########################################
 # Discord
 #########################################
-@app.task(name="update_discord")
+@app.task(name="update_discord", expires=3600)
 def update_discord(user_id):
     if not is_bot_active():
         return
@@ -63,7 +63,7 @@ def get_server():
 
 
 # Move people to mumble
-@app.task(name="mumble_afk_check")
+@app.task(name="mumble_afk_check", expires=5)
 def mumble_afk_check():
     if settings.MUMBLE_AUTO_AFK:
         server = get_server()
@@ -102,7 +102,7 @@ def purge_templink_users(templink_id, reason="Templink deactivated"):
 
 
 # Set expired templinks inactive and kick anyone using them from mumble
-@app.task(name="purge_expired_templinks")
+@app.task(name="purge_expired_templinks", expires=5)
 def purge_expired_templinks():
     templinks = Templink.objects.filter(
         active=True,
