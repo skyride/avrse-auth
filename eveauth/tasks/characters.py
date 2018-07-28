@@ -320,15 +320,15 @@ def update_character_notifications(character_id):
                             )
 
         # Add character to notifications it doesn't yet belong to
-        existing = set(
-            db_char.notifications.filter(
-                id__in=map(lambda x: x['notification_id'], notifications)
-            ).values_list(
-                'id',
-                flat=True
-            )
-        )
-        new = set(map(lambda x: x['notification_id'], notifications)) - existing
+        #existing = set(
+        #    db_char.notifications.filter(
+        #        id__in=map(lambda x: x['notification_id'], notifications)
+        #    ).values_list(
+        #        'id',
+        #        flat=True
+        #    )
+        #)
+        #new = set(map(lambda x: x['notification_id'], notifications)) - existing
 
         print "Updated notifications for character %s" % db_char.name
 
