@@ -1,5 +1,6 @@
 import ujson as json
 import requests
+import time
 
 from datetime import timedelta
 
@@ -57,7 +58,9 @@ def spawn_character_notification_updates():
 
 @app.task(name="update_character", expires=3600)
 def update_character(character_id):
-    # Get the db objects we need
+    # Start the timer
+    start_time = time.time()
+
     db_char = Character.objects.get(id=character_id)
 
     with transaction.atomic():
@@ -257,7 +260,7 @@ def update_character(character_id):
                         type_id=implant
                     ).save()
 
-        print "Updated all info for character %s" % db_char.name
+        print "Updated all info for character %s in %s seconds" % (db_char.name, time.time() - start_time)
 
 
 
