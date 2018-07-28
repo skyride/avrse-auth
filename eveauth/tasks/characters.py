@@ -285,7 +285,7 @@ def update_character_notifications(character_id):
 
     # Check token has the scope
     if "esi-characters.read_notifications.v1" in db_char.token.extra_data['scopes']:
-        notifications = api.get("/v1/characters/$id/notifications/")
+        notifications = api.get("/v2/characters/$id/notifications/")
 
         # Add notifications that don't exist
         existing = set(
