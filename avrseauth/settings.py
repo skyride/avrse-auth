@@ -192,41 +192,71 @@ STATIC_ROOT = os.path.join(_PATH, 'static')
 # How many hours between rechecking user groups via API
 USER_UPDATE_DELAY = 1
 
+from kombu import Exchange, Queue
+CELERY_DEFAULT_QUEUE = "medium"
+CELERY_QUEUES = [
+    Queue('high', Exchange('high'), routing_key="high"),
+    Queue('medium', Exchange('medium'), routing_key="medium")
+]
 
 from datetime import timedelta
 CELERYBEAT_SCHEDULE = {
     # Update user groups once an hour
     'spawn_groupupdates': {
         'task': 'spawn_groupupdates',
-        'schedule': timedelta(hours=USER_UPDATE_DELAY)
+        'schedule': timedelta(hours=USER_UPDATE_DELAY),
+        'options': {
+            'queue': 'high'
+        }
     },
     'spawn_price_updates': {
         'task': 'spawn_price_updates',
-        'schedule': timedelta(hours=24)
+        'schedule': timedelta(hours=24),
+        'options': {
+            'queue': 'high'
+        }
     },
     'spawn_kill_updates': {
         'task': 'spawn_kill_updates',
-        'schedule': timedelta(hours=12)
+        'schedule': timedelta(hours=12),
+        'options': {
+            'queue': 'high'
+        }
     },
     'spawn_corporation_updates': {
         'task': 'spawn_corporation_updates',
-        'schedule': timedelta(hours=1)
+        'schedule': timedelta(hours=1),
+        'options': {
+            'queue': 'high'
+        }
     },
     'spawn_character_location_updates': {
         'task': 'spawn_character_location_updates',
-        'schedule': timedelta(minutes=5)
+        'schedule': timedelta(minutes=5),
+        'options': {
+            'queue': 'high'
+        }
     },
     'spawn_character_notification_updates': {
         'task': 'spawn_character_notification_updates',
-        'schedule': timedelta(minutes=5)
+        'schedule': timedelta(minutes=5),
+        'options': {
+            'queue': 'high'
+        }
     },
     'purge_expired_templinks': {
         'task': 'purge_expired_templinks',
-        'schedule': timedelta(seconds=5)
+        'schedule': timedelta(seconds=5),
+        'options': {
+            'queue': 'high'
+        }
     },
     'mumble_afk_check': {
         'task': 'mumble_afk_check',
-        'schedule': timedelta(seconds=5)
+        'schedule': timedelta(seconds=5),
+        'options': {
+            'queue': 'high'
+        }
     }
 }
 
