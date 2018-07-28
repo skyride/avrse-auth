@@ -142,14 +142,17 @@ def update_character(character_id):
             # Skills
             skills = api.get("/v4/characters/$id/skills/")
             Skill.objects.filter(character=db_char).delete()
+            db_skills = []
             for skill in skills['skills']:
-                Skill(
+                db_skill = Skill(
                     character=db_char,
                     type_id=skill['skill_id'],
                     trained_skill_level=skill['trained_skill_level'],
                     active_skill_level=skill['active_skill_level'],
                     skillpoints_in_skill=skill['skillpoints_in_skill']
-                ).save()
+                )
+                db_skills.append(db_skill)
+            Skill.objects.bulk_create(db_skills)
 
             # Assets
             Asset.objects.filter(character=db_char).delete()
