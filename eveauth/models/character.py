@@ -33,6 +33,9 @@ class Character(models.Model):
     last_jump_date = models.DateTimeField(null=True, default=None)
     clone_jump_ready = models.DateTimeField(null=True, default=None)
 
+    last_login = models.DateTimeField(null=True, default=None)
+    last_logoff = models.DateTimeField(null=True, default=None)
+
     visible_to = models.IntegerField(null=True, default=None)
     visible_until = models.DateTimeField(null=True, default=None)
 

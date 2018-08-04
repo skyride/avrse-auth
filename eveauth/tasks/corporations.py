@@ -7,6 +7,7 @@ from django.utils import timezone
 from avrseauth.celery import app
 
 from eveauth.esi import ESI, parse_api_date
+from eveauth.models.character import Character
 from eveauth.models.corporation import Corporation
 from eveauth.models.structure import Service
 from eveauth.models.structure import Structure
@@ -31,8 +32,9 @@ def spawn_corporation_updates():
 # Update all corp data from the first available director API
 @app.task(name="update_corporation", expires=3600)
 def update_corporation(corp_id):
-    # Look for character with the right roles
     corp = Corporation.objects.get(id=corp_id)
+
+    # Structures
     director = corp.characters.filter(
         roles__name="Director",
         token__isnull=False,
@@ -42,7 +44,6 @@ def update_corporation(corp_id):
     if director != None:
         api = ESI(director.token)
 
-        # Structures
         structures = api.get("/v2/corporations/%s/structures/" % corp.id)
         corp.structures.exclude(
             id__in=map(
@@ -142,4 +143,28 @@ def update_corporation(corp_id):
                                 )
 
 
-        print "Updated all info for Corporation %s" % corp.name
+        print "Updated structures for %s" % corp.name
+
+
+    # Member Tracking
+    director = corp.characters.filter(
+        roles__name="Director",
+        token__isnull=False,
+        token__extra_data__contains="esi-corporations.read_corporation_membership.v1"
+    ).first()
+
+    if director != None:
+        api = ESI(director.token)
+
+        members = api.get("/v1/corporations/%s/membertracking/" % corp.id)
+        if members is not None:
+            with transaction.atomic():
+                for member in members:
+                    char = Character.get_or_create(member['character_id'])
+                    char.corp = corp
+                    char.last_login = parse_api_date(member['logon_date'])
+                    char.last_logoff = parse_api_date(member['logoff_date'])
+                    char.ship_id = member['ship_type_id']
+                    char.save()
+
+        print "Updated %s members for %s" % (len(members), corp.name)
