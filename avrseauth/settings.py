@@ -134,25 +134,27 @@ SOCIAL_AUTH_EVEONLINE_SCOPE = [
     "publicData"
 ]
 SOCIAL_AUTH_CHARACTER_AUTH_SCOPE = [
-    "esi-assets.read_assets.v1",                    # SEE UR STUFF
-    "esi-characters.read_corporation_roles.v1",     # SEE UR ROLES
-    "esi-characters.read_fatigue.v1",               # SEE UR SPACE AIDS
-    "esi-clones.read_clones.v1",                    # SEE UR JUMP CLONES
-    "esi-clones.read_implants.v1",                  # SEE UR IMPLANTS
-    "esi-location.read_location.v1",                # SEE WHERE UR AT
+    "esi-assets.read_assets.v1",                        # SEE UR STUFF
+    "esi-characters.read_corporation_roles.v1",         # SEE UR ROLES
+    "esi-characters.read_fatigue.v1",                   # SEE UR SPACE AIDS
+    "esi-clones.read_clones.v1",                        # SEE UR JUMP CLONES
+    "esi-clones.read_implants.v1",                      # SEE UR IMPLANTS
+    "esi-location.read_location.v1",                    # SEE WHERE UR AT
     "esi-location.read_online.v1",
     "esi-location.read_ship_type.v1",
-    "esi-search.search_structures.v1",              # SEE SHITADELS UR STUFF IS IN
+    "esi-search.search_structures.v1",                  # SEE SHITADELS UR STUFF IS IN
     "esi-universe.read_structures.v1",
-    "esi-skills.read_skills.v1",                    # SEE UR SKILLS
+    "esi-skills.read_skills.v1",                        # SEE UR SKILLS
     "esi-skills.read_skillqueue.v1",
-    "esi-wallet.read_character_wallet.v1",          # SEE UR SPACE GOLD
-    "esi-corporations.read_structures.v1",          # SEE UR CORP'S STRUCTURES
-    "esi-corporations.read_standings.v1",           # SEE UR CORP'S STANDINGS
-    "esi-corporations.read_titles.v1",              # SEE UR CORP'S TITLES
-    "esi-assets.read_corporation_assets.v1",        # SEE UR CORP'S STUFF
-    "esi-corporations.read_divisions.v1",           # GET UR CORP'S DIVISION NAMES
-    "esi-characters.read_notifications.v1",         # SEE UR NOTIFICATIONS
+    "esi-wallet.read_character_wallet.v1",              # SEE UR SPACE GOLD
+    "esi-corporations.read_structures.v1",              # SEE UR CORP'S STRUCTURES
+    "esi-corporations.read_standings.v1",               # SEE UR CORP'S STANDINGS
+    "esi-corporations.read_titles.v1",                  # SEE UR CORP'S TITLES
+    "esi-assets.read_corporation_assets.v1",            # SEE UR CORP'S STUFF
+    "esi-corporations.read_divisions.v1",               # GET UR CORP'S DIVISION NAMES
+    "esi-characters.read_notifications.v1",             # SEE UR NOTIFICATIONS
+    "esi-corporations.read_corporation_membership.v1",  # SEE UR CORP'S MEMBER LIST
+    "esi-corporations.track_members.v1",                # SEE WHERE EVERYONE IN UR CORP IS
 ]
 SOCIAL_AUTH_DISCORD_SCOPE = [
     "identify"
