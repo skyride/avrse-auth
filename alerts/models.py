@@ -21,7 +21,9 @@ class Webhook(models.Model):
         ("group_app", "New Group Application"),
         ("character_added", "Character Added"),
         ("character_deleted", "Character Deleted"),
-        ("character_expired", "Character Expired")
+        ("character_expired", "Character Expired"),
+        ("character_joined", "Character Joined Corp"),
+        ("character_left", "Character Left Corp")
     )
     NOTIFY_CHOICES = (
         ('', 'No'),

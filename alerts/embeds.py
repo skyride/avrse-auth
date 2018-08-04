@@ -219,6 +219,60 @@ def character_deleted(user, character):
 def character_expired(user, character):
     return character_embed(user, character, "expired token for", 0xffff00)
 
+def character_joined(character, corp):
+    if character.owner is not None:
+        owned_by = character.owner.profile.character.name
+    else:
+        owned_by = "Unknown"
+
+    return {
+        "username": "Auth Bot",
+        "embeds": [
+            {
+                "type": "rich",
+                "title": "%s joined %s" % (character.name, corp.name),
+                "thumbnail": {
+                    "url": "https://imageserver.eveonline.com/Character/%s_512.jpg" % character.id
+                },
+                "color": 0x0000ff,
+                "fields": [
+                    {
+                        "name": "Owned By",
+                        "value": owned_by,
+                        "inline": True,
+                    }
+                ]
+            }
+        ]
+    }
+
+def character_left(character, corp):
+    if character.owner is not None:
+        owned_by = character.owner.profile.character.name
+    else:
+        owned_by = "Unknown"
+
+    return {
+        "username": "Auth Bot",
+        "embeds": [
+            {
+                "type": "rich",
+                "title": "%s left %s" % (character.name, corp.name),
+                "thumbnail": {
+                    "url": "https://imageserver.eveonline.com/Character/%s_512.jpg" % character.id
+                },
+                "color": 0xff0000,
+                "fields": [
+                    {
+                        "name": "Owned By",
+                        "value": owned_by,
+                        "inline": True,
+                    }
+                ]
+            }
+        ]
+    }
+
 
 #"AN": 0x0000ff,
 #"AR": 0xffff00,

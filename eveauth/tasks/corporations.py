@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import transaction
 from django.utils import timezone
@@ -9,11 +10,12 @@ from avrseauth.celery import app
 from eveauth.esi import ESI, parse_api_date
 from eveauth.models.character import Character
 from eveauth.models.corporation import Corporation
-from eveauth.models.structure import Service
-from eveauth.models.structure import Structure
+from eveauth.models.structure import Service, Structure
 
 from alerts import embeds
 from alerts.models import Webhook
+from alerts.embeds import character_joined, character_left
+
 from sde.models import Station
 from timerboard.models import Timer
 
@@ -33,6 +35,10 @@ def spawn_corporation_updates():
 @app.task(name="update_corporation", expires=3600)
 def update_corporation(corp_id):
     corp = Corporation.objects.get(id=corp_id)
+    api = ESI()
+    corp_details = api.get("/v4/corporations/%s/" % corp.id)
+    if corp_details is not None:
+        alliance_id = corp_details.get('alliance_id', None)
 
     # Structures
     director = corp.characters.filter(
@@ -145,7 +151,6 @@ def update_corporation(corp_id):
 
         print "Updated structures for %s" % corp.name
 
-
     # Member Tracking
     director = corp.characters.filter(
         roles__name="Director",
@@ -156,7 +161,29 @@ def update_corporation(corp_id):
     if director != None:
         api = ESI(director.token)
 
+        # Work on differences
+        character_ids = api.get("/v3/corporations/%s/members/" % corp.id)
+        if character_ids is not None:
+            # Create diffs
+            new_character_ids = set(character_ids)
+            db_character_ids = set(Character.objects.filter(corp=corp).values_list('id', flat=True))
+            joined_chars = new_character_ids - db_character_ids
+            joined_chars = Character.objects.filter(id__in=joined_chars).all()
+            left_chars = db_character_ids - new_character_ids
+            left_chars = Character.objects.filter(id__in=left_chars).all()
+
+            # Generate webhook events
+            for joined_char in joined_chars:
+                if joined_char.token is not None:
+                    if joined_char.id in settings.members['alliances'] or corp.id in settings.members['corps'] or alliance_id in settings.members['chars']:
+                        Webhook.send("character_joined", character_joined(joined_char, corp))
+            for left_char in left_chars:
+                if left_char.token is not None:
+                    if left_chars.id in settings.members['alliances'] or corp.id in settings.members['corps'] or alliance_id in settings.members['chars']:
+                        Webhook.send("character_left", character_left(left_char, corp))
+
         members = api.get("/v1/corporations/%s/membertracking/" % corp.id)
+
         if members is not None:
             with transaction.atomic():
                 for member in members:
