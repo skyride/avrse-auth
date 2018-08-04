@@ -178,9 +178,11 @@ def update_corporation(corp_id):
                     if joined_char.id in settings.members['alliances'] or corp.id in settings.members['corps'] or alliance_id in settings.members['chars']:
                         Webhook.send("character_joined", character_joined(joined_char, corp))
             for left_char in left_chars:
-                if left_char.token is not None:
-                    if left_chars.id in settings.members['alliances'] or corp.id in settings.members['corps'] or alliance_id in settings.members['chars']:
-                        Webhook.send("character_left", character_left(left_char, corp))
+                if left_chars.id in settings.members['alliances'] or corp.id in settings.members['corps'] or alliance_id in settings.members['chars']:
+                    Webhook.send("character_left", character_left(left_char, corp))
+
+            # Null the corp on chars that have left
+            left_chars.update(corp=None, alliance=None)
 
         members = api.get("/v1/corporations/%s/membertracking/" % corp.id)
 
