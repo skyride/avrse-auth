@@ -7,3 +7,4 @@ celerybeat-schedule
 sqlite-latest.sqlite
 .vscode
 test.py
+discord-config.yaml

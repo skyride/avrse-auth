@@ -1,0 +1,83 @@
+version: '3'
+services:
+  app:
+    build: .
+    command: python manage.py runserver 0:8000
+    volumes:
+      - .:/app
+    environment:
+      - MUMBLE_HOST=172.17.0.1
+    depends_on:
+      - redis
+      - postgres
+      - memcached
+    ports:
+      - 8000:8000
+
+  celery-high:
+    build: .
+    command: celery worker -A avrseauth -B -c 2 -Q high
+    volumes:
+      - .:/app
+    environment:
+      - MUMBLE_HOST=172.17.0.1
+    depends_on:
+      - redis
+      - postgres
+      - memcached
+
+  celery-medium:
+    build: .
+    command: celery worker -A avrseauth -c 16 -Q medium
+    volumes:
+      - .:/app
+    environment:
+      - MUMBLE_HOST=172.17.0.1
+    depends_on:
+      - redis
+      - postgres
+      - memcached
+
+  discord-bot:
+    build: .
+    working_dir: /app/eveauth
+    command: python -m disco.cli --config ../discord-config.yaml
+    volumes:
+      - .:/app
+    environment:
+      - MUMBLE_HOST=172.17.0.1
+    depends_on:
+      - redis
+      - postgres
+      - memcached
+
+  mumble-auth:
+    build: .
+    working_dir: /app/eveauth
+    command: python mumble.py
+    volumes:
+      - .:/app
+    environment:
+      - MUMBLE_HOST=172.17.0.1
+    depends_on:
+      - redis
+      - postgres
+      - memcached
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - redisdata:/data
+
+  postgres:
+    image: postgres:11-alpine
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  memcached:
+    image: memcached
+
+
+volumes:
+  pgdata:
+  redisdata:

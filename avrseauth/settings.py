@@ -14,7 +14,7 @@ import os
 _PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '../..'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.environ.get("DEBUG", None) is not None
 
 ALLOWED_HOSTS = ["*"]
 
@@ -159,6 +159,26 @@ SOCIAL_AUTH_CHARACTER_AUTH_SCOPE = [
 SOCIAL_AUTH_DISCORD_SCOPE = [
     "identify"
 ]
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': 'postgres',
+        'NAME': 'postgres',
+        'USER': 'postgres'
+    }
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': 'memcached:11211',
+    }
+}
+
+CELERY_APP_NAME = "avrseauth"
+BROKER_URL = "redis://redis:6379/1"
 
 
 # Celery

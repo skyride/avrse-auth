@@ -148,8 +148,9 @@ if __name__ == "__main__":
     print "Creating callbacks...",
     ice = Ice.initialize(sys.argv)
 
-    meta = Murmur.MetaPrx.checkedCast(ice.stringToProxy('Meta:tcp -h 127.0.0.1 -p 6502'))
-    adapter = ice.createObjectAdapterWithEndpoints("Callback.Client", "tcp -h 127.0.0.1")
+    mumble_host = os.environ.get("MUMBLE_HOST", "127.0.0.1")
+    meta = Murmur.MetaPrx.checkedCast(ice.stringToProxy("Meta:tcp -h %s -p 6502" % mumble_host))
+    adapter = ice.createObjectAdapterWithEndpoints("Callback.Client", "tcp -h %s" % mumble_host)
     adapter.activate()
 
     for server in meta.getBootedServers():
