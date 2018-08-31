@@ -1,4 +1,7 @@
+from datetime import datetime
+
 from django.db import models
+from django.utils.timezone import now
 
 from eveauth.models.character import Character
 from sde.models import Type
@@ -30,3 +33,11 @@ class SkillTraining(models.Model):
 
     class Meta:
         ordering = ('position', )
+
+    def percentage_complete(self):
+        total_seconds = (self.ends - self.starts).total_seconds()
+        current_seconds = (self.ends - now()).total_seconds()
+        return 100.0 / float(total_seconds) * current_seconds
+
+    def time_left(self):
+        return self.ends - self.starts
