@@ -23,7 +23,7 @@ from eveauth.models.corporation import Corporation
 from eveauth.models.implant import Implant
 from eveauth.models.kill import Kill
 from eveauth.models.role import Role
-from eveauth.models.skill import Skill
+from eveauth.models.skill import Skill, SkillTraining
 from eveauth.models.notification import Notification
 
 from sde.models import Station
@@ -156,6 +156,25 @@ def update_character(character_id):
                 )
                 db_skills.append(db_skill)
             Skill.objects.bulk_create(db_skills)
+
+            # Skill Queue
+            skills_training = api.get("/v2/characters/$id/skillqueue/")
+            SkillTraining.objects.filter(character=db_char).delete()
+            db_skills_training = []
+            for skill_training in skills_training:
+                db_skill_training = SkillTraining(
+                    character=db_char,
+                    type_id=skill_training['skill_id'],
+                    start_sp=skill_training['training_start_sp'],
+                    end_sp=skill_training['level_end_sp'],
+                    training_to_level=skill_training['finished_level'],
+                    position=skill_training['queue_position']
+                )
+                if "start_date" in skill_training:
+                    db_skill_training.starts = parse_api_date(skill_training['start_date'])
+                    db_skill_training.ends = parse_api_date(skill_training['finish_date'])
+                db_skills_training.append(db_skill_training)
+            SkillTraining.objects.bulk_create(db_skills_training)
 
             # Assets
             Asset.objects.filter(character=db_char).delete()

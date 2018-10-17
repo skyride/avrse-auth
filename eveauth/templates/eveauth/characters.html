@@ -55,6 +55,19 @@ $(function () {
         </div>
       </a>
 
+      <li class="list-group-item" style="padding: 0px;">
+        <div class="progress progress-striped" style="margin-bottom: 0px; border-radius: 0px; height: 30px;">
+          {% with skill=character.training_skills.all.0 %}
+            {% if skill.ends %}
+              <div class="progress-bar progress-bar-success" style="width: {{ skill.percentage_complete }}%;"></div>
+                <div style="position: absolute; width: 100%; padding: 4px 8px;">
+                <span class="text-primary">{{ skill.type.name }} {{ skill.training_to_level|roman }} - {{ skill.time_left.total_seconds|time }}</span>
+              </div>
+            {% endif %}
+          {% endwith %}
+        </div>
+      </li>
+
       <ul class="list-group">
         <li class="list-group-item">
           {{ character.corp.name }}
