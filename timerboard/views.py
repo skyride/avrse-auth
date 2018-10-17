@@ -8,8 +8,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, reverse
 from django.utils.timezone import now
 
-from timerboard.forms import TimerForm
+from timerboard.forms import TimerForm, StructureExitForm
 from timerboard.models import Timer
+from timerboard.utils import StructureExitCalculator
 
 from sde.models import Type, System
 
@@ -111,3 +112,23 @@ def edit(request, timer=None):
 @login_required
 def add(request):
     return edit(request)
+
+
+# Structure Calculator
+@login_required
+def structure_calculator(request):
+    calculator = None
+    if request.method == "POST":
+        form = StructureExitForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            calculator = StructureExitCalculator(data['exit_day'], data['exit_time'], data['is_powered'], data['location'])
+    else:
+        form = StructureExitForm()
+
+    context = {
+        "form": form,
+        "calculator": calculator
+    }
+
+    return render(request, "timerboard/structure_calculator.html", context)

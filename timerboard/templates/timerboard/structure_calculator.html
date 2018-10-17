@@ -1,0 +1,72 @@
+{% extends 'eveauth/base.html' %}
+{% load static authtags mathfilters timertags bootstrap3 %}
+
+{% block title %}Structure Calculator{% endblock %}
+
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-6">
+      <h2>Structure Calculator</h2>
+    </div>
+  </div>
+  <hr />
+
+  <form method="POST">
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-md-4 col-md-offset-1">
+        {% bootstrap_field form.exit_day form_group_class="" show_label=False %}
+      </div>
+      <div class="col-md-2">
+        {% bootstrap_field form.exit_time form_group_class="" show_label=False %}
+      </div>
+      <div class="col-md-2">
+        {% bootstrap_field form.location form_group_class="" show_label=False %}
+      </div>
+      <div class="col-md-2">
+        {% bootstrap_field form.is_powered form_group_class="" show_label=False %}
+      </div>
+      <br />
+
+      <div class="col-md-6 col-md-offset-3" style="margin-top: 15px;">
+        {% bootstrap_button "Calculate" button_type="submit" size="md" button_class="btn-block btn-primary" %}
+      </div>
+    </div>
+  </form>
+
+  {% if calculator %}
+    <hr />
+
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h3>Armor</h3>
+        {% if calculator.get_armor_window %}
+          <p>
+            Timer will come out between <strong>{{ calculator.get_armor_window_start|date:"D dS H:i" }}</strong> and <strong>{{ calculator.get_armor_window_end|date:"D dS H:i" }}</strong>.
+          </p>
+          <p>
+            The armor timer comes out between 22 and 26 hours from when you <strong>start</strong> shooting the structure.
+          </p>
+        {% else %}
+          <p>
+            The structure is low power and thus won't have an armor timer.
+          </p>
+        {% endif %}
+      </div>
+    </div>
+    <hr />
+
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h3>Structure</h3>
+        <p>
+          Timer will come out between <strong>{{ calculator.get_structure_window_start|date:"D dS H:i" }}</strong> and <strong>{{ calculator.get_structure_window_end|date:"D dS H:i" }}</strong>.<br />
+        </p>
+        <p>
+          You have until <strong>{{ calculator.get_structure_window_guarantee|date:"D dS H:i" }}</strong> to start attacking the structure to guarantee it doesn't roll over to the following week.
+        </p>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

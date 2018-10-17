@@ -57,3 +57,29 @@ class TimerForm(forms.ModelForm):
             'visible_to_level',
             'visible_to_groups'
         )
+
+
+class StructureExitForm(forms.Form):
+    EXIT_DAY_CHOICES = (
+        (1, "Monday"),
+        (2, "Tuesday"),
+        (3, "Wednesday"),
+        (4, "Thursday"),
+        (5, "Friday"),
+        (6, "Saturday"),
+        (7, "Sunday")
+    )
+    LOCATION_CHOICES = (
+        (0.5, "W-Space"),
+        (2.5, "Lowsec/Nullsec"),
+        (5.5, "Highsec")
+    )
+    IS_POWERED_CHOICES = (
+        (1, "Online"),
+        (0, "Low Power")
+    )
+
+    exit_day = forms.ChoiceField(choices=EXIT_DAY_CHOICES)
+    exit_time = forms.ChoiceField(choices=[(i, "{:0>2d}".format(i)+":00") for i in range(0, 24)])
+    location = forms.ChoiceField(choices=LOCATION_CHOICES)
+    is_powered = forms.ChoiceField(choices=IS_POWERED_CHOICES)
