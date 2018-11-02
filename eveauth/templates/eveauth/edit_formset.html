@@ -14,8 +14,29 @@
     <div class="col-md-12">
         <form method="POST">
             {% csrf_token %}
-            <table>
-                {{ formset.as_table }}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        {% for field in formset.0 %}
+                            {% if field.name != "id" %}
+                                <th>{{ field.label }}</th>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for form in formset %}
+                        <tr>
+                            {% for field in form %}
+                                {% if field.name != "id" %}
+                                    <td>{% bootstrap_field field show_label=False form_group_class="" %}</td>
+                                {% else %}
+                                    {% bootstrap_field field show_label=False form_group_class="" %}
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
             </table>
 
             <div class="row">
