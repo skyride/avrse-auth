@@ -66,8 +66,9 @@ urlpatterns = [
     url(r'^mumble/templinks/([0-9A-Za-z]+)/submit$', views.templink_landing_submit, name="templink_landing_submit"),
 
     url(r'admin/hr/requirements/$', views.manage_requirements, name="manage_requirements"),
-    url(r'admin/hr/requirements/add', views.edit_requirement, name="add_requirement"),
-    url(r'admin/hr/requirements/([0-9]+)', views.edit_requirement, name="edit_requirement"),
+    url(r'admin/hr/requirements/add$', views.edit_requirement, name="add_requirement"),
+    url(r'admin/hr/requirements/([0-9]+)$', views.edit_requirement, name="edit_requirement"),
+    url(r'admin/hr/requirements/([0-9]+)/skills$', views.edit_requirement_skills, name="edit_requirement_skills"),
 
     url(r'^settings/webhooks/$', views.settings_webhooks_index, name="settings_webhooks_index")
 ]

@@ -7,13 +7,17 @@
 {% block content %}
 <div class="row">
     <div class="col-md-12">
+        {% bootstrap_formset_errors formset %}
         <h3>Edit {{ name }}</h3>
     </div>
 
     <div class="col-md-12">
         <form method="POST">
             {% csrf_token %}
-            {% bootstrap_form form %}
+            <table>
+                {{ formset.as_table }}
+            </table>
+
             <div class="row">
                 <div class="col-md-4">
                     {% bootstrap_button content="Delete" name="delete" button_type="submit" extra_classes="btn-block" button_class="btn-danger" %}

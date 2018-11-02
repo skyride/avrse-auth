@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.models import Group
 
-from eveauth.models import GroupDetails, Requirement
+from eveauth.models import GroupDetails, Requirement, RequirementSkill
+from sde.models import Type
 
 
 class GroupForm(forms.ModelForm):
@@ -59,4 +60,17 @@ class RequirementForm(forms.ModelForm):
             "name",
             "description",
             "enabled"
+        ]
+
+
+class RequirementSkillForm(forms.ModelForm):
+    skill = forms.ModelChoiceField(Type.objects.filter(published=True, group__category_id=16).order_by('name'))
+
+    class Meta:
+        model = RequirementSkill
+        fields = [
+            "requirement",
+            "skill",
+            "required_level",
+            "recommended_level"
         ]

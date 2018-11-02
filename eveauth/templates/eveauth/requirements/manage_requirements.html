@@ -13,11 +13,12 @@
     <a class="btn btn-primary pull-right" href="{% url 'add_requirement' %}">Add New Requirement</a>
   </div>
 </div>
+<hr />
 
 <table class="table table-striped">
   {% for requirement in requirements %}
     <tr>
-      <td>{{ requirement.name }}</td>
+      <td><a href="{% url 'edit_requirement_skills' requirement.id %}">{{ requirement.name }}</a></td>
       <td>{{ requirement.description }}</td>
       <td>{{ requirement.enabled|yesno:"Enabled,Disabled" }}</td>
       <td><a href="{% url 'edit_requirement' requirement.id %}">Edit</a></td>

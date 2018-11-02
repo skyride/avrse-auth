@@ -1,8 +1,11 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.forms import modelformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
 
 from eveauth.models import Requirement, RequirementSkill
-from eveauth.forms import RequirementForm
+from eveauth.forms import RequirementForm, RequirementSkillForm
+
+from sde.models import Type
 
 
 @login_required
@@ -44,3 +47,26 @@ def edit_requirement(request, requirement_id=None):
         "form": form,
     }
     return render(request, "eveauth/edit_form.html", context)
+
+
+@login_required
+@user_passes_test(lambda x: x.groups.filter(name__in=["admin", "HR"]).exists())
+def edit_requirement_skills(request, requirement_id):
+    requirement = get_object_or_404(Requirement, id=requirement_id)
+
+    RequirementSkillFormSet = modelformset_factory(
+        RequirementSkill,
+        form=RequirementSkillForm
+    )
+
+    if request.method == "POST":
+        formset = RequirementSkillFormSet(request.POST, queryset=requirement.skills.all())
+        instances = formset.save()
+    else:
+        formset = RequirementSkillFormSet(queryset=requirement.skills.all())
+
+    context = {
+        "name": requirement.name,
+        "formset": formset,
+    }
+    return render(request, "eveauth/edit_formset.html", context)
