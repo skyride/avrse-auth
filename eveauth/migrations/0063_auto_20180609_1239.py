@@ -48,5 +48,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-	migrations.RunPython(add_groups),
+	    migrations.RunPython(add_groups),
     ]

@@ -1,0 +1,27 @@
+{% extends 'eveauth/base.html' %}
+
+{% block title %}Manage Requirements{% endblock %}
+
+
+{% block content %}
+<div class="row">
+  <div class="col-md-6">
+    <h2>Requirements</h2>
+  </div>
+
+  <div class="col-md-6">
+    <a class="btn btn-primary pull-right" href="{% url 'add_requirement' %}">Add New Requirement</a>
+  </div>
+</div>
+
+<table class="table table-striped">
+  {% for requirement in requirements %}
+    <tr>
+      <td>{{ requirement.name }}</td>
+      <td>{{ requirement.description }}</td>
+      <td>{{ requirement.enabled|yesno:"Enabled,Disabled" }}</td>
+      <td><a href="{% url 'edit_requirement' requirement.id %}">Edit</a></td>
+    </tr>
+  {% endfor %}
+</table>
+{% endblock %}

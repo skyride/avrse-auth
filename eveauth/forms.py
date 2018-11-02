@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import Group
 
-from eveauth.models import GroupDetails
+from eveauth.models import GroupDetails, Requirement
 
 
 class GroupForm(forms.ModelForm):
@@ -50,3 +50,13 @@ class CharacterVisibleToForm(forms.Form):
         required=True,
         choices=VISIBLE_TO_CHOICES,
     )
+
+
+class RequirementForm(forms.ModelForm):
+    class Meta:
+        model = Requirement
+        fields = [
+            "name",
+            "description",
+            "enabled"
+        ]

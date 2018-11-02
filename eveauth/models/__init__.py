@@ -21,6 +21,8 @@ from templinkuser import TemplinkUser
 
 from message import Message
 
+from requirements import Requirement, RequirementSkill
+
 # Murmur models
 from murmurserver import MurmurServer
 from murmurchannel import MurmurChannel
