@@ -38,8 +38,8 @@ def update_character(backend, user, response, social=None, *args, **kwargs):
     character.owner = user
     character.save()
 
-    # Call an update
-    tasks.update_character(character.id)
+    # Call an update on the characters groups
+    tasks.update_groups.delay(user.id)
     character = Character.get_or_create(response['CharacterID'])
 
     # Generate event
