@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'eveauth',
     'timerboard',
     'alerts',
+    'flarum',
+
     'esi',
     'sde',
 ]
