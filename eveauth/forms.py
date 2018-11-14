@@ -65,11 +65,12 @@ class RequirementForm(forms.ModelForm):
 
 class RequirementSkillForm(forms.ModelForm):
     skill = forms.ModelChoiceField(Type.objects.filter(published=True, group__category_id=16).order_by('name'))
+    required_level = forms.IntegerField(max_value=5, min_value=0)
+    recommended_level = forms.IntegerField(max_value=5, min_value=0)
 
     class Meta:
         model = RequirementSkill
         fields = [
-            "requirement",
             "skill",
             "required_level",
             "recommended_level"

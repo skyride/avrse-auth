@@ -16,7 +16,11 @@
             {% bootstrap_form form %}
             <div class="row">
                 <div class="col-md-4">
-                    {% bootstrap_button content="Delete" name="delete" button_type="submit" extra_classes="btn-block" button_class="btn-danger" %}
+                    {% if delete %}
+                        {% bootstrap_button content="Delete" name="delete" button_type="submit" extra_classes="btn-block" button_class="btn-danger" %}
+                    {% else %}
+                        {% bootstrap_button content="Cancel" name="cancel" button_type="link" href="." extra_classes="btn-block" button_class="btn-primary" %}
+                    {% endif %}
                 </div>
                 <div class="col-md-4">
                     {% bootstrap_button content="Save" button_type="submit" extra_classes="btn-block" button_class="btn-primary" %}

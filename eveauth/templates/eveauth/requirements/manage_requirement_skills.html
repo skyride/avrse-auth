@@ -1,0 +1,34 @@
+{% extends 'eveauth/base.html' %}
+
+{% block title %}{{ requirement.name }} - Skills{% endblock %}
+
+
+{% block content %}
+<div class="row">
+  <div class="col-md-9">
+    <h2><a href="{% url 'manage_requirements' %}"><i class="fas fa-arrow-left"></i></a> {{ requirement.name }} - Skills</h2>
+  </div>
+
+  <div class="col-md-3">
+    <a class="btn btn-primary pull-right" href="{% url 'edit_requirement_skill' requirement.id %}">Add New Skill</a>
+  </div>
+</div>
+<hr />
+
+<table class="table table-striped">
+  <tr>
+    <th>Skill</th>
+    <th>Required Level</th>
+    <th>Recommended Level</th>
+    <th></th>
+  </tr>
+  {% for skill in requirement.skills.all %}
+    <tr>
+      <td>{{ skill.skill.name }}</td>
+      <td>{{ skill.required_level }}</td>
+      <td>{{ skill.recommended_level }}</td>
+      <td><a href="{% url 'edit_requirement_skill' requirement.id skill.id %}">Edit</a></td>
+    </tr>
+  {% endfor %}
+</table>
+{% endblock %}

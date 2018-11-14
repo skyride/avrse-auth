@@ -68,7 +68,9 @@ urlpatterns = [
     url(r'admin/hr/requirements/$', views.manage_requirements, name="manage_requirements"),
     url(r'admin/hr/requirements/add$', views.edit_requirement, name="add_requirement"),
     url(r'admin/hr/requirements/([0-9]+)$', views.edit_requirement, name="edit_requirement"),
-    url(r'admin/hr/requirements/([0-9]+)/skills$', views.edit_requirement_skills, name="edit_requirement_skills"),
+    url(r'admin/hr/requirements/([0-9]+)/skills/$', views.manage_requirement_skills, name="manage_requirement_skills"),
+    url(r'admin/hr/requirements/([0-9]+)/skills/add$', views.edit_requirement_skill, name="edit_requirement_skill"),
+    url(r'admin/hr/requirements/([0-9]+)/skills/([0-9]+)$', views.edit_requirement_skill, name="edit_requirement_skill"),
 
     url(r'^settings/webhooks/$', views.settings_webhooks_index, name="settings_webhooks_index")
 ]

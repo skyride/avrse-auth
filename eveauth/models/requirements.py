@@ -24,3 +24,6 @@ class RequirementSkill(models.Model):
     skill = models.ForeignKey(Type, related_name="requirement_skills")
     required_level = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
     recommended_level = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
+
+    class Meta:
+        unique_together = (('requirement', 'skill'), )

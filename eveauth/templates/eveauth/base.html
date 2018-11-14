@@ -1,5 +1,4 @@
-{% load static %}
-{% load authtags %}
+{% load static authtags bootstrap3 %}
 
 <html lang="en">
   <head>
@@ -114,14 +113,7 @@
     </nav>
 
     <div class="container">
-      {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-dismissible alert-{{ message.tags }}">
-          <button type="button" class="close" data-dismiss="alert">&times;</button>
-          {{ message }}
-        </div>
-        {% endfor %}
-      {% endif %}
+      {% bootstrap_messages %}
 
       {% block content %}
       {% endblock %}

@@ -18,7 +18,7 @@
 <table class="table table-striped">
   {% for requirement in requirements %}
     <tr>
-      <td><a href="{% url 'edit_requirement_skills' requirement.id %}">{{ requirement.name }}</a></td>
+      <td><a href="{% url 'manage_requirement_skills' requirement.id %}">{{ requirement.name }}</a></td>
       <td>{{ requirement.description }}</td>
       <td>{{ requirement.enabled|yesno:"Enabled,Disabled" }}</td>
       <td><a href="{% url 'edit_requirement' requirement.id %}">Edit</a></td>
