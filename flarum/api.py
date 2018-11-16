@@ -14,6 +14,46 @@ class FlarumAPI(object):
         self._check_url()
         self._hydrate_token()
 
+
+    def create_group(self, name_singular, name_plural, color=None, icon=None):
+        """Create a group within flarum, returns id"""
+        payload = {
+            "data": {
+                "type": "groups",
+                "attributes": {
+                    "nameSingular": name_singular,
+                    "namePlural": name_plural,
+                    "icon": icon,
+                    "color": color
+                }
+            }
+        }
+        r = self.post("/groups", json=payload)
+        error_code_handler(r)
+        return r.json()['data']['id']
+
+
+    def create_user(self, username, email, password):
+        pass
+
+    
+    def update_user_groups(self, user_id, groups):
+        """Takes a queryset of FlarumGroup"""
+        payload = {
+            "data": {
+                "type": "users",
+                "id": "2",
+                "relationships": {
+                    "groups": {
+                        "data": [{"type": "groups", "id": group.id} for group in groups]
+                    }
+                }
+            }
+        }
+        r = self.patch("/users/%s" % user_id, json=payload)
+        error_code_handler(r)
+
+
     def get(self, url, *args, **kwargs):
         return self._call(requests.get, url, *args, **kwargs)
 
