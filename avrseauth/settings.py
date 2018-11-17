@@ -163,6 +163,12 @@ SOCIAL_AUTH_DISCORD_SCOPE = [
 ]
 
 
+# Flarum defaults
+FLARUM_URL = ""
+FLARUM_USERNAME = ""
+FLARUM_PASSWORD = ""
+
+
 # Celery
 CELERY_IGNORE_RESULT = True
 CELERY_TASK_RESULT_EXPIRES = 1200
@@ -260,6 +266,13 @@ CELERYBEAT_SCHEDULE = {
         'schedule': timedelta(seconds=5),
         'options': {
             'queue': 'high'
+        }
+    },
+    'sync_groups_and_users': {
+        'task': 'sync_groups_and_users',
+        'schedule': timedelta(minutes=60),
+        'options': {
+            'queue': 'medium'
         }
     }
 }

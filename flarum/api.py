@@ -29,12 +29,38 @@ class FlarumAPI(object):
             }
         }
         r = self.post("/groups", json=payload)
-        error_code_handler(r)
         return r.json()['data']['id']
 
 
     def create_user(self, username, email, password):
-        pass
+        """Create a user within flarum, returns id"""
+        payload = {
+            "data": {
+                "type": "users",
+                "attributes": {
+                    "username": username,
+                    "email": email,
+                    "password": password,
+                    "isActivated": True
+                }
+            }
+        }
+        r = self.post("/users", json=payload)
+        return r.json()['data']['id']
+
+
+    def update_user_password(self, user_id, password):
+        payload = {
+            "data": {
+                "id": user_id,
+                "type": "users",
+                "attributes": {
+                    "password": password
+                }
+            }
+        }
+        r = self.patch("/users/%s" % user_id, json=payload)
+        return r.json()['data']['id']
 
     
     def update_user_groups(self, user_id, groups):
@@ -42,7 +68,6 @@ class FlarumAPI(object):
         payload = {
             "data": {
                 "type": "users",
-                "id": "2",
                 "relationships": {
                     "groups": {
                         "data": [{"type": "groups", "id": group.id} for group in groups]

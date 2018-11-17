@@ -37,7 +37,8 @@ def services(request):
         "mumble_port": settings.MUMBLE_PORT,
         "forum_address": settings.FORUM_ADDRESS,
         "mumble_access_level": settings.MUMBLE_ACCESS_LEVEL,
-        "discord_access_level": settings.DISCORD_ACCESS_LEVEL
+        "discord_access_level": settings.DISCORD_ACCESS_LEVEL,
+        "flarum_url": settings.FLARUM_URL
     }
 
     return render(request, "eveauth/services.html", context)
