@@ -372,25 +372,27 @@ def update_kills(char_id):
     kills = requests.get("https://zkillboard.com/api/kills/characterID/%s/" % char_id).json()
 
     with transaction.atomic():
+        api = ESI()
         new = 0
         for kill in kills:
-            if "character_id" in kill['victim']:
+            details = api.get("/v1/killmails/%s/%s/" % (kill['killmail_id'], kill['zkb']['hash']))
+            if "character_id" in details['victim']:
                 db_kill, created = Kill.objects.get_or_create(
                     id=kill['killmail_id'],
                     defaults={
                         'victim': Character.get_or_create(
-                                kill['victim']['character_id']
+                                details['victim']['character_id']
                             ),
-                        'ship_id': kill['victim']['ship_type_id'],
-                        'system_id': kill['solar_system_id'],
+                        'ship_id': details['victim']['ship_type_id'],
+                        'system_id': details['solar_system_id'],
                         'price': kill['zkb']['totalValue'],
-                        'date': parse_api_date(kill['killmail_time'])
+                        'date': parse_api_date(details['killmail_time'])
                     }
                 )
 
                 if created:
                     new = new + 1
-                    for attacker in kill['attackers']:
+                    for attacker in details['attackers']:
                         if "character_id" in attacker:
                             db_kill.killers.add(
                                 Character.get_or_create(attacker['character_id'])
