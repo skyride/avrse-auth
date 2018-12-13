@@ -1,5 +1,5 @@
 from flarum.api import FlarumAPI
-from flarum.models import FlarumGroup
+from flarum.models import FlarumGroup, FlarumUser
 
 
 def create_group(name_singular, name_plural, type="group"):
@@ -11,7 +11,6 @@ def create_group(name_singular, name_plural, type="group"):
         name_plural=name_plural,
         type=type
     )
-    print "Created flarum group %s" % str(group)
     return group
 
 
@@ -20,3 +19,15 @@ def get_or_create_group(name_singular, name_plural, *args, **kwargs):
         return FlarumGroup.objects.get(name_singular=name_singular)
     except FlarumGroup.DoesNotExist:
         return create_group(name_singular, name_plural, *args, **kwargs)
+
+
+def create_user(user, password):
+    api = FlarumAPI()
+    id = api.create_user(user.username, "%s@auth.com" % user.username, password)
+    user = FlarumUser.objects.create(
+        id=id,
+        username=user.username,
+        user=user,
+        email="%s@auth.com" % user.username
+    )
+    return user

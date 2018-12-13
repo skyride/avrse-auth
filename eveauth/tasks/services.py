@@ -38,6 +38,8 @@ def update_discord(user_id):
                 user.profile.corporation.ticker,
                 ["Non-member", "Blue", "Member"][user.profile.level]
             ]
+            if user.profile.alliance is not None:
+                roles.append(user.profile.alliance.ticker)
             groups = user.groups.exclude(
                 Q(name__startswith="Corp: ") | Q(name__startswith="Alliance: ")
             ).all()

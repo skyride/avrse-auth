@@ -178,6 +178,55 @@
   {% endif %}
 
 
+    {% if flarum_url != "" %}
+        <div class="col-sm-6 col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>Forum</strong>
+                </div>
+
+                <div class="panel-body">
+                    {% if not request.user.flarum %}
+                        <p>
+                            <strong><span class="text-danger">You need to set a password to use the forum.</span></strong>
+                        </p>
+                    {% endif %}
+
+                    <table class="table table-condensed">
+                        <tr>
+                            <th>Address:</th>
+                            <td><a href="{{ flarum_url }}">{{ flarum_url }}</a></td>
+                        </tr>
+
+
+                        {% if request.user.flarum %}
+                        <tr>
+                            <th>Username:</th>
+                            <td>{{ request.user.flarum.username }}</td>
+                        </tr>
+                        {% endif %}
+
+                        <tr>
+                            <th style="vertical-align: middle;">Password:</th>
+                            <td>
+                                <form style="margin-bottom: 0px;" method="POST" action="{% url 'flarum:update_password' %}">
+                                    {% csrf_token %}
+                                    <div class="input-group">
+                                        <input class="form-control input-sm" type="password" name="password">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-sm btn-primary">Save</button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+
   {% if user.profile.level >= discord_access_level %}
   <div class="col-sm-6 col-md-4">
     <div class="panel panel-default">

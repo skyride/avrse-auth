@@ -48,10 +48,16 @@ class ServerAuthenticatorI(Murmur.ServerUpdatingAuthenticator):
                     password = hasher.encode(pw, salt)
                     if password == profile.mumble_password:
                         # Name
-                        out_name = "#%s - %s" % (
-                            profile.corporation.ticker,
-                            profile.character.name
-                        )
+                        if profile.alliance.ticker is not None and profile.level < 2:
+                            out_name = "#%s - %s" % (
+                                profile.alliance.ticker,
+                                profile.character.name
+                            )
+                        else:
+                            out_name = "#%s - %s" % (
+                                profile.corporation.ticker,
+                                profile.character.name
+                            )
 
                         # Groups
                         groups = list(db_user.groups.values_list('name', flat=True))
