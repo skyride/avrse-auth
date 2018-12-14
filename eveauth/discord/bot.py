@@ -64,7 +64,7 @@ class AuthPlugin(Plugin):
     @Plugin.listen('MessageCreate')
     def fc_commands(self, event):
         try:
-            # Tokenise commands        
+            # Tokenise commands
             tokens = event.content.split()
             if tokens[0].startswith("!"):
                 user = self._get_social(event.member.id).user
@@ -84,6 +84,8 @@ class AuthPlugin(Plugin):
                     commands.sabrefeed()
 
                 admin = user.groups.filter(name="FC").exists()
+                hr = user.groups.filter(name="HR").exists()
+
                 # Admin only commands
                 if admin:
                     if tokens[0].lower() == "!fatigue":
@@ -106,6 +108,12 @@ class AuthPlugin(Plugin):
                         commands.locate(admin=True)
                     elif tokens[0].lower() == "!setmessage":
                         commands.setmessage()
+
+                if hr:
+                    if tokens[0].lower() == "!alts":
+                        commands.alts()
+                    elif tokens[0].lower() == "!locate":
+                        commands.locate(admin=True)
 
                 # public commands with limitations
                 else:
