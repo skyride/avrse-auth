@@ -92,6 +92,7 @@ class AuthPlugin(Plugin):
                         commands.fatigue(admin=True)
                     elif tokens[0].lower() == "!alts":
                         commands.alts()
+                        return
                     elif tokens[0].lower() == "!whoin":
                         commands.whoin()
                     elif tokens[0].lower() == "!whoinrange":
