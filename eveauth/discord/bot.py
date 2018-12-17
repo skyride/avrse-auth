@@ -107,6 +107,7 @@ class AuthPlugin(Plugin):
                         commands.jcs()
                     elif tokens[0].lower() == "!locate":
                         commands.locate(admin=True)
+                        return
                     elif tokens[0].lower() == "!setmessage":
                         commands.setmessage()
 
