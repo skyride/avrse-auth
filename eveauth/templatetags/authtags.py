@@ -1,4 +1,7 @@
+import calendar
 import math
+
+from datetime import time
 
 from django import template
 from django.conf import settings
@@ -130,3 +133,13 @@ def fatiguetime(delta):
         out = "%sD %s" % (str(delta.days), out)
 
     return out
+
+
+@register.filter(name="day")
+def day(dow):
+    return calendar.day_abbr[dow]
+
+
+@register.filter(name="hour")
+def hour(hour):
+    return time(hour, 0)
