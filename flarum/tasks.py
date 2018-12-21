@@ -86,7 +86,12 @@ def update_users_groups(flarum_user_id):
         groups.append(get_or_create_group(alliance.ticker, alliance.ticker, "alliance"))
 
     # Groups
-    for group in user.user.groups.exclude(Q(name__startswith="Corp: ") | Q(name__startswith="Alliance: ")):
+    for group in user.user.groups.filter(
+        details__forum=True
+    ).exclude(
+        Q(name__startswith="Corp: ") |
+        Q(name__startswith="Alliance: ")
+    ):
         groups.append(get_or_create_group(group.name, group.name, "group"))
 
     api.update_user_groups(user.id, groups)
