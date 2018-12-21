@@ -30,6 +30,8 @@ def scopes(backend, user, response, social=None, *args, **kwargs):
 
 # Do the set up for the character when they're added
 def update_character(backend, user, response, social=None, *args, **kwargs):
+    from eveauth.tasks import update_character
+    
     # Create character
     character = Character.get_or_create(response['CharacterID'])
 
@@ -40,7 +42,8 @@ def update_character(backend, user, response, social=None, *args, **kwargs):
 
     # Call an update on the characters groups
     tasks.update_groups.delay(user.id)
-    character = Character.get_or_create(response['CharacterID'])
+    update_character(character.id)
+    character = Character.get_or_create(character.id)
 
     # Generate event
     Webhook.send(
