@@ -67,6 +67,13 @@ def update_corporation(corp_id):
 
                     previous_state = db_structure.state
 
+                    # Try to update name
+                    info = api.get("/v1/universe/structures/%s/" % structure['structure_id'])
+                    if info is not None:
+                        station = db_structure.station
+                        station.name = info['name']
+                        station.save()
+
                     db_structure.corporation = corp
                     db_structure.type_id = structure['type_id']
                     db_structure.station = Station.get_or_create(structure['structure_id'], api)
