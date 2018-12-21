@@ -1,0 +1,58 @@
+{% extends 'eveauth/base.html' %}
+{% load static bootstrap3 %}
+
+{% block title %}Group Applications{% endblock %}
+
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-12">
+    <h2>Group Applications</h2>
+  </div>
+</div>
+<hr />
+
+<table class="table table-striped">
+  <tr>
+    <th>Group</th>
+    <th>Applicant</th>
+    <th>Applied</th>
+    <th>Accepted</th>
+    <th>Completed By</th>
+    <th>Last Updated</th>
+  </tr>
+
+  {% for app in apps %}
+  <tr>
+    <td>
+      {{ app.group.name }}
+    </td>
+    <td>
+      <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Character/{{ app.user.profile.character.id }}_32.jpg">
+      <a href="{% url 'view_user' app.user.id %}">{{ app.user.profile.character.name }}</a>
+    </td>
+    <td>
+      {{ app.created }}
+    </td>
+    <td>
+      {{ app.accepted|yesno:"Accepted,Denied," }}
+    </td>
+    {% if app.completed != None %}
+      <td>
+        <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Character/{{ app.completed_by.profile.character.id }}_32.jpg">
+        {{ app.completed_by.profile.character.name }}
+      </td>
+      <td>
+        {{ app.last_updated }}
+      </td>
+    {% else %}
+      <td colspan="2"></td>
+    {% endif %}
+  </tr>
+  {% endfor %}
+</table>
+
+<div align="center">
+  {% bootstrap_pagination apps %}
+</div>
+{% endblock %}

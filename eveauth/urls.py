@@ -39,6 +39,7 @@ urlpatterns = [
 
     url(r'^admin/groups/$', views.groupadmin_index, name="groupadmin_index"),
     url(r'^admin/groups/create$', views.groupadmin_create, name="groupadmin_create"),
+    url(r'^admin/groups/log$', views.groupadmin_applog, name="groupadmin_applog"),
     url(r'^admin/groups/([0-9]+)/$', views.groupadmin_edit, name="groupadmin_edit"),
     url(r'^admin/groups/([0-9]+)/delete$', views.groupadmin_delete, name="groupadmin_delete"),
     url(r'^admin/groups/([0-9]+)/kick/([0-9]+)$', views.groupadmin_kick, name="groupadmin_kick"),
