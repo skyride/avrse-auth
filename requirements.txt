@@ -8,7 +8,7 @@ certifi==2017.7.27.1
 chardet==3.0.4
 daemon==1.1
 disco-py==0.0.12
-Django==1.11.8
+Django==1.11.17
 django-appconf==1.0.2
 django-bootstrap3==9.1.0
 django-discord-bind==0.2.0

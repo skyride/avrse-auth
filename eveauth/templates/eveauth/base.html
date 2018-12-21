@@ -37,15 +37,6 @@
             <li><a href="{% url 'characters_index' %}">Characters</a></li>
             <li><a href="{% url 'assets_index' %}">My Ships</a></li>
             <li><a href="{% url 'groups_index' %}">Groups</a></li>
-            <!--<li>
-              <a href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                Timers <span class="caret">
-              </a>
-              <ul class="dropdown-menu">
-                <li><a href="{% url 'timerboard:index' %}">Timerboard</a></li>
-                <li><a href="{% url 'timerboard:structure_calculator' %}">Structure Calculator</a></li>
-              </ul>
-            </li>-->
             <li><a href="{% url 'timerboard:index' %}">Timerboard</a></li>
               {% if request.user|has_group:"admin,Audit,Logistics,HR" %}
               <li>
