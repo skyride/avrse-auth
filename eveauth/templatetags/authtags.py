@@ -104,12 +104,11 @@ def roman(num):
 @register.filter(name="levelicon")
 def levelicon(skill, level):
     if level > skill.active_skill_level:
-        return mark_safe('<i class="far fa-square"></i>')
-    if level <= skill.trained_skill_level:
-        if skill.trained_skill_level > skill.active_skill_level:
-            return mark_safe('<i class="fas fa-square text-warning"></i>')
+        if level > skill.trained_skill_level:
+            return mark_safe('<i class="far fa-square"></i>')
         else:
-            return mark_safe('<i class="fas fa-square"></i>')
+            return mark_safe('<i class="fas fa-square text-warning"></i>')
+    return mark_safe('<i class="fas fa-square"></i>')
 
 
 @register.filter(name="typesum")
