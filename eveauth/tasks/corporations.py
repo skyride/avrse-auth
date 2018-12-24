@@ -70,7 +70,7 @@ def update_corporation(corp_id):
                     # Try to update name
                     info = api.get("/v1/universe/structures/%s/" % structure['structure_id'])
                     if info is not None:
-                        station = db_structure.station
+                        station = Station.get_or_create(structure['structure_id'], api)
                         station.name = info['name']
                         station.save()
 
