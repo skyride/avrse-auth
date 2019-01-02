@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="{{ AUTH_NAME }}">
 
-    <title>{{ AUTH_NAME }} // {% block title %}{% endblock %}</title>
+    <title>{% block title %}{% endblock %} | {{ AUTH_NAME }}</title>
 
     <!-- CSS -->
     {% if request.session.theme == "darkly" %}
