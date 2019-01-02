@@ -10,7 +10,15 @@ $('[data-toggle="tooltip"]').tooltip({html: true})
 
 {% block content %}
 <h2><a href="{% url 'structures_index' %}">Structures</a></h2>
-<h3><img style="border-radius: 50%;" src="//imageserver.eveonline.com/Corporation/{{ corp.id }}_32.png"> {{ corp.name }} [{{ corp.ticker }}]</h3>
+<h3>
+	{% if request.user|has_group:"admin" %}
+		<a href="{% url "corpaudit_view" corp.id  %}">
+	{% endif %}
+		<img style="border-radius: 50%;" src="//imageserver.eveonline.com/Corporation/{{ corp.id }}_32.png"> {{ corp.name }} [{{ corp.ticker }}]
+	{% if request.user|has_group:"admin" %}
+		</a>
+	{% endif %}
+</h3>
 <hr />
 
 <div>
