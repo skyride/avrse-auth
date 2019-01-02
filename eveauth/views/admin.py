@@ -189,7 +189,8 @@ def assetsearch_index(request):
         print assets
 
     assets = assets.filter(
-        type__group__category_id=6
+        type__group__category_id=6,
+        character__token__isnull=False
     ).order_by(
         'system__region__name',
         'system__name',
