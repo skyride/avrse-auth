@@ -391,6 +391,24 @@ def groupadmin_index(request):
 
 @login_required
 @user_passes_test(lambda x: x.groups.filter(name="admin").exists())
+def groupadmin_applog(request):
+    page = request.GET.get('page', 1)
+    apps = GroupApp.objects.order_by('-last_updated').prefetch_related(
+        'user__profile__character',
+        'group',
+        'completed_by__profile__character'
+    )
+    paginator = Paginator(apps, 100)
+
+    context = {
+        "paginator": paginator,
+        "apps": paginator.page(page),
+    }
+    return render(request, "eveauth/groupadmin_applog.html", context)
+
+
+@login_required
+@user_passes_test(lambda x: x.groups.filter(name="admin").exists())
 def groupadmin_create(request):
     group = Group(name="New Group")
     group.save()

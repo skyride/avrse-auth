@@ -22,7 +22,8 @@ $('[data-toggle="tooltip"]').tooltip({html: true})
       <th><a href="{% url structures_list system.id 'type' %}">Type</a></th>
       <th><a href="{% url structures_list system.id 'services' %}">Services</a></th>
       <th><a href="{% url structures_list system.id 'state' %}">State</a></th>
-      <th><a href="{% url structures_list system.id 'fuel' %}">Fuel Expires</a></th>
+      <th><a href="{% url structures_list system.id 'fuel' %}">Fueled/Timers</a></th>
+      <th>Vulnerability Window</th>
       <th><div align="center">Fuel Pings</div></th>
     </tr>
 
@@ -61,6 +62,9 @@ $('[data-toggle="tooltip"]').tooltip({html: true})
           {{ structure.fuel_expires }}
           {% endif %}
         {% endif %}
+      </td>
+      <td>
+        {{ structure.reinforce_weekday|day }} {{ structure.reinforce_hour|hour }}
       </td>
       <td>
         <div align="center">

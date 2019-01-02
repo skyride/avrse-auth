@@ -9,7 +9,8 @@ class GroupApp(models.Model):
     user = models.ForeignKey(User, related_name="group_apps", on_delete=models.CASCADE)
     group = models.ForeignKey(Group, related_name="apps", on_delete=models.CASCADE)
 
-    created = models.DateTimeField(auto_now=True, db_index=True)
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
+    last_updated = models.DateTimeField(auto_now=True, db_index=True)
 
     accepted = models.NullBooleanField(default=None)
     completed = models.DateTimeField(null=True, default=None)

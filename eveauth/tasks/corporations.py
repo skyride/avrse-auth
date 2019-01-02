@@ -1,11 +1,11 @@
 from datetime import timedelta
 
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import transaction
 from django.utils import timezone
 
 from avrseauth.celery import app
+from avrseauth.settings import members
 
 from eveauth.esi import ESI, parse_api_date
 from eveauth.models.character import Character
@@ -66,6 +66,13 @@ def update_corporation(corp_id):
                         db_structure = Structure(id=structure['structure_id'])
 
                     previous_state = db_structure.state
+
+                    # Try to update name
+                    info = api.get("/v1/universe/structures/%s/" % structure['structure_id'])
+                    if info is not None:
+                        station = Station.get_or_create(structure['structure_id'], api)
+                        station.name = info['name']
+                        station.save()
 
                     db_structure.corporation = corp
                     db_structure.type_id = structure['type_id']
@@ -175,20 +182,20 @@ def update_corporation(corp_id):
             # Generate webhook events
             for joined_char in joined_chars:
                 if joined_char.token is not None:
-                    if joined_char.id in settings.members['alliances'] or corp.id in settings.members['corps'] or alliance_id in settings.members['chars']:
+                    if joined_char.id in members['alliances'] or corp.id in members['corps'] or alliance_id in members['chars']:
                         Webhook.send("character_joined", character_joined(joined_char, corp))
             for left_char in left_chars:
-                if left_chars.id in settings.members['alliances'] or corp.id in settings.members['corps'] or alliance_id in settings.members['chars']:
+                if left_char.id in members['alliances'] or corp.id in members['corps'] or alliance_id in members['chars']:
                     Webhook.send("character_left", character_left(left_char, corp))
 
             # Null the corp on chars that have left
             left_chars.update(corp=None, alliance=None)
 
-        members = api.get("/v1/corporations/%s/membertracking/" % corp.id)
+        corp_members = api.get("/v1/corporations/%s/membertracking/" % corp.id)
 
-        if members is not None:
+        if corp_members is not None:
             with transaction.atomic():
-                for member in members:
+                for member in corp_members:
                     char = Character.get_or_create(member['character_id'])
                     char.corp = corp
                     char.last_login = parse_api_date(member['logon_date'])
@@ -196,4 +203,4 @@ def update_corporation(corp_id):
                     char.ship_id = member['ship_type_id']
                     char.save()
 
-        print "Updated %s members for %s" % (len(members), corp.name)
+        print "Updated %s members for %s" % (len(corp_members), corp.name)

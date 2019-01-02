@@ -49,9 +49,13 @@
       </td>
       <td>
         <img width="24" height="24" style="border-radius: 50%; margin-top: -12px; margin-bottom: -11px;" src="//imageserver.eveonline.com/Type/{{ asset.type_id }}_32.png">
-        <a href="{% url 'adminassets_viewship' asset.id %}">
-          {{ asset.type.name }} {% if asset.name %}- <i>{{ asset.name }}</i>{% endif %}
-        </a>
+        {% if asset.singleton %}
+          <a href="{% url 'adminassets_viewship' asset.id %}">
+            {{ asset.type.name }} {% if asset.name %}- <i>{{ asset.name }}</i>{% endif %}
+          </a>
+        {% else %}
+          {{ asset.type.name }} x{{ asset.quantity }}
+        {% endif %}
       </td>
     </tr>
     {% endfor %}

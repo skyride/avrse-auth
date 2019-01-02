@@ -92,6 +92,7 @@ class AuthPlugin(Plugin):
                         commands.fatigue(admin=True)
                     elif tokens[0].lower() == "!alts":
                         commands.alts()
+                        return
                     elif tokens[0].lower() == "!whoin":
                         commands.whoin()
                     elif tokens[0].lower() == "!whoinrange":
@@ -106,6 +107,7 @@ class AuthPlugin(Plugin):
                         commands.jcs()
                     elif tokens[0].lower() == "!locate":
                         commands.locate(admin=True)
+                        return
                     elif tokens[0].lower() == "!setmessage":
                         commands.setmessage()
 

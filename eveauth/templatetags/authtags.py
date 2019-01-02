@@ -1,4 +1,7 @@
+import calendar
 import math
+
+from datetime import time
 
 from django import template
 from django.conf import settings
@@ -104,12 +107,11 @@ def roman(num):
 @register.filter(name="levelicon")
 def levelicon(skill, level):
     if level > skill.active_skill_level:
-        return mark_safe('<i class="far fa-square"></i>')
-    if level <= skill.trained_skill_level:
-        if skill.trained_skill_level > skill.active_skill_level:
-            return mark_safe('<i class="fas fa-square text-warning"></i>')
+        if level > skill.trained_skill_level:
+            return mark_safe('<i class="far fa-square"></i>')
         else:
-            return mark_safe('<i class="fas fa-square"></i>')
+            return mark_safe('<i class="fas fa-square text-warning"></i>')
+    return mark_safe('<i class="fas fa-square"></i>')
 
 
 @register.filter(name="typesum")
@@ -131,3 +133,13 @@ def fatiguetime(delta):
         out = "%sD %s" % (str(delta.days), out)
 
     return out
+
+
+@register.filter(name="day")
+def day(dow):
+    return calendar.day_abbr[dow]
+
+
+@register.filter(name="hour")
+def hour(hour):
+    return time(hour, 0)
