@@ -38,7 +38,7 @@ def update_groups(user_id):
 
     # Update char/corp/alliance
     api = ESI()
-    char_id = social.extra_data['id']
+    char_id = social.uid
     char = api.get("/v4/characters/%s/" % char_id)
 
     with transaction.atomic():
