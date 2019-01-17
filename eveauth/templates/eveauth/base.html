@@ -82,9 +82,9 @@
           <ul class="nav navbar-nav navbar-right">
             <li>
               {% if not request.user.is_authenticated %}
-              <a href="{% url 'social:begin' 'eveonline' %}">
+              <!--<a href="{% url 'social:begin' 'eveonline' %}">
                 <img style="margin-top: -5px; margin-bottom: -10px;" src="{% static 'eveauth/img/EVE_SSO_Login_Buttons_Small_Black.png' %}">
-              </a>
+              </a>-->
               {% else %}
               <a href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                 {{ request.user.first_name }} {{ request.user.last_name }} <span class="caret">
