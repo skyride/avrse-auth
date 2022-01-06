@@ -3,7 +3,7 @@ backports.ssl-match-hostname==3.5.0.1
 billiard==3.5.0.3
 bravado==9.2.2
 bravado-core==4.11.1
-celery==4.1.0
+celery==5.2.2
 certifi==2017.7.27.1
 chardet==3.0.4
 daemon==1.1
