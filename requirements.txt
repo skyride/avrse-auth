@@ -48,7 +48,7 @@ strict-rfc3339==0.7
 swagger-spec-validator==2.1.0
 terminaltables==3.1.0
 typing==3.6.4
-ujson==1.35
+ujson==5.2.0
 urllib3==1.22
 vine==1.1.4
 webcolors==1.7
