@@ -4,7 +4,7 @@ billiard==3.5.0.3
 bravado==9.2.2
 bravado-core==4.11.1
 celery==4.1.0
-certifi==2017.7.27.1
+certifi==2022.12.7
 chardet==3.0.4
 daemon==1.1
 disco-py==0.0.12
